@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="TodayFormatted">
+          <DataField>TodayFormatted</DataField>
+        </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="PreviousStartDateText">
+          <DataField>PreviousStartDateText</DataField>
+        </Field>
+        <Field Name="PageCaption">
+          <DataField>PageCaption</DataField>
+        </Field>
+        <Field Name="UserCaption">
+          <DataField>UserCaption</DataField>
+        </Field>
+        <Field Name="GLAccTableCaptionFilter">
+          <DataField>GLAccTableCaptionFilter</DataField>
+        </Field>
+        <Field Name="Filter">
+          <DataField>Filter</DataField>
+        </Field>
+        <Field Name="FiscalYearStatusText">
+          <DataField>FiscalYearStatusText</DataField>
+        </Field>
+        <Field Name="No_GLAcc">
+          <DataField>No_GLAcc</DataField>
+        </Field>
+        <Field Name="Name_GLAcc">
+          <DataField>Name_GLAcc</DataField>
+        </Field>
+        <Field Name="GLAcc2DebitAmtCreditAmt">
+          <DataField>GLAcc2DebitAmtCreditAmt</DataField>
+        </Field>
+        <Field Name="GLAcc2DebitAmtCreditAmtFormat">
+          <DataField>GLAcc2DebitAmtCreditAmtFormat</DataField>
+        </Field>
+        <Field Name="GLAcc2CreditAmtDebitAmt">
+          <DataField>GLAcc2CreditAmtDebitAmt</DataField>
+        </Field>
+        <Field Name="GLAcc2CreditAmtDebitAmtFormat">
+          <DataField>GLAcc2CreditAmtDebitAmtFormat</DataField>
+        </Field>
+        <Field Name="DebitAmt_GLAcc">
+          <DataField>DebitAmt_GLAcc</DataField>
+        </Field>
+        <Field Name="DebitAmt_GLAccFormat">
+          <DataField>DebitAmt_GLAccFormat</DataField>
+        </Field>
+        <Field Name="CreditAmt_GLAcc">
+          <DataField>CreditAmt_GLAcc</DataField>
+        </Field>
+        <Field Name="CreditAmt_GLAccFormat">
+          <DataField>CreditAmt_GLAccFormat</DataField>
+        </Field>
+        <Field Name="BalAtEndingDateDebitCaption">
+          <DataField>BalAtEndingDateDebitCaption</DataField>
+        </Field>
+        <Field Name="BalAtEndingDateDebitCaptionFormat">
+          <DataField>BalAtEndingDateDebitCaptionFormat</DataField>
+        </Field>
+        <Field Name="BalAtEndingDateCreditCaption">
+          <DataField>BalAtEndingDateCreditCaption</DataField>
+        </Field>
+        <Field Name="BalAtEndingDateCreditCaptionFormat">
+          <DataField>BalAtEndingDateCreditCaptionFormat</DataField>
+        </Field>
+        <Field Name="TLAccType">
+          <DataField>TLAccType</DataField>
+        </Field>
+        <Field Name="GLTrialBalCaption">
+          <DataField>GLTrialBalCaption</DataField>
+        </Field>
+        <Field Name="NoCaption">
+          <DataField>NoCaption</DataField>
+        </Field>
+        <Field Name="NameCaption">
+          <DataField>NameCaption</DataField>
+        </Field>
+        <Field Name="BalAtStartingDateCaption">
+          <DataField>BalAtStartingDateCaption</DataField>
+        </Field>
+        <Field Name="BalDateRangeCaption">
+          <DataField>BalDateRangeCaption</DataField>
+        </Field>
+        <Field Name="BalAtEndingdateCaption">
+          <DataField>BalAtEndingdateCaption</DataField>
+        </Field>
+        <Field Name="DebitCaption">
+          <DataField>DebitCaption</DataField>
+        </Field>
+        <Field Name="CreditCaption">
+          <DataField>CreditCaption</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

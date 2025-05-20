@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Microsoft cloud sandbox",
+            "type": "al",
+            "request": "launch",
+            "environmentType": "Sandbox",
+            "environmentName": "Sandbox_050525",
+            "breakOnError": true,
+            "breakOnRecordWrite": false,
+            "server": "https://businesscentral.dynamics.com/",
+            "schemaUpdateMode": "ForceSync",
+        }
+    ]
+}
