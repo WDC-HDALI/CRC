@@ -4,6 +4,8 @@ using Microsoft.Sales.History;
 
 tableextension 50014 "WDC Sales Invoice Line" extends "Sales Invoice Line"
 {
+    //***********Documentation****************
+    //WDC01  WDC.FS  27/08/2025  Add key12
     fields
     {
         field(50000; "Assoc. Transport Line No."; Integer)
@@ -17,4 +19,11 @@ tableextension 50014 "WDC Sales Invoice Line" extends "Sales Invoice Line"
             DataClassification = ToBeClassified;
         }
     }
+    // keys
+    // {
+    //     key(Key12; "Posting Date", "Document No.", "Line No.")
+    //     {
+
+    //     }
+    // }
 }

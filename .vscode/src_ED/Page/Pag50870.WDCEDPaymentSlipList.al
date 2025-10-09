@@ -1,13 +1,14 @@
 page 50870 "WDC-ED Payment Slip List"
 {
-    ApplicationArea = All;
+
     CaptionML = ENU = 'Payment Slip List', FRA = 'Liste bordereau paiement';
     CardPageID = "WDC-ED Payment Slip";
     Editable = false;
     PageType = List;
     SourceTable = "WDC-ED Payment Header";
     UsageCategory = Lists;
-
+    SourceTableView = SORTING("Posting Date", "No.") order(ascending);
+    ApplicationArea = All;
     layout
     {
         area(content)
@@ -15,23 +16,33 @@ page 50870 "WDC-ED Payment Slip List"
             repeater(Control1)
             {
                 ShowCaption = false;
-                field("No."; Rec."No.")
-                {
-                    ApplicationArea = All;
-                }
-                field("Currency Code"; Rec."Currency Code")
-                {
-                    ApplicationArea = All;
-                }
                 field("Posting Date"; Rec."Posting Date")
                 {
                     ApplicationArea = All;
                 }
-                field("Payment Class"; Rec."Payment Class")
+                field("Payment Slip Type"; Rec."Payment Slip Type")
+                {
+                    ApplicationArea = All;
+                }
+                field("No."; Rec."No.")
+                {
+                    ApplicationArea = All;
+                }
+
+                field("Payment Class Name"; Rec."Payment Class Name")
                 {
                     ApplicationArea = All;
                 }
                 field("Status Name"; Rec."Status Name")
+                {
+                    ApplicationArea = All;
+                }
+                field("Amount (LCY)"; Rec."Amount (LCY)")
+                {
+                    ApplicationArea = All;
+                }
+
+                field("Currency Code"; Rec."Currency Code")
                 {
                     ApplicationArea = All;
                 }
@@ -52,5 +63,5 @@ page 50870 "WDC-ED Payment Slip List"
             }
         }
     }
-}
 
+}

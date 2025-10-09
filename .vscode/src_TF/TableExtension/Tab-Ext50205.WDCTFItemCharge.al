@@ -23,6 +23,11 @@ tableextension 50205 "WDC-TF Item Charge" extends "Item Charge"
             FieldClass = FlowField;
             CalcFormula = Sum("Value Entry"."Cost Amount (Actual)" WHERE("Item Charge No." = FIELD("No."), "Transit Folder No." = FIELD("Folder filter")));
         }
+        field(50204; "Mandatory Transit Folder No."; Boolean)
+        {
+            CaptionML = ENU = 'Mandatory Transit Folder No.', FRA = 'Dossier Import obligatoire';
+            DataClassification = ToBeClassified;
+        }
 
     }
 }

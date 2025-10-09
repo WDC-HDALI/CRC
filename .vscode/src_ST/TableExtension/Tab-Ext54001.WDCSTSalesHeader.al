@@ -38,7 +38,6 @@ tableextension 54001 "WDC-ST Sales Header" extends "Sales Header"
                 TESTFIELD(Status, Status::Open);
                 CALCFIELDS("Amount Including VAT");
                 "Prep. Amount" := ROUND((("Amount Including VAT" + "Stamp Amount") * "% Prep. Amount" / 100), 0.001, '=');
-
             end;
         }
         field(54005; "Prep. Amount"; Decimal)

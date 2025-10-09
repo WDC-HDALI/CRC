@@ -457,11 +457,14 @@ table 50865 "WDC-ED Payment Header"
         key(Key2; "Posting Date")
         {
         }
+        key(Key3; "Posting Date", "No.")
+        {
+        }
     }
 
     fieldgroups
     {
-        fieldgroup(DropDown; "No.")
+        fieldgroup(DropDown; "No.", "Payment Class Name", "Amount (LCY)", "Posting Date")
         {
         }
     }
@@ -492,23 +495,23 @@ table 50865 "WDC-ED Payment Header"
 
         end;
         InitHeader;
-        InitFirstPaymentLine();
+        //InitFirstPaymentLine(); //Cette fonction a fait un problème de comptabilisation
     end;
 
-    Procedure InitFirstPaymentLine()
-    var
-        lPaymentClass: record "WDC-ED Payment Class";
-        lpaymentLines: Record "WDC-ED Payment Line";
-    begin
-        if lPaymentClass.Get(rec."Payment Class") then
-            if lPaymentClass.Suggestions <> lPaymentClass.Suggestions::None then begin
-                lpaymentLines.Init();
-                lpaymentLines."No." := Rec."No.";
-                lpaymentLines."Line No." := 10000;
-                lpaymentLines.Validate("Account Type", lPaymentClass.Suggestions);
-                lpaymentLines.Insert();
-            end;
-    end;
+    // Procedure InitFirstPaymentLine()
+    // var
+    //     lPaymentClass: record "WDC-ED Payment Class";
+    //     lpaymentLines: Record "WDC-ED Payment Line";
+    // begin
+    //     if lPaymentClass.Get(rec."Payment Class") then
+    //         if lPaymentClass.Suggestions <> lPaymentClass.Suggestions::None then begin
+    //             lpaymentLines.Init();
+    //             lpaymentLines."No." := Rec."No.";
+    //             lpaymentLines."Line No." := 10000;
+    //             lpaymentLines.Validate("Account Type", lPaymentClass.Suggestions);
+    //             lpaymentLines.Insert();
+    //         end;
+    // end;
 
     procedure LookupShortcutDimCode(FieldNo: Integer; var ShortcutDimCode: Code[20])
     begin

@@ -2,7 +2,6 @@ pageextension 54028 "WDC-ST Payment Slip" extends "WDC-ED Payment Slip"
 {
     layout
     {
-
         addafter("Posting Date")
         {
             field("Payment Slip Type"; Rec."Payment Slip Type")
@@ -17,7 +16,6 @@ pageextension 54028 "WDC-ST Payment Slip" extends "WDC-ED Payment Slip"
             {
                 ApplicationArea = All;
             }
-
         }
     }
     actions
@@ -41,6 +39,7 @@ pageextension 54028 "WDC-ST Payment Slip" extends "WDC-ED Payment Slip"
                 end;
             }
         }
+
         modify(Post)
         {
             Visible = false;

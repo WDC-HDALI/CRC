@@ -46,8 +46,8 @@ report 50882 "WDC-ED Transfer"
                     if StrLen("Bank Account No.") > 11 then
                         Error(Text008, "Bank Account Name");
 
-                    if not "RIB Checked" then
-                        Error(Text009, "Bank Account Name", "Account No.");
+                    // if not "RIB Checked" then
+                    //     Error(Text009, "Bank Account Name", "Account No.");
 
                     if "Currency Code" <> "Payment Header"."Currency Code" then
                         Error(Text010);

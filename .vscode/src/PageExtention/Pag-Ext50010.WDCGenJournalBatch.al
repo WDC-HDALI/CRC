@@ -1,3 +1,5 @@
+//***************Documentation********************
+//WDC01  WDC.HG  24/07/2025  Show  "Payment Method Code"  field 
 pageextension 50010 "WDC Gen Journal Batch" extends 251
 {
     layout
@@ -13,6 +15,22 @@ pageextension 50010 "WDC Gen Journal Batch" extends 251
             {
                 ApplicationArea = All;
             }
+            //<<WDC01
+            field("Payment Method Code"; Rec."Payment Method Code")
+            {
+                ApplicationArea = All;
+            }
+            //>>WDC01
         }
     }
+    // trigger OnClosePage()
+    // var
+    //     myInt: Integer;
+    // begin
+    //       if rec.Name = 'BANQUE' then
+    //         true
+    //     else
+    //         visible := false;
+    // end;
+
 }

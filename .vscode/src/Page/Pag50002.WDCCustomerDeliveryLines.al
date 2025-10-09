@@ -1,12 +1,13 @@
 namespace CRC.CRC;
 
-page 50002 "WDC Customer Delivery Lines"
+page 50035 "WDC Customer Delivery Lines"
 {
     ApplicationArea = All;
-    CaptionML = ENU = 'Customer Delivery Lines', FRA = 'Lignes livraison client';
-    PageType = ListPart;
+    Caption = 'Customer Delivery Lines';
+    PageType = List;
     SourceTable = "WDC Customer Shipment Lines";
     InsertAllowed = false;
+    UsageCategory = Administration;
     layout
     {
         area(Content)
@@ -14,6 +15,10 @@ page 50002 "WDC Customer Delivery Lines"
             repeater(General)
             {
                 CaptionML = ENU = 'General', FRA = 'Général';
+                field("Document No."; Rec."Document No.")
+                {
+                    ApplicationArea = All;
+                }
                 field("Line No."; Rec."Line No.")
                 {
                     ApplicationArea = All;

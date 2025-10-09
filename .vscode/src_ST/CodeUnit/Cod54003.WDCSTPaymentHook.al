@@ -1,3 +1,5 @@
+//**************Documentation********************
+//WDC01  WDC.HG  22/07/2025   display the "reference payement" in vendor ledger entries 
 codeunit 54003 "WDC-ST PaymentHook"
 {
     procedure PrintLine(PaymentHeader: Record "WDC-ED Payment Header"; ActionType: Integer)
@@ -45,7 +47,9 @@ codeunit 54003 "WDC-ST PaymentHook"
     var
         RecTmp: Record "WDC-ED Payment Line";
         PayClass: Record "WDC-ED Payment Status";
+        lGenLedgSetup: Record "General Ledger Setup";
     begin
+        lGenLedgSetup.Get();
         CLEAR(PayClass);
         IF PayClass.GET(Rec."Payment Class", Rec."Status No.") AND ((PayClass."Calculate RS") OR
           (PayClass."Calc. RS On VAT") OR (PayClass."VAT On Commission") OR (PayClass.Commission) OR
@@ -57,9 +61,11 @@ codeunit 54003 "WDC-ST PaymentHook"
             RecTmp.SETFILTER("No.", Rec."No.");
             IF RecTmp.FindFirst THEN BEGIN
                 REPEAT
-                    RecTmp.CalcRetenu;
-                    RecTmp.CalcAmount;
-                    RecTmp.MODIFY;
+                    if RecTmp."Amount (LCY)" >= lGenLedgSetup."Min RS Amount LCY" THEN BEGIN
+                        RecTmp.CalcRetenu;
+                        RecTmp.CalcAmount;
+                        RecTmp.MODIFY;
+                    end;
                 UNTIL RecTmp.NEXT = 0;
                 COMMIT;
             END;
@@ -390,10 +396,6 @@ codeunit 54003 "WDC-ST PaymentHook"
         PaymentHeader.GET(PaymentHeaderParameter."No.");
         Actualiserstat(PaymentHeader);
         IF UserSetup.GET(UPPERCASE(USERID)) THEN BEGIN
-            //     IF NOT Authorization.GET(StepParameter."Line No.", StepParameter."Payment Class", UserSetup."Payment Slip Profil") THEN
-            //         ERROR(Text024);
-            // END ELSE
-            //     ERROR(Text025);
             IF StepParameter."Verify Header RIB" AND NOT PaymentHeader."RIB Checked" THEN
                 ERROR(Text008);
             PaymentLine.SETRANGE("No.", PaymentHeader."No.");
@@ -405,10 +407,10 @@ codeunit 54003 "WDC-ST PaymentHook"
                 PaymentLine.SETRANGE("Acceptation Code");
             END;
             IF StepParameter."Verify Lines RIB" THEN BEGIN
-                PaymentLine.SETRANGE("RIB Checked", FALSE);
+                PaymentLine.SetFilter("Bank Account No.", '');
                 IF PaymentLine.FindFirst THEN
                     ERROR(Text003);
-                PaymentLine.SETRANGE("RIB Checked");
+                //PaymentLine.SETRANGE("RIB Checked");
             END;
             IF StepParameter."Verify Due Date" THEN BEGIN
                 PaymentLine.SETRANGE("Due Date", 0D);
@@ -453,7 +455,11 @@ codeunit 54003 "WDC-ST PaymentHook"
                     IF StepParameter."Mandatory Drawer" THEN
                         PaymentLine.TESTFIELD("Drawer/Beneficiary");
                     IF StepParameter."Mandatory Draw" THEN
-                        PaymentLine.TESTFIELD(Draw)
+                        PaymentLine.TESTFIELD(Draw);
+                    IF StepParameter."Payment No. Required" THEN
+                        PaymentLine.TESTFIELD("Payment Reference");
+                    IF StepParameter."Comment Required" THEN
+                        PaymentLine.TESTFIELD(Comments);
                 UNTIL PaymentLine.NEXT = 0;
             Step.GET(StepParameter."Payment Class", StepParameter."Line No.");
             Step1.GET(StepParameter."Payment Class", StepParameter."Line No.");
@@ -784,12 +790,14 @@ codeunit 54003 "WDC-ST PaymentHook"
                 InvPostingBuffer[1]."Source No." := PaymentLine."Account No.";
                 InvPostingBuffer[1]."External Document No." := PaymentLine."External Document No.";
                 InvPostingBuffer[1]."Dimension Set ID" := PaymentLine."Dimension Set ID";
+                InvPostingBuffer[1]."Payment Reference" := PaymentLine."Payment Reference";//wdc01
                 UpdtBuffer;
                 IF (InvPostingBuffer[1].Amount >= 0) XOR InvPostingBuffer[1].Correction THEN
                     PaymentLine."Entry No. Debit" := InvPostingBuffer[1]."GL Entry No."
                 ELSE
                     PaymentLine."Entry No. Credit" := InvPostingBuffer[1]."GL Entry No.";
                 GenererInv;
+
 
             UNTIL StepLedger.NEXT = 0;
             //NoSeriesMgt.SaveNoState;
@@ -805,6 +813,7 @@ codeunit 54003 "WDC-ST PaymentHook"
         TotalCredit: Decimal;
         PaymentLineTmp: Record 50866;
     begin
+        PaymentHeader.CalcFields("Payment Slip Type");
         GLsetup.GET;
         InvPostingBuffer[1].SETCURRENTKEY("GL Entry No.", "Account Type", "Account No.");
         InvPostingBuffer[1].ASCENDING(FALSE);
@@ -815,6 +824,7 @@ codeunit 54003 "WDC-ST PaymentHook"
                     GenJnlLine.INIT;
                     GenJnlLine."Posting Date" := PaymentHeader."Posting Date";
                     GenJnlLine."Document Date" := PaymentHeader."Document Date";
+                    GenJnlLine."Payment Slip Type" := PaymentHeader."Payment Slip Type";
                     GenJnlLine.Description := InvPostingBuffer[1].Description;
                     IF STRLEN(GenJnlLine.Description) > 50 THEN BEGIN
                         GenJnlLine.Description := COPYSTR(GenJnlLine.Description, 1, 48);
@@ -827,8 +837,7 @@ codeunit 54003 "WDC-ST PaymentHook"
                         IF RecReasonCode.FindFirst THEN
                             IF GenJnlLine.Description = '' THEN
                                 GenJnlLine.Description := RecReasonCode.Description;
-                    END
-                    ELSE
+                    END ELSE
                         GenJnlLine."Reason Code" := Step."Reason Code";
 
                     GenJnlLine."Document Type" := InvPostingBuffer[1]."Document Type";
@@ -859,28 +868,30 @@ codeunit 54003 "WDC-ST PaymentHook"
                     GenJnlLine."Due Date" := InvPostingBuffer[1]."Due Date";
                     GenJnlLine."Shortcut Dimension 1 Code" := InvPostingBuffer[1]."Global Dimension 1 Code";
                     GenJnlLine."Shortcut Dimension 2 Code" := InvPostingBuffer[1]."Global Dimension 2 Code";
+                    GenJnlLine."Payment Reference" := InvPostingBuffer[1]."Payment Reference"; //wdc01
                     GenJnlPostLine.RunWithCheck(GenJnlLine);
 
                     IF (InvPostingBuffer[1]."RS Account No." <> '') AND (InvPostingBuffer[1]."RS Amount" <> 0) THEN BEGIN
                         GenJnlLine.INIT;
                         GenJnlLine."Posting Date" := PaymentHeader."Posting Date";
                         GenJnlLine."Document Date" := PaymentHeader."Document Date";
+                        GenJnlLine."Payment Slip Type" := PaymentHeader."Payment Slip Type"::RS;
                         GroupeRetenu.RESET;
                         Desc := '';
                         IF GroupeRetenu.GET(0, PaymentLine."RS Code") THEN
                             Desc := FORMAT(GroupeRetenu."Type Retenue")
                         ELSE
                             IF GroupeRetenu.GET(1, PaymentLine."Guarantee RS Code") THEN
-                                Desc := FORMAT(GroupeRetenu."Type Retenue")
-                            ELSE
-                                IF GroupeRetenu.GET(2, PaymentLine."RS Code") THEN
-                                    Desc := FORMAT(GroupeRetenu."Type Retenue")
-                                ELSE
-                                    IF GroupeRetenu.GET(3, PaymentLine."RS Code") THEN
-                                        Desc := FORMAT(GroupeRetenu."Type Retenue")
-                                    ELSE
-                                        IF GroupeRetenu.GET(4, PaymentLine."RS Code") THEN
-                                            Desc := FORMAT(GroupeRetenu."Type Retenue");
+                                Desc := FORMAT(GroupeRetenu."Type Retenue");
+                        // ELSE
+                        //     IF GroupeRetenu.GET(2, PaymentLine."RS Code") THEN
+                        //         Desc := FORMAT(GroupeRetenu."Type Retenue")
+                        //     ELSE
+                        //         IF GroupeRetenu.GET(3, PaymentLine."RS Code") THEN
+                        //             Desc := FORMAT(GroupeRetenu."Type Retenue")
+                        //         ELSE
+                        //             IF GroupeRetenu.GET(4, PaymentLine."RS Code") THEN
+                        //                 Desc := FORMAT(GroupeRetenu."Type Retenue");
                         GenJnlLine.Description := Desc;
                         GenJnlLine."Reason Code" := Step."Reason Code";
                         RecReasonCode.RESET;
@@ -916,6 +927,7 @@ codeunit 54003 "WDC-ST PaymentHook"
                         GenJnlLine."Due Date" := InvPostingBuffer[1]."Due Date";
                         GenJnlLine."Shortcut Dimension 1 Code" := InvPostingBuffer[1]."Global Dimension 1 Code";
                         GenJnlLine."Shortcut Dimension 2 Code" := InvPostingBuffer[1]."Global Dimension 2 Code";
+                        GenJnlLine."Payment Reference" := InvPostingBuffer[1]."Payment Reference"; //wdc01
                         IF (ROUND(GenJnlLine."Amount (LCY)", GLsetup."Amount Rounding Precision") <> 0) THEN
                             GenJnlPostLine.RunWithCheck(GenJnlLine);
                     END;
@@ -955,6 +967,7 @@ codeunit 54003 "WDC-ST PaymentHook"
                         GenJnlLine."Due Date" := InvPostingBuffer[1]."Due Date";
                         GenJnlLine."Shortcut Dimension 1 Code" := InvPostingBuffer[1]."Global Dimension 1 Code";
                         GenJnlLine."Shortcut Dimension 2 Code" := InvPostingBuffer[1]."Global Dimension 2 Code";
+                        GenJnlLine."Payment Reference" := InvPostingBuffer[1]."Payment Reference"; //wdc01
 
 
                         IF (ROUND(GenJnlLine."Amount (LCY)", GLsetup."Amount Rounding Precision") <> 0) THEN
@@ -979,6 +992,7 @@ codeunit 54003 "WDC-ST PaymentHook"
                         GenJnlLine."Due Date" := InvPostingBuffer[1]."Due Date";
                         GenJnlLine."Shortcut Dimension 1 Code" := InvPostingBuffer[1]."Global Dimension 1 Code";
                         GenJnlLine."Shortcut Dimension 2 Code" := InvPostingBuffer[1]."Global Dimension 2 Code";
+                        GenJnlLine."Payment Reference" := InvPostingBuffer[1]."Payment Reference"; //wdc01
                         IF (ROUND(GenJnlLine."Amount (LCY)", GLsetup."Amount Rounding Precision") <> 0) THEN
                             GenJnlPostLine.RunWithCheck(GenJnlLine);
 
@@ -1001,6 +1015,7 @@ codeunit 54003 "WDC-ST PaymentHook"
                         GenJnlLine."Due Date" := InvPostingBuffer[1]."Due Date";
                         GenJnlLine."Shortcut Dimension 1 Code" := InvPostingBuffer[1]."Global Dimension 1 Code";
                         GenJnlLine."Shortcut Dimension 2 Code" := InvPostingBuffer[1]."Global Dimension 2 Code";
+                        GenJnlLine."Payment Reference" := InvPostingBuffer[1]."Payment Reference"; //wdc01
                         IF (ROUND(GenJnlLine."Amount (LCY)", GLsetup."Amount Rounding Precision") <> 0) THEN
                             GenJnlPostLine.RunWithCheck(GenJnlLine);
                     END;
@@ -1112,6 +1127,7 @@ codeunit 54003 "WDC-ST PaymentHook"
                     IF GenJnlLine.Description = '' THEN
                         GenJnlLine.Description := RecReasonCode.Description;
                 GenJnlLine."Document Date" := PaymentHeader."Document Date";
+                GenJnlLine."Payment Reference" := InvPostingBuffer[1]."Payment Reference"; //wdc01
                 GenJnlPostLine.RunWithCheck(GenJnlLine);
             END;
         END;

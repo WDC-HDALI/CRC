@@ -40,6 +40,10 @@ pageextension 50009 "WDC Trucks List" extends "Shipping Agents"
             {
                 ApplicationArea = all;
             }
+            field("Company Vehicule"; Rec."Company Vehicule")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 }

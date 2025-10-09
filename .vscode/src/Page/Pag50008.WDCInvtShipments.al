@@ -27,6 +27,14 @@ page 50008 "WDC Invt. Shipments"
                     ApplicationArea = Basic, Suite;
                     ToolTip = 'Specifies the number of the involved entry or record, according to the specified number series.';
                 }
+                field(CustomerNo; Rec.CustomerNo)
+                {
+                    ApplicationArea = Basic, Suite;
+                }
+                field(CustomerName; Rec.CustomerName)
+                {
+                    ApplicationArea = Basic, Suite;
+                }
                 field("Posting Description"; Rec."Posting Description")
                 {
                     ApplicationArea = Basic, Suite;

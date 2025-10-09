@@ -35,4 +35,18 @@ report 50000 "WDC Update Sales Shipment Line"
         end;
     end;
 
+    procedure UpdateRemainQtyToDeliveryWithReturnedQuantity(pDocumentNo: Code[20]; pLineNo: Integer; pQty: Decimal)
+    var
+        lSalesShipmentLine: Record "Sales Shipment Line";
+    begin
+        if lSalesShipmentLine.get(pDocumentNo, pLineNo) then begin
+            if pQty < lSalesShipmentLine."Remain. Qty to Delivery" then
+                lSalesShipmentLine."Remain. Qty to Delivery" := lSalesShipmentLine."Remain. Qty to Delivery" - pQty
+            else
+                lSalesShipmentLine."Remain. Qty to Delivery" := 0;
+            lSalesShipmentLine.modify();
+
+
+        end;
+    end;
 }

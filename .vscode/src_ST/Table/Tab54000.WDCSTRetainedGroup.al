@@ -35,6 +35,11 @@ table 54000 "WDC-ST Retained Group"
             CaptionML = ENU = 'Active', FRA = 'Actif';
             DataClassification = ToBeClassified;
         }
+        field(7; "RS Type"; Enum "WDC-ST RS Type")
+        {
+            CaptionML = ENU = 'RS Type', FRA = 'Type RS';
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

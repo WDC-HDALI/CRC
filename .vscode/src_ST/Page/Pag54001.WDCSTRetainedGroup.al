@@ -4,12 +4,17 @@ page 54001 "WDC-ST Retained Group"
     SourceTable = "WDC-ST Retained Group";
     UsageCategory = Lists;
     CaptionML = ENU = 'Retained Group', FRA = 'Groupes retenue';
+    ApplicationArea = all;
     layout
     {
         area(content)
         {
             repeater(Group)
             {
+                field("RS Type"; Rec."RS Type")
+                {
+                    ApplicationArea = all;
+                }
                 field(Code; Rec.Code)
                 {
                     ApplicationArea = all;

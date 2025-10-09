@@ -1,5 +1,20 @@
 codeunit 54000 "WDC-ST Sales Subscribers"
 {
+
+    [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnAfterValidateEvent', "Bill-to Customer No.", false, false)]
+    local procedure OnAfterUpdateBuyFromVend(var Rec: Record "Sales Header")
+    var
+        lCustomerPostingGroup: Record "Customer Posting Group";
+    begin
+        IF lCustomerPostingGroup.GET(Rec."Customer Posting Group") THEN BEGIN
+            Rec."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+            if Rec."Apply Fiscal Stamp" THEN
+                Rec."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
+            else
+                Rec."Stamp Amount" := 0;
+        end;
+    end;
+
     [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnValidateBilltoCustomerTemplCodeOnBeforeRecreateSalesLines', '', false, false)]
     local procedure OnValidateBilltoCustomerTemplateCodeBeforeRecreateSalesLinesValidateStamp(var SalesHeader: Record "Sales Header"; CallingFieldNo: Integer)
     var
@@ -24,7 +39,9 @@ codeunit 54000 "WDC-ST Sales Subscribers"
         IF lCustomerPostingGroup.GET(SalesHeader."Customer Posting Group") THEN BEGIN
             SalesHeader."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
             if lCustomerPostingGroup."Apply Fiscal Stamp" THEN
-                SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount";
+                SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
+            else
+                SalesHeader."Stamp Amount" := 0;
         end;
     end;
 
@@ -36,7 +53,9 @@ codeunit 54000 "WDC-ST Sales Subscribers"
         lCustomerPostingGroup.GET(SalesHeader."Customer Posting Group");
         SalesHeader."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
         IF lCustomerPostingGroup."Apply Fiscal Stamp" THEN
-            SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount";
+            SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
+        else
+            SalesHeader."Stamp Amount" := 0;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, 825, 'OnPostLedgerEntryOnAfterGenJnlPostLine', '', false, false)]
@@ -105,5 +124,18 @@ codeunit 54000 "WDC-ST Sales Subscribers"
     begin
         AmountInclVAT := AmountInclVAT + SalesInvoiceHeader."Stamp Amount";
     end;
+
+    [EventSubscriber(ObjectType::table, Database::"Sales Shipment Line", 'OnAfterDescriptionSalesLineInsert', '', true, true)]
+    local procedure OnAfterDescriptionSalesLineInsert(var SalesLine: Record "Sales Line"; SalesShipmentLine: Record "Sales Shipment Line"; var NextLineNo: Integer)
+    var
+        MyText000: Label 'Shipment No. %1: %2';
+        SalesShipmentheader: Record "Sales shipment Header";
+    begin
+        if SalesShipmentheader.Get(SalesShipmentLine."Document No.") then begin
+            SalesLine.Description := StrSubstNo(MyText000, SalesShipmentLine."Document No.", SalesShipmentheader."Posting Date");
+            SalesLine.Modify();
+        end;
+    end;
+
 
 }

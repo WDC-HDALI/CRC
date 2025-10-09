@@ -14,10 +14,18 @@ table 50001 "WDC Customer Shipment Header"
             CaptionML = ENU = 'Sell-to Customer No.', FRA = 'N° client';
             NotBlank = true;
             TableRelation = Customer;
+            trigger OnValidate()
+            var
+                lCustomer: Record Customer;
+            begin
+                Rec."Sell-to Customer Name" := '';
+                if lCustomer.get("Sell-to Customer No.") then
+                    Rec."Sell-to Customer Name" := lCustomer.Name;
+            end;
         }
         field(3; "Shipment No."; Code[20])
         {
-            CaptionML = ENU = 'Shipment No.', FRA = 'N° facture';
+            CaptionML = ENU = 'Shipment No.', FRA = 'N° expédition';
             Editable = false;
         }
         field(4; "Bill-to Customer No."; Code[20])
@@ -805,6 +813,8 @@ table 50001 "WDC Customer Shipment Header"
         {
         }
     }
+
+
     trigger OnInsert()
     var
         NoSeriesMgt: Codeunit "No. Series";
@@ -813,5 +823,18 @@ table 50001 "WDC Customer Shipment Header"
         WhseSetup.Get();
         "No." := NoSeriesMgt.GetNextNo(WhseSetup."Customer Shipment Nos.", WorkDate);
         "Document Date" := WorkDate();
+    end;
+
+    trigger OnDelete()
+    var
+        lCustshipLines: Record "WDC Customer Shipment Lines";
+    begin
+        lCustshipLines.Reset();
+        lCustshipLines.SetRange("Document No.", "No.");
+        if lCustshipLines.FindSet() then
+            repeat
+                lCustshipLines.Delete();
+            until lCustshipLines.Next() = 0;
+
     end;
 }

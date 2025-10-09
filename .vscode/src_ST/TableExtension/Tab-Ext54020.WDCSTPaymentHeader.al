@@ -206,13 +206,13 @@ tableextension 54020 "WDC-ST Payment Header" extends "WDC-ED Payment Header"
             CaptionML = ENU = 'Generate Check No.', FRA = 'Générer No. Chèque';
             DataClassification = ToBeClassified;
         }
-        field(54015; "Vendor Agent"; Code[20])
-        {
-            CaptionML = ENU = 'Vendor Agent', FRA = 'Agent Frs';
-            CalcFormula = Lookup("WDC-ED Payment Line"."Account No." WHERE("No." = FIELD("No."),
-                                                                     "Payment Class" = FILTER('DEC-CHEQ|ENC-CHQ')));
-            FieldClass = FlowField;
-        }
+        // field(54015; "Vendor Agent"; Code[20])
+        // {
+        //     CaptionML = ENU = 'Vendor Agent', FRA = 'Agent Frs';
+        //     CalcFormula = Lookup("WDC-ED Payment Line"."Account No." WHERE("No." = FIELD("No."),
+        //                                                              "Payment Class" = FILTER('DEC-CHEQ|ENC-CHQ')));
+        //     FieldClass = FlowField;
+        // }
         field(54016; "Vendor Agent CIN"; Code[8])
         {
             CaptionML = ENU = 'Vendor Agent CIN', FRA = 'CIN Agent Frs';

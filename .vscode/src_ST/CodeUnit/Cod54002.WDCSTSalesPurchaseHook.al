@@ -1,3 +1,5 @@
+//****************Documentation*************
+//WDC01  WDC.HG  22/09/2025 Correct the Credit Memo Entry 
 codeunit 54002 "WDC-ST Sales&PurchaseHook"
 {
 
@@ -87,7 +89,12 @@ codeunit 54002 "WDC-ST Sales&PurchaseHook"
             VendorPostingGroup.TESTFIELD("Fiscal Stamp Account No.");
             VendorPostingGroup.TESTFIELD("Stamp Amount");
             MntTimbre := 0;
-            MntTimbre := VendorPostingGroup."Stamp Amount";
+            //<<WDC01
+            if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::"Credit Memo" then
+                MntTimbre := -VendorPostingGroup."Stamp Amount"
+            else
+                MntTimbre := VendorPostingGroup."Stamp Amount";
+            //>>WDC01
             CompteTimbre := VendorPostingGroup."Fiscal Stamp Account No.";
             GenJnlLine.INIT;
             GenJnlLine."Posting Date" := PurchaseHeader."Posting Date";

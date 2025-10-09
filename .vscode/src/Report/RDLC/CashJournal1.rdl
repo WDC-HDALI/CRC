@@ -1,0 +1,514 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="title">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>title</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>title</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Page">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Page</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Page</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Date">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Date</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Date</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Client">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Client</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Client</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Nom_Client">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Nom_Client</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Nom_Client</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Doc">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Doc</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Doc</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Montant">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Montant</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Montant</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
+        <Field Name="DocumentNo_SalesShipmentLine">
+          <DataField>DocumentNo_SalesShipmentLine</DataField>
+        </Field>
+        <Field Name="CustomerNo_SalesShipmentLine">
+          <DataField>CustomerNo_SalesShipmentLine</DataField>
+        </Field>
+        <Field Name="PostingDate_SalesShipmentLine">
+          <DataField>PostingDate_SalesShipmentLine</DataField>
+        </Field>
+        <Field Name="ShipCustName">
+          <DataField>ShipCustName</DataField>
+        </Field>
+        <Field Name="ShipAmount">
+          <DataField>ShipAmount</DataField>
+        </Field>
+        <Field Name="ShipAmountFormat">
+          <DataField>ShipAmountFormat</DataField>
+        </Field>
+        <Field Name="Type_Doc">
+          <DataField>Type_Doc</DataField>
+        </Field>
+        <Field Name="ToDisplay">
+          <DataField>ToDisplay</DataField>
+        </Field>
+        <Field Name="DocumentNo_ReturnReceiptLine">
+          <DataField>DocumentNo_ReturnReceiptLine</DataField>
+        </Field>
+        <Field Name="CustomerNo_ReturnReceiptLine">
+          <DataField>CustomerNo_ReturnReceiptLine</DataField>
+        </Field>
+        <Field Name="PostingDate_ReturnReceiptLine">
+          <DataField>PostingDate_ReturnReceiptLine</DataField>
+        </Field>
+        <Field Name="ShipCustName2">
+          <DataField>ShipCustName2</DataField>
+        </Field>
+        <Field Name="ShipAmount2">
+          <DataField>ShipAmount2</DataField>
+        </Field>
+        <Field Name="ShipAmount2Format">
+          <DataField>ShipAmount2Format</DataField>
+        </Field>
+        <Field Name="Type_Doc6">
+          <DataField>Type_Doc6</DataField>
+        </Field>
+        <Field Name="Factures_PostingDate">
+          <DataField>Factures_PostingDate</DataField>
+        </Field>
+        <Field Name="Factures_DocumentType">
+          <DataField>Factures_DocumentType</DataField>
+        </Field>
+        <Field Name="Factures_DocumentNo">
+          <DataField>Factures_DocumentNo</DataField>
+        </Field>
+        <Field Name="Factures_CustomerNo">
+          <DataField>Factures_CustomerNo</DataField>
+        </Field>
+        <Field Name="Factures_CustomerName">
+          <DataField>Factures_CustomerName</DataField>
+        </Field>
+        <Field Name="Factures_AmountLCY">
+          <DataField>Factures_AmountLCY</DataField>
+        </Field>
+        <Field Name="Factures_AmountLCYFormat">
+          <DataField>Factures_AmountLCYFormat</DataField>
+        </Field>
+        <Field Name="Remaining_AmountLCY">
+          <DataField>Remaining_AmountLCY</DataField>
+        </Field>
+        <Field Name="Remaining_AmountLCYFormat">
+          <DataField>Remaining_AmountLCYFormat</DataField>
+        </Field>
+        <Field Name="Espece">
+          <DataField>Espece</DataField>
+        </Field>
+        <Field Name="EspeceFormat">
+          <DataField>EspeceFormat</DataField>
+        </Field>
+        <Field Name="Cheque">
+          <DataField>Cheque</DataField>
+        </Field>
+        <Field Name="ChequeFormat">
+          <DataField>ChequeFormat</DataField>
+        </Field>
+        <Field Name="RS">
+          <DataField>RS</DataField>
+        </Field>
+        <Field Name="RSFormat">
+          <DataField>RSFormat</DataField>
+        </Field>
+        <Field Name="Traite">
+          <DataField>Traite</DataField>
+        </Field>
+        <Field Name="TraiteFormat">
+          <DataField>TraiteFormat</DataField>
+        </Field>
+        <Field Name="Avoir1">
+          <DataField>Avoir1</DataField>
+        </Field>
+        <Field Name="Avoir1Format">
+          <DataField>Avoir1Format</DataField>
+        </Field>
+        <Field Name="Virement">
+          <DataField>Virement</DataField>
+        </Field>
+        <Field Name="VirementFormat">
+          <DataField>VirementFormat</DataField>
+        </Field>
+        <Field Name="Type_Doc2">
+          <DataField>Type_Doc2</DataField>
+        </Field>
+        <Field Name="TotalComptants">
+          <DataField>TotalComptants</DataField>
+        </Field>
+        <Field Name="TotalComptantsFormat">
+          <DataField>TotalComptantsFormat</DataField>
+        </Field>
+        <Field Name="TotalTermes">
+          <DataField>TotalTermes</DataField>
+        </Field>
+        <Field Name="TotalTermesFormat">
+          <DataField>TotalTermesFormat</DataField>
+        </Field>
+        <Field Name="TotalAmountComptants">
+          <DataField>TotalAmountComptants</DataField>
+        </Field>
+        <Field Name="TotalAmountComptantsFormat">
+          <DataField>TotalAmountComptantsFormat</DataField>
+        </Field>
+        <Field Name="TotalAmountTermes">
+          <DataField>TotalAmountTermes</DataField>
+        </Field>
+        <Field Name="TotalAmountTermesFormat">
+          <DataField>TotalAmountTermesFormat</DataField>
+        </Field>
+        <Field Name="TotalEspeceCmp">
+          <DataField>TotalEspeceCmp</DataField>
+        </Field>
+        <Field Name="TotalEspeceCmpFormat">
+          <DataField>TotalEspeceCmpFormat</DataField>
+        </Field>
+        <Field Name="TotalChequeCmp">
+          <DataField>TotalChequeCmp</DataField>
+        </Field>
+        <Field Name="TotalChequeCmpFormat">
+          <DataField>TotalChequeCmpFormat</DataField>
+        </Field>
+        <Field Name="TotalTraiteCmp">
+          <DataField>TotalTraiteCmp</DataField>
+        </Field>
+        <Field Name="TotalTraiteCmpFormat">
+          <DataField>TotalTraiteCmpFormat</DataField>
+        </Field>
+        <Field Name="TotalRSCmp">
+          <DataField>TotalRSCmp</DataField>
+        </Field>
+        <Field Name="TotalRSCmpFormat">
+          <DataField>TotalRSCmpFormat</DataField>
+        </Field>
+        <Field Name="TotalVirementCmp">
+          <DataField>TotalVirementCmp</DataField>
+        </Field>
+        <Field Name="TotalVirementCmpFormat">
+          <DataField>TotalVirementCmpFormat</DataField>
+        </Field>
+        <Field Name="TotalAvoirCmp">
+          <DataField>TotalAvoirCmp</DataField>
+        </Field>
+        <Field Name="TotalAvoirCmpFormat">
+          <DataField>TotalAvoirCmpFormat</DataField>
+        </Field>
+        <Field Name="TotalAvoirT">
+          <DataField>TotalAvoirT</DataField>
+        </Field>
+        <Field Name="TotalAvoirTFormat">
+          <DataField>TotalAvoirTFormat</DataField>
+        </Field>
+        <Field Name="TotalEspeceT">
+          <DataField>TotalEspeceT</DataField>
+        </Field>
+        <Field Name="TotalEspeceTFormat">
+          <DataField>TotalEspeceTFormat</DataField>
+        </Field>
+        <Field Name="TotalChequeT">
+          <DataField>TotalChequeT</DataField>
+        </Field>
+        <Field Name="TotalChequeTFormat">
+          <DataField>TotalChequeTFormat</DataField>
+        </Field>
+        <Field Name="TotalTraiteT">
+          <DataField>TotalTraiteT</DataField>
+        </Field>
+        <Field Name="TotalTraiteTFormat">
+          <DataField>TotalTraiteTFormat</DataField>
+        </Field>
+        <Field Name="TotalRST">
+          <DataField>TotalRST</DataField>
+        </Field>
+        <Field Name="TotalRSTFormat">
+          <DataField>TotalRSTFormat</DataField>
+        </Field>
+        <Field Name="TotalVirementT">
+          <DataField>TotalVirementT</DataField>
+        </Field>
+        <Field Name="TotalVirementTFormat">
+          <DataField>TotalVirementTFormat</DataField>
+        </Field>
+        <Field Name="AvoirTotalT">
+          <DataField>AvoirTotalT</DataField>
+        </Field>
+        <Field Name="AvoirTotalCmp">
+          <DataField>AvoirTotalCmp</DataField>
+        </Field>
+        <Field Name="Avoir_PostingDate">
+          <DataField>Avoir_PostingDate</DataField>
+        </Field>
+        <Field Name="Avoir_DocumentType">
+          <DataField>Avoir_DocumentType</DataField>
+        </Field>
+        <Field Name="Avoir_DocumentNo">
+          <DataField>Avoir_DocumentNo</DataField>
+        </Field>
+        <Field Name="Avoir_CustomerNo">
+          <DataField>Avoir_CustomerNo</DataField>
+        </Field>
+        <Field Name="Avoir_CustomerName">
+          <DataField>Avoir_CustomerName</DataField>
+        </Field>
+        <Field Name="Avoir_AmountLCY">
+          <DataField>Avoir_AmountLCY</DataField>
+        </Field>
+        <Field Name="Avoir_AmountLCYFormat">
+          <DataField>Avoir_AmountLCYFormat</DataField>
+        </Field>
+        <Field Name="Type_Doc3">
+          <DataField>Type_Doc3</DataField>
+        </Field>
+        <Field Name="Paiement_PostingDate">
+          <DataField>Paiement_PostingDate</DataField>
+        </Field>
+        <Field Name="Paiement_DocumentType">
+          <DataField>Paiement_DocumentType</DataField>
+        </Field>
+        <Field Name="Paiement_DocumentNo">
+          <DataField>Paiement_DocumentNo</DataField>
+        </Field>
+        <Field Name="Paiement_CustomerNo">
+          <DataField>Paiement_CustomerNo</DataField>
+        </Field>
+        <Field Name="Paiement_CustomerName">
+          <DataField>Paiement_CustomerName</DataField>
+        </Field>
+        <Field Name="Paiement_AmountLCY">
+          <DataField>Paiement_AmountLCY</DataField>
+        </Field>
+        <Field Name="Paiement_AmountLCYFormat">
+          <DataField>Paiement_AmountLCYFormat</DataField>
+        </Field>
+        <Field Name="Paiement_Espece">
+          <DataField>Paiement_Espece</DataField>
+        </Field>
+        <Field Name="Paiement_EspeceFormat">
+          <DataField>Paiement_EspeceFormat</DataField>
+        </Field>
+        <Field Name="Paiement_Cheque">
+          <DataField>Paiement_Cheque</DataField>
+        </Field>
+        <Field Name="Paiement_ChequeFormat">
+          <DataField>Paiement_ChequeFormat</DataField>
+        </Field>
+        <Field Name="Paiement_RS">
+          <DataField>Paiement_RS</DataField>
+        </Field>
+        <Field Name="Paiement_RSFormat">
+          <DataField>Paiement_RSFormat</DataField>
+        </Field>
+        <Field Name="Paiement_Traite">
+          <DataField>Paiement_Traite</DataField>
+        </Field>
+        <Field Name="Paiement_TraiteFormat">
+          <DataField>Paiement_TraiteFormat</DataField>
+        </Field>
+        <Field Name="Paiement_Avoir">
+          <DataField>Paiement_Avoir</DataField>
+        </Field>
+        <Field Name="Paiement_AvoirFormat">
+          <DataField>Paiement_AvoirFormat</DataField>
+        </Field>
+        <Field Name="Paiement_Virement">
+          <DataField>Paiement_Virement</DataField>
+        </Field>
+        <Field Name="Paiement_VirementFormat">
+          <DataField>Paiement_VirementFormat</DataField>
+        </Field>
+        <Field Name="NRecu">
+          <DataField>NRecu</DataField>
+        </Field>
+        <Field Name="Type_Doc4">
+          <DataField>Type_Doc4</DataField>
+        </Field>
+        <Field Name="Total_recette">
+          <DataField>Total_recette</DataField>
+        </Field>
+        <Field Name="Total_recetteFormat">
+          <DataField>Total_recetteFormat</DataField>
+        </Field>
+        <Field Name="Total_Espece">
+          <DataField>Total_Espece</DataField>
+        </Field>
+        <Field Name="Total_EspeceFormat">
+          <DataField>Total_EspeceFormat</DataField>
+        </Field>
+        <Field Name="Total_Cheque">
+          <DataField>Total_Cheque</DataField>
+        </Field>
+        <Field Name="Total_ChequeFormat">
+          <DataField>Total_ChequeFormat</DataField>
+        </Field>
+        <Field Name="Total_RS">
+          <DataField>Total_RS</DataField>
+        </Field>
+        <Field Name="Total_RSFormat">
+          <DataField>Total_RSFormat</DataField>
+        </Field>
+        <Field Name="Total_Traite">
+          <DataField>Total_Traite</DataField>
+        </Field>
+        <Field Name="Total_TraiteFormat">
+          <DataField>Total_TraiteFormat</DataField>
+        </Field>
+        <Field Name="Total_Virement">
+          <DataField>Total_Virement</DataField>
+        </Field>
+        <Field Name="Total_VirementFormat">
+          <DataField>Total_VirementFormat</DataField>
+        </Field>
+        <Field Name="Total_Avoir">
+          <DataField>Total_Avoir</DataField>
+        </Field>
+        <Field Name="Total_AvoirFormat">
+          <DataField>Total_AvoirFormat</DataField>
+        </Field>
+        <Field Name="Total_AvoirCmp">
+          <DataField>Total_AvoirCmp</DataField>
+        </Field>
+        <Field Name="Total_AvoirCmpFormat">
+          <DataField>Total_AvoirCmpFormat</DataField>
+        </Field>
+        <Field Name="Total_AvoirT">
+          <DataField>Total_AvoirT</DataField>
+        </Field>
+        <Field Name="Total_AvoirTFormat">
+          <DataField>Total_AvoirTFormat</DataField>
+        </Field>
+        <Field Name="TotalAvoirT1">
+          <DataField>TotalAvoirT1</DataField>
+        </Field>
+        <Field Name="TotalAvoirT1Format">
+          <DataField>TotalAvoirT1Format</DataField>
+        </Field>
+        <Field Name="TotalAvoirCmp1">
+          <DataField>TotalAvoirCmp1</DataField>
+        </Field>
+        <Field Name="TotalAvoirCmp1Format">
+          <DataField>TotalAvoirCmp1Format</DataField>
+        </Field>
+        <Field Name="Number">
+          <DataField>Number</DataField>
+        </Field>
+        <Field Name="Type_Doc5">
+          <DataField>Type_Doc5</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

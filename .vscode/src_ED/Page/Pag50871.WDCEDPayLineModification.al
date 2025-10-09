@@ -58,10 +58,10 @@ page 50871 "WDC-ED Pay. Line Modification"
                 {
                     ApplicationArea = All;
                 }
-                field("RIB Checked"; Rec."RIB Checked")
-                {
-                    ApplicationArea = All;
-                }
+                // field("RIB Checked"; Rec."RIB Checked")
+                // {
+                //     ApplicationArea = All;
+                // }
             }
         }
     }

@@ -15,5 +15,8 @@ tableextension 50019 "WDC Sales Cr.Memo Header" extends "Sales Cr.Memo Header"
             CaptionML = ENU = 'Invoiced Order No.', FRA = 'N° commande facturée';
             DataClassification = ToBeClassified;
         }
+        // field(50009; Canceled; Boolean) //Reservéééééé
+
+        //field(50010; "Replacment Invoice No."; Code[20]) //Reservéééééé
     }
 }
