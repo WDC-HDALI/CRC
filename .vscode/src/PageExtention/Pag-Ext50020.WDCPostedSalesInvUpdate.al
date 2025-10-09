@@ -2,6 +2,25 @@ pageextension 50020 "WDC Posted Sales Inv. - Update" extends "Posted Sales Inv. 
 {
     layout
     {
+        addafter("Posting Date")
+        {
+            field("Salesperson Code"; Rec."Salesperson Code")
+            {
+                ApplicationArea = all;
+
+            }
+        }
+        modify("Sell-to Customer Name")
+        {
+            Editable = true;
+        }
+        // addafter("Sell-to Customer Name")
+        // {
+        //     field("Bill-to Name"; Rec."Bill-to Name")
+        //     {
+        //         ApplicationArea = all;
+        //     }
+        // }
         modify("Shipping Agent Code")
         {
             Visible = false;

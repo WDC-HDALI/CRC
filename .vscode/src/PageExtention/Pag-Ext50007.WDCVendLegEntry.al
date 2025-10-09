@@ -4,6 +4,10 @@ pageextension 50007 "WDC VendLegEntry" extends "Vendor Ledger Entries"
     {
         addafter(Description)
         {
+            field("Payment Slip Type"; Rec."Payment Slip Type")
+            {
+                ApplicationArea = All;
+            }
             field("Initial Date"; Rec."Initial Date")
             {
                 ApplicationArea = All;

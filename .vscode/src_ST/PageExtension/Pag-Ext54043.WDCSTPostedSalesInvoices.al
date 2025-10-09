@@ -13,6 +13,7 @@ pageextension 54043 "WDC-ST Posted Sales Invoices" extends "Posted Sales Invoice
             {
                 CaptionML = ENU = 'Invoice Amount', FRA = 'Montant facture';
                 ApplicationArea = All;
+                Style = Strong;
                 Editable = false;
             }
         }
@@ -21,6 +22,11 @@ pageextension 54043 "WDC-ST Posted Sales Invoices" extends "Posted Sales Invoice
     trigger OnAfterGetRecord()
     begin
         InvoiceAmount := Rec."Amount Including VAT" + Rec."Stamp Amount";
+    end;
+
+    trigger OnOpenPage()
+    begin
+        rec.SetCurrentKey("Posting Date");
     end;
 
     Var

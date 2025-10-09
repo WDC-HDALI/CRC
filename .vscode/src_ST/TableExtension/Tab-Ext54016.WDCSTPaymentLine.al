@@ -8,6 +8,7 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             var
                 CurrExchRate: Record 330;
             begin
+                Paramcpta.GET;
                 IF ("RS Amount" = 0) AND ("Validated RS Amount" = 0) AND ("RS VAT Amount" = 0)
                     AND ("Validated RS VAT Amount" = 0) AND ("Commission Amount" = 0) AND ("Validated Commission Amount" = 0)
                     AND ("Commission VAT Amount" = 0) AND ("Validated VAt Amt Commission" = 0) AND ("Guarantee RS Amount" = 0)
@@ -18,24 +19,39 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                     "Initial Amount LCY" := "Amount (LCY)";
                 END;
 
-                IF Amount <> 0 THEN BEGIN
+                IF Amount >= Paramcpta."Min RS Amount LCY" THEN BEGIN
                     IF "RS Code" <> '' THEN
-                        VALIDATE("RS Code", "RS Code")
-                    ELSE BEGIN
-                        Paramcpta.GET;
-                        IF "Account Type" = "Account Type"::Vendor THEN BEGIN
-                            CLEAR(Vend);
-                            Vend.GET("Account No.");
-                            IF Vend."Exempt RS" = FALSE THEN BEGIN
-
-                                IF Vend."RS Code" = '' THEN BEGIN
-                                    Paramcpta.TESTFIELD("Default RS");
-                                    VALIDATE("RS Code", Paramcpta."Default RS");
-                                END;
-                            END;
-                        END;
-                    END;
+                        VALIDATE("RS Code", "RS Code");
+                end else begin
+                    Validate("RS Code", '');
+                    "RS Amount" := 0;
+                    "Validated RS Amount" := 0;
+                    "RS Amount LCY" := 0;
+                    "Validated RS Amount LCY" := 0;
+                    "RS VAT Amount" := 0;
+                    "Validated RS VAT Amount" := 0;
+                    "RS VAT Amount LCY" := 0;
+                    "Validated RS VAT Amount LCY" := 0;
+                    "Guarantee RS Code" := '';
+                    "Guarantee RS Amount" := 0;
+                    "Validated Guarantee RS Amount" := 0;
+                    "Guarantee RS Amount LCY" := 0;
+                    "Valid Guarantee RS Amount LCY" := 0;
                 END;
+
+                // ELSE BEGIN
+                // IF "Account Type" = "Account Type"::Vendor THEN BEGIN
+                //     CLEAR(Vend);
+                //     Vend.GET("Account No.");
+                //IF Vend."Exempt RS" = FALSE THEN BEGIN
+
+                // IF Vend."RS Code" = '' THEN BEGIN
+                //     Paramcpta.TESTFIELD("Default RS");
+                //     VALIDATE("RS Code", Paramcpta."Default RS");
+                // END;
+                //END;
+                //END;
+                // END;
 
             end;
         }
@@ -118,17 +134,15 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                         IF banqe.GET("Account No.") THEN
                             IF banqe."Caisse Type" <> banqe."Caisse Type"::Expense THEN
                                 ERROR('Veuiller choisir une caisse dépense');
-
-
             end;
         }
-
-
-
         field(54000; "RS Code"; Code[10])
         {
             CaptionML = ENU = 'RS Code', FRA = 'Code RS';
-            TableRelation = "WDC-ST Retained Group".Code WHERE("Type Retenue" = FILTER("à la source"));
+            TableRelation = IF ("Account Type" = CONST(Customer)) "WDC-ST Retained Group".Code WHERE("Type Retenue" = FILTER("à la source"),
+            "RS Type" = const(Customer))
+            ELSE IF ("Account Type" = CONST(Vendor)) "WDC-ST Retained Group".Code WHERE("Type Retenue" = FILTER("à la source"),
+            "RS Type" = const(Vendor));
             trigger OnValidate()
             begin
                 IF "Account Type" = "Account Type"::Vendor THEN
@@ -600,11 +614,7 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             DataClassification = ToBeClassified;
 
         }
-        field(54056; "No. chèque"; Integer)
-        {
-            DataClassification = ToBeClassified;
 
-        }
         field(54057; "Référence chèque"; Code[20])
         {
             DataClassification = ToBeClassified;
@@ -647,12 +657,6 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             CaptionML = ENU = 'Situation', FRA = 'Situation';
             DataClassification = ToBeClassified;
         }
-        field(54063; "Header Status"; Integer)
-        {
-            CaptionML = ENU = 'Header Status', FRA = 'Statut Entête';
-            CalcFormula = Lookup("WDC-ED Payment Header"."Status No." WHERE("No." = FIELD("No.")));
-            FieldClass = FlowField;
-        }
         field(54065; "Drawer/Beneficiary"; Code[20])
         {
             CaptionML = ENU = 'Drawer/Beneficiary', FRA = 'Tireur/Beneficiaire';
@@ -665,13 +669,6 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             DataClassification = ToBeClassified;
 
         }
-        field(54067; "Certified/Endorsed"; Boolean)
-        {
-            CaptionML = ENU = 'Certified/Endorsed', FRA = 'Certifié/avalisé';
-            DataClassification = ToBeClassified;
-
-        }
-
         field(54069; "Cession No."; Code[20])
         {
             CaptionML = ENU = 'Cession No.', FRA = 'N° Cession';
@@ -707,12 +704,7 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                 VALIDATE(Amount, -Montantcommande);
             end;
         }
-        field(54073; Observations; Text[200])
-        {
-            CaptionML = ENU = 'Observations', FRA = 'Observations';
-            DataClassification = ToBeClassified;
 
-        }
         field(54072; "Invoice No."; Code[20])
         {
             CaptionML = ENU = 'Invoice No.', FRA = 'N° Facture';
@@ -731,6 +723,12 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
         {
             CaptionML = ENU = 'Payment Slip Type', FRA = 'Type bordoreau';
             Editable = false;
+        }
+        field(54076; "Payment Reference"; Code[20])
+        {
+            CaptionML = ENU = 'Payment Reference', FRA = 'N° Paiement';
+            DataClassification = ToBeClassified;
+
         }
 
     }

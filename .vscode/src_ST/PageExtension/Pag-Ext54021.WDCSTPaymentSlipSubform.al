@@ -1,33 +1,37 @@
+//********************Documentation********************************
+//WDC01  WDC.HG  31/07/2025  Add new action to modify due date for draft
 pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip Subform"
 {
     layout
     {
         addafter("Bank Account Code")
         {
+            field("Payment Reference"; Rec."Payment Reference")
+            {
+                ApplicationArea = All;
+            }
             field("RS Code"; Rec."RS Code")
             {
                 ApplicationArea = All;
             }
 
-        }
-        addafter("RIB Checked")
-        {
             field("Validated RS Amount"; Rec."Validated RS Amount")
             {
                 ApplicationArea = All;
+                editable = false;
             }
             field("RS Amount"; Rec."RS Amount")
             {
                 ApplicationArea = All;
             }
-            field("Commission VAT Amount"; Rec."Commission VAT Amount")
-            {
-                ApplicationArea = All;
-            }
-            field("Commission Amount"; Rec."Commission Amount")
-            {
-                ApplicationArea = All;
-            }
+            // field("Commission VAT Amount"; Rec."Commission VAT Amount")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Commission Amount"; Rec."Commission Amount")
+            // {
+            //     ApplicationArea = All;
+            // }
             field("Payment Label"; Rec."Payment Label")
             {
                 ApplicationArea = All;
@@ -45,18 +49,7 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
                 ApplicationArea = All;
             }
 
-            field("External Invoice No."; Rec."External Invoice No.")
-            {
-                ApplicationArea = All;
-            }
-            field("In Bank"; Rec."In Bank")
-            {
-                ApplicationArea = All;
-            }
-            field(Cancelation; Rec.Cancelation)
-            {
-                ApplicationArea = All;
-            }
+
             field("Payment Amount Type"; Rec."Payment Amount Type")
             {
                 ApplicationArea = All;
@@ -65,18 +58,7 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
             {
                 ApplicationArea = All;
             }
-            field("Commande No."; Rec."Commande No.")
-            {
-                ApplicationArea = All;
-            }
-            field("Invoice No."; Rec."Invoice No.")
-            {
-                ApplicationArea = All;
-            }
-            field(Replaced; Rec.Replaced)
-            {
-                ApplicationArea = All;
-            }
+
             field("Payment Credit"; Rec."Payment Credit")
             {
                 ApplicationArea = All;
@@ -104,30 +86,30 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
                 ApplicationArea = All;
             }
 
-            field("Counterparty Payment Line"; Rec."Counterparty Payment Line")
-            {
-                ApplicationArea = All;
-            }
-            field("Counterparty Account Type"; Rec."Counterparty Account Type")
-            {
-                ApplicationArea = All;
-            }
-            field("Contr. Associ. Acc. LP Type"; Rec."Contr. Associ. Acc. LP Type")
-            {
-                ApplicationArea = All;
-            }
-            field("Contr. Associ. Acc. LP No."; Rec."Contr. Associ. Acc. LP No.")
-            {
-                ApplicationArea = All;
-            }
-            field("Payment State"; Rec."Payment State")
-            {
-                ApplicationArea = All;
-            }
-            field("Invoice Source No."; Rec."Invoice Source No.")
-            {
-                ApplicationArea = All;
-            }
+            // field("Counterparty Payment Line"; Rec."Counterparty Payment Line")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Counterparty Account Type"; Rec."Counterparty Account Type")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Contr. Associ. Acc. LP Type"; Rec."Contr. Associ. Acc. LP Type")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Contr. Associ. Acc. LP No."; Rec."Contr. Associ. Acc. LP No.")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Payment State"; Rec."Payment State")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Invoice Source No."; Rec."Invoice Source No.")
+            // {
+            //     ApplicationArea = All;
+            // }
             field("Payment Methode Code"; Rec."Payment Methode Code")
             {
                 ApplicationArea = All;
@@ -137,38 +119,35 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
                 ApplicationArea = All;
             }
 
-            field("Montant Frais a Déduire"; Rec."Montant Frais a Déduire")
-            {
-                ApplicationArea = All;
-            }
+            // field("Montant Frais a Déduire"; Rec."Montant Frais a Déduire")
+            // {
+            //     ApplicationArea = All;
+            // }
             field("Assiette RS"; Rec."Assiette RS")
             {
                 ApplicationArea = All;
             }
-            field("Mnt Déduction"; Rec."Mnt Déduction")
-            {
-                ApplicationArea = All;
-            }
-            field("Date de validation"; Rec."Date de validation")
-            {
-                ApplicationArea = All;
-            }
-            field("No. chèque"; Rec."No. chèque")
-            {
-                ApplicationArea = All;
-            }
-            field("Référence chèque"; Rec."Référence chèque")
-            {
-                ApplicationArea = All;
-            }
-            field("Petite Dépense"; Rec."Petite Dépense")
-            {
-                ApplicationArea = All;
-            }
-            field("Reason Code"; Rec."Reason Code")
-            {
-                ApplicationArea = All;
-            }
+            // field("Mnt Déduction"; Rec."Mnt Déduction")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Date de validation"; Rec."Date de validation")
+            // {
+            //     ApplicationArea = All;
+            // }
+
+            // field("Référence chèque"; Rec."Référence chèque")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Petite Dépense"; Rec."Petite Dépense")
+            // {
+            //     ApplicationArea = All;
+            // }
+            // field("Reason Code"; Rec."Reason Code")
+            // {
+            //     ApplicationArea = All;
+            // }
         }
 
     }
@@ -208,11 +187,36 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
                     end;
                 end;
             }
+            //<<WDC01
+            action(ModifyDueDate)
+            {
+                ApplicationArea = All;
+                Captionml = ENU = 'Update Due Date', FRA = 'Modifier la Date d''échéance';
+                Image = DueDate;
+                trigger OnAction()
+                var
+                    BordLine: Record "WDC-ED Payment Line";
+                    err01: TextConst ENU = 'you cannot change the due date for this case', FRA = 'vous ne pouvez pas modifier la date d''échéance pour ce cas';
+
+                begin
+                    CurrPage.SetSelectionFilter(BordLine);
+                    if BordLine.FindFirst() then begin
+                        if BordLine."Payment Methode Code" <> 'TRAITE' then
+                            error(err01);
+                        Report.RunModal(54015, true, true, BordLine);
+                    end;
+                end;
+            }
+            //>>WDC01
         }
     }
 
     procedure CalculateRS()
+    var
+        lGenLedgSetup: Record "General Ledger Setup";
     begin
+        lGenLedgSetup.Get();
+
         CLEAR(paymentline);
         paymentline.RESET;
         paymentline.SETFILTER("Payment Class", Rec."Payment Class");
@@ -220,9 +224,11 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
         paymentline.SETFILTER("No.", Rec."No.");
         IF paymentline.Findfirst THEN BEGIN
             REPEAT
-                paymentline.CalcRetenu;
-                paymentline.CalcAmount;
-                paymentline.MODIFY;
+                if paymentline."Amount (LCY)" >= lGenLedgSetup."Min RS Amount LCY" THEN BEGIN
+                    paymentline.CalcRetenu;
+                    paymentline.CalcAmount;
+                    paymentline.MODIFY;
+                END;
             UNTIL paymentline.NEXT = 0;
         end;
     end;

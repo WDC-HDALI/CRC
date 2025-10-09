@@ -11,6 +11,28 @@ pageextension 54040 "WDC-ST Sales Invoice Subform" extends "Sales Invoice Subfor
         {
             Visible = false;
         }
+        modify("Line Discount %")
+        {
+            trigger OnAfterValidate()
+            begin
+                CurrPage.Update();
+            end;
+        }
+        modify("Line Discount Amount")
+        {
+            trigger OnAfterValidate()
+            begin
+                CurrPage.Update();
+            end;
+        }
+        modify("Unit Price")
+        {
+            trigger OnAfterValidate()
+            begin
+                CurrPage.Update();
+            end;
+        }
+
         addafter("Total Amount Incl. VAT")
         {
             field(StampAmount; StampAmount)
@@ -34,7 +56,20 @@ pageextension 54040 "WDC-ST Sales Invoice Subform" extends "Sales Invoice Subfor
         StampAmount := 0;
     end;
 
+    trigger OnAfterGetCurrRecord()
+    var
+    begin
+        UpdateAmountIncludingVAT;
+    end;
+
     trigger OnAfterGetRecord()
+    var
+
+    begin
+        UpdateAmountIncludingVAT;
+    end;
+
+    Procedure UpdateAmountIncludingVAT()
     var
         lSalesLine: Record "Sales Line";
         lSalesHeader: Record "Sales Header";
@@ -44,7 +79,9 @@ pageextension 54040 "WDC-ST Sales Invoice Subform" extends "Sales Invoice Subfor
         if lSalesHeader.Get(Rec."Document Type", Rec."Document No.") then begin
             StampAmount := lSalesHeader."Stamp Amount";
             lSalesHeader.CalcFields("Amount Including VAT");
-            TotalInvoice := lSalesHeader."Amount Including VAT" + StampAmount;
+            if lSalesHeader."Amount Including VAT" <> 0 then
+                TotalInvoice := lSalesHeader."Amount Including VAT" + StampAmount;
+            CurrPage.Update(false);
         end;
     end;
 

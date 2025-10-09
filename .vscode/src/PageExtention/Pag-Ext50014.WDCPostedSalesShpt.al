@@ -1,3 +1,5 @@
+//*****************Documentation*************************
+//wdc01  WDC.HG  03/07/2025 add New field Destination
 pageextension 50014 "WDC Posted Sales Shpt" extends "Posted Sales Shipment"
 {
     layout
@@ -24,6 +26,15 @@ pageextension 50014 "WDC Posted Sales Shpt" extends "Posted Sales Shipment"
                 ApplicationArea = All;
             }
         }
+        //<<WDC01
+        addafter("Shipping Agent Service Code")
+        {
+            field(DestinationAddress; Rec.DestinationAddress)
+            {
+                ApplicationArea = all;
+            }
 
+        }
+        //<<WDC01
     }
 }

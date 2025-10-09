@@ -2,7 +2,8 @@ namespace CRC.CRC;
 
 using Microsoft.Warehouse.Setup;
 using Microsoft.Inventory.Item;
-
+//****************Documentation**********************
+//wdc01  WDC.FS  19/06/2025 Hide Some Fields
 pageextension 50004 "WDC Item List" extends "Item List"
 {
     layout
@@ -31,6 +32,24 @@ pageextension 50004 "WDC Item List" extends "Item List"
         {
             Visible = false;
         }
+        //<<wdc01
+        modify("Vendor No.")
+        {
+            Visible = false;
+        }
+        modify("unit Cost")
+        {
+            Visible = false;
+        }
+        modify("Default Deferral Template Code")
+        {
+            Visible = false;
+        }
+        modify("Cost is Adjusted")
+        {
+            Visible = false;
+        }
+        //>>wdc01
         addafter(InventoryField)
         {
             field("Sold Qty not Delivered"; Rec."Sold Qty not Delivered")
@@ -38,5 +57,6 @@ pageextension 50004 "WDC Item List" extends "Item List"
                 ApplicationArea = All;
             }
         }
+
     }
 }

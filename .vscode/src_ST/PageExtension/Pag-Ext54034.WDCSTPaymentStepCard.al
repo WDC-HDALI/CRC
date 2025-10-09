@@ -40,7 +40,14 @@ pageextension 54034 "WDC-ST Payment Step Card" extends "WDC-ED Payment Step Card
                 ApplicationArea = All;
 
             }
-
+            field("Payment No. Required"; Rec."Payment No. Required")
+            {
+                ApplicationArea = All;
+            }
+            field("Comment Required"; Rec."Comment Required")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 }
