@@ -1,6 +1,8 @@
 namespace CRC.CRC;
 
 using Microsoft.Finance.GeneralLedger.Journal;
+using System.Security.User;
+using Microsoft.Sales.Setup;
 using Microsoft.Foundation.Company;
 using Microsoft.Sales.History;
 using Microsoft.Finance.GeneralLedger.Posting;
@@ -12,7 +14,7 @@ using Microsoft.Sales.Receivables;
 page 50010 "WDC Customer Payment"
 {
     ApplicationArea = All;
-    CaptionML = ENU = 'Customer Payment', FRA = 'Réglement Client';
+    CaptionML = ENU = 'Customer Payment', FRA = 'Réglement client';
     SourceTable = "Gen. Journal Line";
     AutoSplitKey = true;
     DataCaptionExpression = Rec.DataCaption();
@@ -40,6 +42,11 @@ page 50010 "WDC Customer Payment"
             repeater(Control1)
             {
                 ShowCaption = false;
+                field("Posting Date"; Rec."Posting Date")
+                {
+                    ApplicationArea = all;
+                    Visible = SeePostingDate;
+                }
                 field("Payment Method Code"; Rec."Payment Method Code")
                 {
                     ApplicationArea = Basic, Suite;
@@ -185,41 +192,25 @@ page 50010 "WDC Customer Payment"
         GenJnline: record "Gen. Journal Line";
         GenJnlineTemp: record "Gen. Journal Line";
     begin
+        UserSetup.Get(USERID);
+        SeePostingDate := UserSetup."See Payment Posting Date";
+
         DocumentNoSerie := 'REG-' + SalesInvHeader."No.";
         CurrentJnlBatchName := 'REGLEMENT';
         JournalTemplateName := 'PAYMENTS';
-        // GenJnlineTemp.reset();
-        // GenJnlineTemp.SetRange("Journal Template Name", JournalTemplateName);
-        // GenJnlineTemp.SetRange("Journal Batch Name", CurrentJnlBatchName);
-        // GenJnlineTemp.SetRange("Applies-to Doc. No.", SalesInvHeader."No.");
-        // if not GenJnlineTemp.FindFirst() then begin
+
         SalesInvHeader.CalcFields("Remaining Amount", Amount, "Amount Including VAT");
-        //GenJnline.init();
-        //GenJnline."Journal Template Name" := JournalTemplateName;
-        //GenJnline."Journal Batch Name" := CurrentJnlBatchName;
-        //     GenJnline."Document Type" := GenJnline."Document Type"::Payment;
-        //     GenJnline."Document No." := DocumentNoSerie;
-        //     GenJnline."Posting Date" := WorkDate;
-        //     GenJnline."Account Type" := GenJnline."Account Type"::Customer;
-        //     GenJnline.Validate("Account No.", SalesInvHeader."Bill-to Customer No.");
-        //     GenJnline."Applies-to Doc. Type" := GenJnline."Applies-to Doc. Type"::Invoice;
-        //     GenJnline."Applies-to Doc. No." := SalesInvHeader."No.";
-        //     GenJnline."Payment Method Code" := 'ESPECES';
-        //     GenJnline.Validate("Payment Amount", SalesInvHeader."Remaining Amount");
-        //     GenJnline.insert(true);
-        // end;
+
         Rec.SetFilter("Journal Template Name", JournalTemplateName);
         Rec.SetFilter("Journal Batch Name", CurrentJnlBatchName);
         rec.setfilter("Applies-to Doc. No.", SalesInvHeader."No.");
         rec."Document Type" := rec."Document Type"::Payment;
         rec."Document No." := DocumentNoSerie;
-        rec."Posting Date" := WorkDate;
+        rec."Posting Date" := WorkDate();
         rec."Account Type" := rec."Account Type"::Customer;
         rec.Validate("Account No.", SalesInvHeader."Bill-to Customer No.");
         rec."Applies-to Doc. Type" := rec."Applies-to Doc. Type"::Invoice;
         rec."Applies-to Doc. No." := SalesInvHeader."No.";
-
-
     end;
 
     trigger OnNewRecord(belowxRec: Boolean)
@@ -233,23 +224,12 @@ page 50010 "WDC Customer Payment"
         SalesInvHeader.CalcFields("Remaining Amount", Amount, "Amount Including VAT");
         Rec."Document Type" := Rec."Document Type"::Payment;
         Rec."Document No." := DocumentNoSerie;
-        Rec."Posting Date" := WorkDate;
+        rec."Posting Date" := WorkDate();
         Rec."Account Type" := Rec."Account Type"::Customer;
         Rec.Validate("Account No.", SalesInvHeader."Bill-to Customer No.");
         Rec."Applies-to Doc. Type" := Rec."Applies-to Doc. Type"::Invoice;
         Rec."Applies-to Doc. No." := SalesInvHeader."No.";
     end;
-
-    var
-        JournalTemplateName: Code[10];
-        CurrentJnlBatchName: Code[10];
-        TotalAmountToPay: Decimal;
-        SalesInvHeader: Record "Sales Invoice Header";
-        Totalpayed: Decimal;
-        RemaingAmountToPay: decimal;
-        DocumentNoSerie: Code[20];
-        editompanyBank: Boolean;
-
 
     procedure SetDataFromInvoice(pSalesInvoiceHeader: Record "Sales Invoice Header")
     begin
@@ -273,6 +253,17 @@ page 50010 "WDC Customer Payment"
             until pGenJournalLine.Next() = 0;
         exit(Totalpayed);
     end;
+
+    var
+        JournalTemplateName: Code[10];
+        CurrentJnlBatchName: Code[10];
+        SalesInvHeader: Record "Sales Invoice Header";
+        Totalpayed: Decimal;
+        DocumentNoSerie: Code[20];
+        editompanyBank: Boolean;
+        UserSetup: Record "User Setup";
+        SeePostingDate: Boolean;
+
 }
 
 

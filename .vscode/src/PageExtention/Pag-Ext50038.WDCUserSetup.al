@@ -42,6 +42,10 @@ pageextension 50038 "WDC User Setup" extends "User Setup"
             {
                 ApplicationArea = all;
             }
+            field("See Payment Posting Date"; Rec."See Payment Posting Date")
+            {
+                ApplicationArea = all;
+            }
             field("Use REGLEMENT Pay. Journ."; Rec."Use REGLEMENT Pay. Journ.")
             {
                 ApplicationArea = all;
