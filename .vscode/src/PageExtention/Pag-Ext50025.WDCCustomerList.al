@@ -49,7 +49,7 @@ pageextension 50025 "WDC Customer List" extends "Customer List"
             field(Report; Rec.Report)
             {
                 ApplicationArea = all;
-                Style = StrongAccent;
+                Style = Strong;
             }
             field(Debit; Rec.Debit)
             {
@@ -93,6 +93,7 @@ pageextension 50025 "WDC Customer List" extends "Customer List"
 
         Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Go Live Date");
         rec.SetFilter("Due Date Filter", '%1..', WorkDate);
+        //rec.SetFilter("Due Date Filter for balance", '..%1', WorkDate);
     end;
 
     trigger OnAfterGetRecord()
@@ -112,7 +113,6 @@ pageextension 50025 "WDC Customer List" extends "Customer List"
             exit('unfavorable')
         else
             exit('favorable');
-
     end;
 
     var

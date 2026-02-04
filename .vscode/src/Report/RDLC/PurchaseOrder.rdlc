@@ -966,7 +966,7 @@
       <Width>19.72119cm</Width>
       <Page>
         <PageHeader>
-          <Height>11.95916cm</Height>
+          <Height>12.17083cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -977,7 +977,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>LES COMPTOIRS REUNIS DU CENTRE</Value>
+                      <Value>=IIF(First(Fields!CompanyName.Value, "DataSet_Result")="CRC" ,"LES COMPTOIRS REUNIS DU CENTRE",First(Fields!CompanyName.Value, "DataSet_Result"))</Value>
                       <Style>
                         <FontSize>14pt</FontSize>
                         <FontWeight>Bold</FontWeight>
@@ -1119,7 +1119,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox5</rd:DefaultName>
-              <Top>4.14141cm</Top>
+              <Top>3.91916cm</Top>
               <Left>0.47307cm</Left>
               <Height>0.6cm</Height>
               <Width>8.24146cm</Width>
@@ -1152,7 +1152,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox6</rd:DefaultName>
-              <Top>4.77669cm</Top>
+              <Top>4.55444cm</Top>
               <Left>0.47307cm</Left>
               <Height>0.6cm</Height>
               <Width>8.24146cm</Width>
@@ -1812,6 +1812,36 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
+            <Textbox Name="Textbox11">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>="Code Vendeur : " &amp; " " &amp; Fields!Purchaser_Code.Value</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox11</rd:DefaultName>
+              <Top>5.24003cm</Top>
+              <Left>0.47307cm</Left>
+              <Height>0.6cm</Height>
+              <Width>9.98771cm</Width>
+              <ZIndex>14</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -1915,6 +1945,9 @@ End Function
         </Field>
         <Field Name="CompanyMF">
           <DataField>CompanyMF</DataField>
+        </Field>
+        <Field Name="Purchaser_Code">
+          <DataField>Purchaser_Code</DataField>
         </Field>
         <Field Name="ItemNo">
           <DataField>ItemNo</DataField>

@@ -22,11 +22,23 @@ pageextension 50038 "WDC User Setup" extends "User Setup"
             {
                 ApplicationArea = all;
             }
+            field("Allow Rename Customer"; Rec."Allow Rename Customer")
+            {
+                ApplicationArea = all;
+            }
+            field("Allow Rename Item"; Rec."Allow Rename Item")
+            {
+                ApplicationArea = all;
+            }
             field("Allow Modify Item"; Rec."Allow Modify Item")
             {
                 ApplicationArea = all;
             }
             field("Allow Modify Vendor"; Rec."Allow Modify Vendor")
+            {
+                ApplicationArea = all;
+            }
+            field("Allow Salesperson Edit"; Rec."Allow Salesperson Edit")
             {
                 ApplicationArea = all;
             }
@@ -50,6 +62,9 @@ pageextension 50038 "WDC User Setup" extends "User Setup"
             {
                 ApplicationArea = all;
             }
+
         }
+
     }
+
 }

@@ -30,6 +30,10 @@ report 50027 "WDC Cash Journal V2"
             {
 
             }
+            column(CompInfo_Picture; CompInfo.Picture)
+            {
+
+            }
             column(StartingDate; StartingDate)
             {
 
@@ -102,7 +106,8 @@ report 50027 "WDC Cash Journal V2"
                 if EndingDate < StartingDate then
                     Error('Date fin ne doit pas être antérieur à la date début !');
                 Factures.SetFilter("Posting Date", '%1..%2', StartingDate, EndingDate);
-
+                CompInfo.get;
+                CompInfo.CalcFields(Picture);
                 Type_Doc := 'FACTURES';
                 ToDisplay := 0;
                 //TotalBL := 0;
@@ -214,11 +219,13 @@ report 50027 "WDC Cash Journal V2"
                 lDetailedCustLedgEntry.SetRange("Payment Slip Type", "Payment Slip Type"::" ");
                 if lDetailedCustLedgEntry.FindSet() then
                     repeat
-                        if lDetailedCustLedgEntry."Amount (LCY)" < 0 then
-                            Avoir += lDetailedCustLedgEntry."Amount (LCY)" * (-1);
+                        if lDetailedCustLedgEntry."Initial Document Type" = lDetailedCustLedgEntry."Initial Document Type"::"Credit Memo" then
+                            Avoir += lDetailedCustLedgEntry."Amount (LCY)";
+
+                        // if lDetailedCustLedgEntry."Amount (LCY)" < 0 then
+                        //     Avoir += lDetailedCustLedgEntry."Amount (LCY)" * (-1);
                         InsertTempCustLedgerEntries(lDetailedCustLedgEntry."Applied Cust. Ledger Entry No.");
-                        if lDetailedCustLedgEntry."Initial Document Type" = lDetailedCustLedgEntry."Initial Document Type"::"Credit Memo" then begin
-                            lCustomerLedgerEntry.reset();
+                        if (lDetailedCustLedgEntry."Initial Document Type" = lDetailedCustLedgEntry."Initial Document Type"::"Credit Memo") and (lDetailedCustLedgEntry.Unapplied = false) then begin
                             if lCustomerLedgerEntry.get(lDetailedCustLedgEntry."Cust. Ledger Entry No.") then begin
                                 if InvoicePaymentDetailedText <> '' then
                                     InvoicePaymentDetailedText += '/';
@@ -227,6 +234,7 @@ report 50027 "WDC Cash Journal V2"
                         end;
                     until lDetailedCustLedgEntry.Next() = 0;
 
+                totalTTC += Factures."Amount (LCY)";
 
             end;
         }
@@ -360,39 +368,6 @@ report 50027 "WDC Cash Journal V2"
 
                 if NRecu = '' then
                     CurrReport.Skip();
-
-                case Paiement."Payment Slip Type" of
-                    "Payment Slip Type"::Cash:
-                        begin
-                            Paiement_Espece += Paiement."Amount (LCY)" * (-1);
-                            Total_Espece += Paiement_Espece;
-                        end;
-                    "Payment Slip Type"::Cheque:
-                        begin
-                            Paiement_Cheque += Paiement."Amount (LCY)" * (-1);
-                            if Paiement."Payment Reference" <> '' then
-                                PaymentDetailText := CopyStr(format(Paiement."Payment Method Code"), 1, 3) + ':' + format(Paiement."Payment Reference");
-                            Total_Cheque += Paiement_Cheque;
-                        end;
-                    "Payment Slip Type"::Draft:
-                        begin
-                            Paiement_Traite += Paiement."Amount (LCY)" * (-1);
-                            Total_Traite += Paiement_Traite;
-                        end;
-                    "Payment Slip Type"::RS:
-                        begin
-                            Paiement_RS += Paiement."Amount (LCY)" * (-1);
-                            Total_RS += Paiement_RS;
-                        end;
-
-                    "Payment Slip Type"::Transfer:
-                        begin
-                            Paiement_Virement += Paiement."Amount (LCY)" * (-1);
-                            if Paiement."Payment Reference" <> '' then
-                                PaymentDetailText := CopyStr(format(Paiement."Payment Method Code"), 1, 3) + ':' + format(Paiement."Payment Reference");
-                            Total_Virement += Paiement_Virement;
-                        end;
-                end;
 
             end;
         }
@@ -597,6 +572,7 @@ report 50027 "WDC Cash Journal V2"
                         begin
                             Paiementterme_Espece += (Paiementterme."Amount (LCY)") * (-1);
                             Total_Espece += Paiementterme_Espece;
+                            totalTTC += Paiementterme_Espece;
                         end;
                     "Payment Slip Type"::Cheque:
                         begin
@@ -604,6 +580,7 @@ report 50027 "WDC Cash Journal V2"
                             if Paiementterme."Payment Reference" <> '' then
                                 PaiementtermeText := CopyStr(format(Paiementterme."Payment Method Code"), 1, 3) + ':' + format(Paiementterme."Payment Reference");
                             Total_Cheque += Paiementterme_Cheque;
+                            totalTTC += Paiementterme_Cheque;
                         end;
                     "Payment Slip Type"::Draft:
                         begin
@@ -611,11 +588,13 @@ report 50027 "WDC Cash Journal V2"
                             if Paiementterme."Payment Reference" <> '' then
                                 PaiementtermeText := CopyStr(format(Paiementterme."Payment Method Code"), 1, 3) + ':' + format(Paiementterme."Payment Reference");
                             Total_Traite += Paiementterme_Traite;
+                            totalTTC += Paiementterme_Traite;
                         end;
                     "Payment Slip Type"::RS:
                         begin
                             Paiementterme_RS += (Paiementterme."Amount (LCY)") * (-1);
                             Total_RS += Paiementterme_RS;
+                            totalTTC += Paiementterme_RS;
                         end;
 
                     "Payment Slip Type"::Transfer:
@@ -624,6 +603,7 @@ report 50027 "WDC Cash Journal V2"
                             if Paiementterme."Payment Reference" <> '' then
                                 PaiementtermeText := CopyStr(format(Paiementterme."Payment Method Code"), 1, 3) + ':' + format(Paiementterme."Payment Reference");
                             Total_Virement += Paiementterme_Virement;
+                            totalTTC += Paiementterme_Virement;
                         end;
                 end;
 
@@ -750,7 +730,10 @@ report 50027 "WDC Cash Journal V2"
             trigger OnAfterGetRecord()
             var
             begin
-                Total_recette := Total_Espece + Total_Cheque + Total_RS + Total_Traite + Total_Virement;
+
+                //Total_recette := Total_Espece + Total_Cheque + Total_RS + Total_Traite + Total_Virement;
+
+                Total_recette := totalTTC;
                 Type_Doc := 'TOTAL';
 
             end;
@@ -870,9 +853,10 @@ report 50027 "WDC Cash Journal V2"
         Total_RS: Decimal;
         Total_Traite: Decimal;
         Total_Virement: Decimal;
-        Avoir_Montant: Decimal;
         InvoicePaymentDetailedText: text[250];
         PaymentDetailText: text[250];
         PaiementtermeText: text[250];
         UserName: code[50];
+        totalTTC: Decimal;
+        CompInfo: Record "Company Information";
 }

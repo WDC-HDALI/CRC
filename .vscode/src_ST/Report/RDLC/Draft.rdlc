@@ -231,7 +231,7 @@
                               <Top>3.8825cm</Top>
                               <Left>0.52234in</Left>
                               <Height>0.19792in</Height>
-                              <Width>1.59379in</Width>
+                              <Width>1.49612in</Width>
                               <ZIndex>5</ZIndex>
                               <Style>
                                 <Border>
@@ -697,7 +697,7 @@
                               <Top>4.1555cm</Top>
                               <Left>2.0879in</Left>
                               <Height>0.19792in</Height>
-                              <Width>2.82132in</Width>
+                              <Width>3.37131in</Width>
                               <ZIndex>17</ZIndex>
                               <Style>
                                 <Border>
@@ -925,7 +925,6 @@
                             </Border>
                           </Style>
                         </Rectangle>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

@@ -495,7 +495,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             CaptionML = ENU = 'Month Cash Invoices', FRA = 'Factures comptants du mois';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Debit Amount (LCY)" where("Payment Terms Code" = Filter('COMPTANT'),
+            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Debit Amount (LCY)" where("Customer No." = Filter('9999'),//CHG01
                                                           "Document Type" = Const("Invoice"),
                                                            "Posting Date" = field("Month Filter"),
                                                            "Entry Type" = const("Initial Entry")));
@@ -505,7 +505,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             CaptionML = ENU = 'Month Term Invoices', FRA = 'Factures à terme du mois';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Debit Amount (LCY)" where("Payment Terms Code" = Filter('<>COMPTANT'),
+            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Debit Amount (LCY)" where("Customer No." = Filter('<>9999'),////CHG01
                                                           "Document Type" = Const("Invoice"),
                                                            "Posting Date" = field("Month Filter"),
                                                            "Entry Type" = const("Initial Entry")));
@@ -516,6 +516,28 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             CaptionML = ENU = 'Month Filter', FRA = 'Filtre du mois';
             FieldClass = FlowFilter;
         }
+        //<<CHG01
+        field(54066; "Month Cash Credit Memo"; Decimal)
+        {
+            CaptionML = ENU = 'Month Cash Credit Memo', FRA = 'Avoirs comptants du mois';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Customer No." = Filter('9999'),
+                                                          "Document Type" = Const("Credit Memo"),
+                                                           "Posting Date" = field("Month Filter"),
+                                                           "Entry Type" = const("Initial Entry")));
+        }
+        field(54067; "Month Term Credit Memo"; Decimal)
+        {
+            CaptionML = ENU = 'Month Term Credit Memo', FRA = 'Avoirs à terme du mois';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Customer No." = Filter('<>9999'),
+                                                          "Document Type" = Const("Credit Memo"),
+                                                           "Posting Date" = field("Month Filter"),
+                                                           "Entry Type" = const("Initial Entry")));
+        }
+        //>>CHG01
     }
     var
         sales: page 1310;

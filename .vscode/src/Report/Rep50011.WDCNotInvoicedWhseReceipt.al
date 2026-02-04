@@ -1,4 +1,4 @@
-report 50011 "Not Invoiced Warehouse Receipt"
+report 50011 "WDC Not Invoiced Whse Receipt"
 {
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = all;

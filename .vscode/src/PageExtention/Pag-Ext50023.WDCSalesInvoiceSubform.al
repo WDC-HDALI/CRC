@@ -10,13 +10,23 @@ pageextension 50023 "WDC Sales Invoice Subform" extends "Sales Invoice Subform"
             field("Unit Price Incl Discount"; Rec."Unit Price Incl Discount")
             {
                 ApplicationArea = all;
-                Editable = false;
+                //  Editable = false;
                 BlankZero = true;
+                trigger OnValidate()
+                var
+                begin
+                    CurrPage.Update();
+                end;
             }
+
         }
 
         addafter("Line Amount")
         {
+            field("Amount Including VAT"; Rec."Amount Including VAT")
+            {
+                ApplicationArea = all;
+            }
             field("Location Item Inventory"; Rec."Location Item Inventory")
             {
                 ApplicationArea = all;

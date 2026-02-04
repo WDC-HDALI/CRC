@@ -203,6 +203,17 @@ page 50022 "WDC Sales Statistics_V2"
                 {
                     ApplicationArea = all;
                 }
+                //<<CHG01
+                field("Month Cash Credit Memo"; Rec."Month Cash Credit Memo")
+                {
+                    ApplicationArea = all;
+                }
+                field("Month Term Credit Memo"; Rec."Month Term Credit Memo")
+                {
+                    ApplicationArea = all;
+                }
+                //>>CHG01
+
                 field("Sales This Month"; Rec."Sales This Month")
                 {
                     CaptionML = ENU = 'Month CA', FRA = 'Total chiffre d''affaire du mois';

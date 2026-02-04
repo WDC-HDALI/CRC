@@ -4,7 +4,7 @@ using Microsoft.Purchases.History;
 using Microsoft.Purchases.Document;
 //******************Documentation***********************
 //WDC01  WDC.HG  11/08/2025  Create current object : update vendor card to show historics and recpt not invoiced detailes
-page 50028 "WDC PurchaseReceptNotInvoiced"
+page 50028 "WDC Purch. Recept Not Invoiced"
 {
     ApplicationArea = All;
     CaptionML = ENU = 'Purchase Receipt Not Inv.', FRA = 'RCA non facturées';

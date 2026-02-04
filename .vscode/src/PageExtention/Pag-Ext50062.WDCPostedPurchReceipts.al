@@ -25,6 +25,10 @@ pageextension 50062 "WDC Posted Purch. Receipts" extends "Posted Purchase Receip
             {
                 ApplicationArea = all;
             }
+            field("Linked Invoice advance"; Rec."Linked Invoice advance")
+            {
+                ApplicationArea = all;
+            }
         }
         modify("Location Code")
         {

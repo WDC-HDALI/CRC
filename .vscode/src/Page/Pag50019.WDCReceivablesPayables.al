@@ -2,7 +2,7 @@
 page 50019 "WDC Receivables-Payables"
 {
     ApplicationArea = Suite;
-    CaptionML = ENU = 'Receivables-Payables', FRA = 'Engagmements';
+    CaptionML = ENU = 'Receivables-Payables', FRA = 'Engagements';
     DeleteAllowed = false;
     InsertAllowed = false;
     LinksAllowed = false;
@@ -54,6 +54,27 @@ page 50019 "WDC Receivables-Payables"
                             NetChangeAmountTypeOnValidate();
                     end;
                 }
+                field(VendorNo; VendorNo)
+                {
+                    ApplicationArea = Suite;
+                    CaptionML = ENU = 'Vendor No.', FRA = 'No. fournisseur';
+                    TableRelation = Vendor."No.";
+                    trigger OnValidate()
+                    var
+                        Vendor: Record Vendor;
+                    begin
+                        VendorName := '';
+                        if Vendor.Get(VendorNo) then
+                            VendorName := Vendor.Name;
+                        UpdateSubForm();
+                    end;
+                }
+                field(VendorName; VendorName)
+                {
+                    ApplicationArea = Suite;
+                    CaptionML = ENU = 'Vendor Name', FRA = 'Nom fournisseur';
+                    Editable = false;
+                }
             }
             part(ReceivPayablesLinesNew; "WDC Receivables-Payables Lines")
             {
@@ -74,10 +95,14 @@ page 50019 "WDC Receivables-Payables"
     var
         PeriodType: Enum "Analysis Period Type";
         AmountType: Enum "Analysis Amount Type";
+        VendorNo: Code[20];
+        VendorName: Text[100];
+        StartFilterDate: Date;
+        EndFilterDate: Date;
 
     local procedure UpdateSubForm()
     begin
-        CurrPage.ReceivPayablesLinesNew.PAGE.SetLines(Rec, PeriodType, AmountType);
+        CurrPage.ReceivPayablesLinesNew.PAGE.SetLines(Rec, PeriodType, AmountType, VendorNo);
     end;
 
     local procedure DayPeriodTypeOnPush()

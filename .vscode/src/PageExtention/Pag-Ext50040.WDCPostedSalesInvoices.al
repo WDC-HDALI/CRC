@@ -1,6 +1,8 @@
 //WDC01  WDC.HG  02/06/2025  Add New Action 
 //wdc02  WDC.FS  18/06/2025 Hide Some Fields
 //WDC03  WDC.HG  09/07/2025  show new fields 
+//WDC04  WDC.HG  24/11/2025  add new print action
+
 pageextension 50040 "WDC Posted Sales Invoices" extends "Posted Sales Invoices"
 {
 
@@ -183,6 +185,39 @@ pageextension 50040 "WDC Posted Sales Invoices" extends "Posted Sales Invoices"
         }
 
     }
+    //<<WDC04
+    actions
+    {
+        modify(Print)
+        {
+            Visible = StandardPrintIsVisible;
+        }
+        addlast(Processing)
+        {
+            action(DirectPrint)
+            {
+                ApplicationArea = Basic, Suite;
+                Captionml = ENU = 'Print', FRA = 'Imprimer';
+                Ellipsis = true;
+                Image = Print;
+                PromotedCategory = Process;
+                Promoted = true;
+                PromotedIsBig = true;
+                Visible = Not StandardPrintIsVisible;
+                trigger OnAction()
+                var
+                    lklk: Report 1306;
+                    lPostedSalesInvoice: report "WDC Posted Sales Invoice ";
+                begin
+                    CurrPage.SetSelectionFilter(Rec);
+                    lPostedSalesInvoice.SetTableView(Rec);
+                    lPostedSalesInvoice.RunModal();
+
+                end;
+            }
+        }
+    }
+    //>>WDC04
 
     trigger OnAfterGetRecord()
     begin
@@ -190,8 +225,16 @@ pageextension 50040 "WDC Posted Sales Invoices" extends "Posted Sales Invoices"
     end;
 
     trigger OnOpenPage()
+    var
+        SalesSetup: Record "Sales & Receivables Setup";
     begin
+        SalesSetup.get();
+
+        StandardPrintIsVisible := SalesSetup."Standard Print Is Visible";
+
         rec.SetCurrentKey("Posting Date");
     end;
 
+    var
+        StandardPrintIsVisible: Boolean;
 }

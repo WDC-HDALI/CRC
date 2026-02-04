@@ -1,4 +1,6 @@
 pageextension 50020 "WDC Posted Sales Inv. - Update" extends "Posted Sales Inv. - Update"
+//*****************Documentation*************************
+//wdc01  WDC.FS  06/01/2026 add New fields
 {
     layout
     {
@@ -7,6 +9,7 @@ pageextension 50020 "WDC Posted Sales Inv. - Update" extends "Posted Sales Inv. 
             field("Salesperson Code"; Rec."Salesperson Code")
             {
                 ApplicationArea = all;
+                Editable = SalesPersonIsEditable;
 
             }
         }
@@ -32,17 +35,39 @@ pageextension 50020 "WDC Posted Sales Inv. - Update" extends "Posted Sales Inv. 
 
         addafter("Shipping Agent Code")
         {
-            field(ShippingAgentCode; Rec."Shipping Agent Code")
+            //<<wdc01
+            //field(ShippingAgentCode; Rec."Shipping Agent Code")
+            //{
+            //  CaptionML = FRA = 'N° camion';
+            //ApplicationArea = All;
+            //}
+            //field(ShippingAgentServiceCode; Rec."Shipping Agent Service Code")
+            //{
+            //  CaptionML = FRA = 'Code chauffeur';
+            // ApplicationArea = All;
+            //}
+            field("Truck No."; Rec."Truck No.")
             {
-                CaptionML = FRA = 'N° camion';
                 ApplicationArea = All;
+                Editable = true;
             }
-            field(ShippingAgentServiceCode; Rec."Shipping Agent Service Code")
+            field("Driver Name"; Rec."Driver Name")
             {
-                CaptionML = FRA = 'Code chauffeur';
                 ApplicationArea = All;
+                Editable = true;
             }
+            //>>wdc01
         }
 
     }
+    trigger OnOpenPage()
+    var
+    Begin
+        UserSetup.Get(UserId());
+        SalesPersonIsEditable := UserSetup."Allow Salesperson Edit";
+    End;
+
+    var
+        SalesPersonIsEditable: Boolean;
+        UserSetup: Record "User Setup";
 }

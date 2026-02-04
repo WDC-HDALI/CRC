@@ -24,6 +24,11 @@ pageextension 50056 "WDC Posted Purchase Receipt" extends "Posted Purchase Recei
                 Editable = false;
                 ApplicationArea = all;
             }
+            field("Linked Invoice advance"; Rec."Linked Invoice advance")
+            {
+                Editable = false;
+                ApplicationArea = all;
+            }
         }
     }
     actions
@@ -35,6 +40,7 @@ pageextension 50056 "WDC Posted Purchase Receipt" extends "Posted Purchase Recei
                 CaptionML = ENU = 'Bill in advance', FRA = 'Facturer à l"avance';
                 ApplicationArea = All;
                 Image = Invoice;
+                Enabled = BillByAdvIsEnable;
                 PromotedOnly = true;
                 Promoted = true;
                 PromotedCategory = Process;
@@ -42,20 +48,24 @@ pageextension 50056 "WDC Posted Purchase Receipt" extends "Posted Purchase Recei
                 trigger OnAction()
                 var
                     lPurchRcptHeader: Record "Purch. Rcpt. Header";
-                    lWDCUpdPurchRcpLine: Report 50031;
+                    lWDCUpdPurchRcpLine: Report "WDC Update Purch. RcpLine";
                 begin
                     lPurchRcptHeader.reset;
                     lPurchRcptHeader.SetRange("No.", Rec."No.");
                     clear(lWDCUpdPurchRcpLine);
                     lWDCUpdPurchRcpLine.SetTableView(lPurchRcptHeader);
                     lWDCUpdPurchRcpLine.Run();
-
-                    rec."Bill in advance" := true;
-                    rec.Modify();
-
                 end;
             }
         }
     }
+    trigger OnAfterGetRecord()
+    begin
+        rec.calcfields(rec."Remain to Invoice");
+        BillByAdvIsEnable := (not Rec."Bill in advance") and (rec."Remain to Invoice") And
+                             (rec."Linked Invoice advance" = '');
+    end;
 
+    var
+        BillByAdvIsEnable: Boolean;
 }

@@ -651,6 +651,7 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
         {
             CaptionML = ENU = 'Payment Methode Code', FRA = 'Code mode règlement';
             DataClassification = ToBeClassified;
+            TableRelation = "Payment Method".Code;
         }
         field(54062; Situation; Enum "WDC-ST Payment Situation")
         {

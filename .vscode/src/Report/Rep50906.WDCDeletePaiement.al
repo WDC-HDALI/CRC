@@ -6,66 +6,104 @@ using Microsoft.Finance.VAT.Ledger;
 using Microsoft.Bank.Ledger;
 using Microsoft.Sales.Receivables;
 using Microsoft.Finance.GeneralLedger.Ledger;
+//**********************documentation***********************//
+//wdc01   wdc.FS   26/11/2025   Report: Delete Paiement
+//************************************************************//
 
 report 50906 "WDC Delete Paiement"
 {
-    Caption = 'Delete paiement';
-    UseRequestPage = false;
+    CaptionML = ENU = 'wdc Delete Paiement', FRA = 'wdc Supprimer Paiement';
+    //UseRequestPage = false;
     Permissions = tabledata "G/L Entry" = RIMD, tabledata "Cust. Ledger Entry" = RIMD, tabledata "Detailed Cust. Ledg. Entry" = RIMD, tabledata "Bank Account Ledger Entry" = RIMD;
     ApplicationArea = All;
     ProcessingOnly = true;
+    UsageCategory = Administration;
+
+
     dataset
     {
 
         dataitem("Company Information"; "Company Information")
         {
+            column(Name; "Name") { }
 
-            column(Name; "Name")
-            {
-            }
             trigger OnAfterGetRecord()
             var
                 GlEntry: Record "G/L Entry";
-                CustEntry: record "Cust. Ledger Entry";
+                CustEntry: Record "Cust. Ledger Entry";
                 DetCustEntry: Record "Detailed Cust. Ledg. Entry";
                 BankEntry: Record "Bank Account Ledger Entry";
+                Text001: TextConst ENU = 'You must enter a Document No.', FRA = 'Vous devez entrer un N° de document';
             begin
-                clear(GlEntry);
-                Clear(CustEntry);
-                Clear(DetCustEntry);
-                Clear(BankEntry);
-                GlEntry.SetFilter("Entry No.", '%1|%2', 13923, 13922);
-                if GlEntry.findset then
+                //<<wdc01
+                if DocumentNo = '' then
+                    Error(Text001);
+
+                GlEntry.reset();
+                GlEntry.SetRange("Document No.", DocumentNo);
+                GlEntry.SetRange("Document Type", GlEntry."Document Type"::Payment);
+                if GlEntry.FindSet then
                     repeat
                         GlEntry.Delete();
                     until GlEntry.Next() = 0;
 
-                CustEntry.SetFilter("Entry No.", '%1', 13923);
-                if CustEntry.findset then
+                CustEntry.reset();
+                CustEntry.SetRange("Document No.", DocumentNo);
+                CustEntry.SetRange("Document Type", CustEntry."Document Type"::Payment);
+                if CustEntry.FindSet then
                     repeat
                         CustEntry.Delete();
                     until CustEntry.Next() = 0;
 
-                DetCustEntry.SetFilter("Entry No.", '%1|%2|%3|%4|%5', 7297, 7298, 7299, 7468, 7469, 7469);
+                DetCustEntry.reset();
+                DetCustEntry.SetRange("Document No.", DocumentNo);
+                DetCustEntry.SetRange("Document Type", DetCustEntry."Document Type"::Payment);
                 if DetCustEntry.FindSet then
                     repeat
                         DetCustEntry.Delete();
                     until DetCustEntry.Next() = 0;
 
-                BankEntry.SetFilter("Entry No.", '%1', 13922);
+                BankEntry.Reset();
+                BankEntry.SetRange("Document No.", DocumentNo);
+                BankEntry.SetRange("Document Type", BankEntry."Document Type"::Payment);
                 if BankEntry.FindSet then
                     repeat
                         BankEntry.Delete();
                     until BankEntry.Next() = 0;
+
             end;
 
             trigger OnPostDataItem()
+            var
+                Text002: TextConst ENU = 'Payment deleted for Document No.: %1', FRA = 'Paiement supprimé pour le N° de document : %1';
             begin
-                Message('Opération de mise à jour terminée')
+                Message(Text002, DocumentNo);
             end;
+            //>>wdc01
+        }
 
+
+    }
+    //<<wdc01
+    requestpage
+    {
+        layout
+        {
+            area(Content)
+            {
+                group(Options)
+                {
+                    field(DocumentNo; DocumentNo)
+                    {
+                        ApplicationArea = All;
+                        CaptionML = ENU = 'Document No.', FRA = 'N° de document';
+                    }
+                }
+            }
         }
     }
+    //>>wdc01
 
-
+    var
+        DocumentNo: Code[20];
 }

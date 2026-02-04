@@ -20,6 +20,16 @@ tableextension 50038 "WDC Sales Setup" extends "Sales & Receivables Setup"
             DataClassification = ToBeClassified;
             TableRelation = "No. Series";
         }
+        field(50002; "Standard Print Is Visible"; Boolean)
+        {
+            Captionml = ENU = 'Standard Print Is Visible', FRA = 'Impression standard visible';
+            DataClassification = ToBeClassified;
+        }
+        field(50003; "Print Paiement Model2"; Boolean)
+        {
+            Captionml = ENU = 'Print Paiement Model2', FRA = 'Modèle imprime paiement 2';
+            DataClassification = ToBeClassified;
+        }
 
     }
 }

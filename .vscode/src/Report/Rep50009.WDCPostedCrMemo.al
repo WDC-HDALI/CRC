@@ -7,7 +7,8 @@ using Microsoft.Inventory.Item;
 using Microsoft.Foundation.Shipping;
 using Microsoft.Sales.Customer;
 using Microsoft.Sales.History;
-
+//*********************Documentation**************************
+//<<WDC01  WDC.HG  24/11/2025  Add SalesPerson Code 
 report 50009 "WDC PostedCrMemo"
 {
     ApplicationArea = All;
@@ -57,6 +58,12 @@ report 50009 "WDC PostedCrMemo"
             {
 
             }
+            //<<WDC01
+            column(Salesperson_Code; "Salesperson Code")
+            {
+
+            }
+            //>>WDC01
             dataitem("Sales Cr.Memo Line"; "Sales Cr.Memo Line")
             {
                 DataItemLink = "Document No." = FIELD("No.");

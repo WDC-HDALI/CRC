@@ -127,6 +127,7 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
             {
                 ApplicationArea = All;
             }
+
             // field("Mnt Déduction"; Rec."Mnt Déduction")
             // {
             //     ApplicationArea = All;

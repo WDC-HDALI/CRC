@@ -3,21 +3,24 @@ namespace CRC.CRC;
 using Microsoft.Purchases.History;
 using Microsoft.Purchases.Document;
 
-report 50031 WDCUpdatePurchRcpLine
+report 50031 "WDC Update Purch. RcpLine"
 {
-    Caption = 'UpdatePurchRcpLine';
+    CaptionML = ENU = 'Invoice Purchase Receipt', FRA = 'Facturer réception d"achat';
     Permissions = tabledata "Purch. Rcpt. Line" = RIMD, tabledata "Purchase Line" = RIMD;
     ProcessingOnly = true;
     ApplicationArea = All;
-    UsageCategory = Lists;
-    UseRequestPage = false;
+    // UsageCategory = Lists;
+    UseRequestPage = true;
+
     dataset
     {
         dataitem(PurchRcptHeader; "Purch. Rcpt. Header")
         {
+            DataItemTableView = sorting("No.") order(ascending);
 
             dataitem(PurchRcptLine; "Purch. Rcpt. Line")
             {
+                DataItemTableView = sorting("Line No.") order(ascending);
                 DataItemLink = "Document No." = field("No.");
                 trigger OnAfterGetRecord()
                 var
@@ -35,8 +38,32 @@ report 50031 WDCUpdatePurchRcpLine
                         UpdatePurchLine("Order No.", "Order Line No.", Quantity);
                 end;
             }
+            trigger OnAfterGetRecord()
+            begin
+                PurchRcptHeader."Bill in advance" := true;
+                PurchRcptHeader."Linked Invoice advance" := InvoiceNo;
+                PurchRcptHeader.Modify();
+            end;
         }
 
+    }
+    requestpage
+    {
+        layout
+        {
+            area(Content)
+            {
+                group(filtres)
+                {
+                    field(InvoiceNo; InvoiceNo)
+                    {
+                        ApplicationArea = all;
+                        CaptionML = ENU = 'Linked Invoice advance', FRA = 'Facture d"avance liée';
+                        TableRelation = "Purch. Inv. Header";
+                    }
+                }
+            }
+        }
     }
     local procedure UpdatePurchLine(pOrderNo: Code[20]; pOrderLineNo: Integer; pQtyReceived: Decimal)
     var
@@ -58,4 +85,7 @@ report 50031 WDCUpdatePurchRcpLine
         lPurchLine."Qty. Invoiced (Base)" := lPurchLine."Quantity Invoiced";
         lPurchLine.Modify();
     end;
+
+    var
+        InvoiceNo: code[20];
 }

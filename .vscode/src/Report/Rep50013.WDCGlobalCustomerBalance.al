@@ -1,5 +1,7 @@
 //*****************Documentation********************
 //WDC01  WDC.HG  11/07/2025  take the  Total TTC for BL instead of HT 
+//WDC02  WDC.HG  17/11/2025 Add report and solde 
+//WDC03  WDC.FS  26.12.2025 Edit Report
 namespace CRC.CRC;
 
 using Microsoft.Sales.History;
@@ -7,6 +9,7 @@ using Microsoft.Sales.Receivables;
 using Microsoft.Inventory.Item;
 using Microsoft.Finance.VAT.Setup;
 using Microsoft.Sales.Document;
+using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Sales.Customer;
 using System.Utilities;
 
@@ -61,6 +64,28 @@ report 50013 "WDC Global Customer Balance"
             {
 
             }
+            //<<WDC02
+            column(Balance__LCY_; FilteredCustomer."Balance (LCY)")
+            {
+
+            }
+            column(Total_Shipment; FilteredCustomer."Total Shipment")
+            {
+
+            }
+            column(Report; FilteredCustomer.Report)
+            {
+
+            }
+            //>>WDC02
+            column(CustBalanceUntilToday; CustBalanceUntilToday)
+            {
+            }
+            //<<wdc03
+            column(Date_Filter; DateFilterTxt)
+            {
+            }
+            //>>wdc03
 
             dataitem("Sales Shipment Line"; "Sales Shipment Line")
             {
@@ -310,12 +335,28 @@ report 50013 "WDC Global Customer Balance"
                     Error('Les dates début et fin ne doivent pas être vide!');
                 if EndingDate < StartingDate then
                     Error('Date fin ne doit pas être antérieur à la date début !');
+                DateFilterTxt := StrSubstNo('%1 .. %2', StartingDate, EndingDate);
             end;
 
             trigger OnAfterGetRecord()
+            var
+                GLSetup: record "General Ledger Setup";
             begin
+                CustBalanceUntilToday := 0;
+                GLSetup.get();
                 CompanyInfo.Get;
                 CompanyInfo.CalcFields(Picture);
+                //<<WDC02
+                if FilteredCustomer.get(Customer."No.") then begin
+                    FilteredCustomer.SetFilter("Start Year Filter", '..%1', StartingDate);
+                    FilteredCustomer.CalcFields("Balance (LCY)", Report, "Total Shipment");
+                end;
+
+                //>>WDC02
+                Customer2.Get(Customer."No.");
+                Customer2.CalcFields("Balance (LCY)");
+                Customer2.CalcFields("Total Shipment");
+                CustBalanceUntilToday := Customer2."Balance (LCY)" + Customer2."Total Shipment";
             end;
         }
     }
@@ -381,4 +422,8 @@ report 50013 "WDC Global Customer Balance"
         CompanyInfo: Record 79;
         DueDate: Date;
         PaymentType: Text[50];
+        FilteredCustomer: Record Customer;
+        Customer2: Record Customer;
+        CustBalanceUntilToday: Decimal;
+        DateFilterTxt: Text[100];
 }

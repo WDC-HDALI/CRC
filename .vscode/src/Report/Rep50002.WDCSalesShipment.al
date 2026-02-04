@@ -10,6 +10,8 @@ using Microsoft.Finance.Currency;
 using Microsoft.Sales.Customer;
 //*****************Documentation**************************
 //WDC01  WDC.HG  10/09/2025  add the Invoice No for Comptant passager 
+//WDC02  WDC.HG  24/11/2025  Add SalesPersonCode 
+//WDC03  WDC.FS  06/01/2026  Add Fields
 report 50002 WDCSalesShipment
 {
     Captionml = ENU = 'Sales Shipment', FRA = 'Bon livraison';
@@ -35,7 +37,7 @@ report 50002 WDCSalesShipment
             {
 
             }
-            column(Bill_to_Name; "Bill-to Name")
+            column(Bill_to_Name; "Sell-to Customer Name")
             {
 
             }
@@ -100,14 +102,24 @@ report 50002 WDCSalesShipment
             {
 
             }
-            column(CamionNo; shippingAgent.Name)
+            //<<WDC03
+            //column(CamionNo; shippingAgent.Name)
+            //{
+
+            //}
+            column(CamionNo; "Truck No.")
             {
 
             }
-            column(ChauffeurName; "Shipping Agent Service Code")
+            //column(ChauffeurName; "Shipping Agent Service Code")
+            //{
+
+            //}
+            column(ChauffeurName; "Driver name")
             {
 
             }
+            //>>WDC03
             column(paymentmethod; paymentmethod.Description)
             {
 
@@ -138,6 +150,12 @@ report 50002 WDCSalesShipment
 
             }
             //>>WDC01
+            //<<WDC02
+            column(Salesperson_Code; "Salesperson Code")
+            {
+
+            }
+            //>>WDC02
             dataitem(SalesShipmentLine; "Sales Shipment Line")
             {
                 DataItemLink = "Document No." = FIELD("No.");
@@ -334,8 +352,8 @@ report 50002 WDCSalesShipment
     trigger OnPostReport()
 
     begin
-        if not CurrReport.Preview then
-            CODEUNIT.Run(CODEUNIT::"Sales Shpt.-Printed", SalesShipmentHeader);
+        //if not CurrReport.Preview then
+        CODEUNIT.Run(CODEUNIT::"Sales Shpt.-Printed", SalesShipmentHeader);
 
     end;
 

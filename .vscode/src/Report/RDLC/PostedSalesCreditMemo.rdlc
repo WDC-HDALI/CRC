@@ -1571,6 +1571,36 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                     <PaddingBottom>2pt</PaddingBottom>
                   </Style>
                 </Textbox>
+                <Textbox Name="Textbox7">
+                  <CanGrow>true</CanGrow>
+                  <KeepTogether>true</KeepTogether>
+                  <Paragraphs>
+                    <Paragraph>
+                      <TextRuns>
+                        <TextRun>
+                          <Value>=Fields!Salesperson_Code.Value</Value>
+                          <Style />
+                        </TextRun>
+                      </TextRuns>
+                      <Style />
+                    </Paragraph>
+                  </Paragraphs>
+                  <rd:DefaultName>Textbox7</rd:DefaultName>
+                  <Top>3.34925cm</Top>
+                  <Left>10.7006cm</Left>
+                  <Height>0.94822cm</Height>
+                  <Width>2.73812cm</Width>
+                  <ZIndex>16</ZIndex>
+                  <Style>
+                    <Border>
+                      <Style>None</Style>
+                    </Border>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                    <PaddingBottom>2pt</PaddingBottom>
+                  </Style>
+                </Textbox>
               </ReportItems>
               <Top>0.06806cm</Top>
               <Height>8.14111cm</Height>
@@ -1666,6 +1696,9 @@ End Function
         </Field>
         <Field Name="SystemCreatedBy">
           <DataField>SystemCreatedBy</DataField>
+        </Field>
+        <Field Name="Salesperson_Code">
+          <DataField>Salesperson_Code</DataField>
         </Field>
         <Field Name="ItemNo">
           <DataField>ItemNo</DataField>

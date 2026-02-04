@@ -5,6 +5,8 @@ using Microsoft.Sales.Receivables;
 using Microsoft.Sales.History;
 
 tableextension 50018 "WDC Sales Invoice Header" extends "Sales Invoice Header"
+//****************Documentation**********************
+//wdc01  WDC.FS  05/01/2026  Add fields
 {
     fields
     {
@@ -93,6 +95,23 @@ tableextension 50018 "WDC Sales Invoice Header" extends "Sales Invoice Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        //<<wdc01
+        field(50017; "Truck No."; Code[20])
+        {
+            CaptionML = ENU = 'Truck No.', FRA = 'N° camion';
+            DataClassification = ToBeClassified;
+            Editable = false;
+
+
+        }
+        field(50018; "Driver Name"; Text[100])
+        {
+            CaptionML = ENU = 'Driver Name', FRA = 'Nom chauffeur';
+            DataClassification = ToBeClassified;
+            Editable = false;
+
+        }
+        //>>wdc01
 
     }
 }

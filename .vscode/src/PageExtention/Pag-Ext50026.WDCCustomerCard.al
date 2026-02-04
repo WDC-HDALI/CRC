@@ -5,7 +5,10 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
 {
     layout
     {
-
+        modify("No.")
+        {
+            Editable = CustomerNoIsEditable;
+        }
         modify("Shipping Agent Code")
         {
             Visible = false;
@@ -175,6 +178,23 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
         {
             Editable = EditFields;
         }
+        //<<CHG01
+        modify("Payment Method Code")
+        {
+            Visible = false;
+        }
+        // modify("Balance (LCY)")
+        // {
+        //     Visible = false;
+        // }
+        // addafter("Balance (LCY)")
+        // {
+        //     field("WDC Balance (LCY)"; Rec."WDC Balance (LCY)")
+        //     {
+        //         ApplicationArea = all;
+        //     }
+        // }
+        //>>CHG01
         addafter("Shipment Method Code")
         {
             field(ShippingAgentCode; Rec."Shipping Agent Code")
@@ -188,6 +208,18 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
             }
         }
+        addbefore("Credit Limit (LCY)")
+        {
+            field(BalanceNotEncashed; BalanceNotEncashed)
+            {
+                CaptionML = ENU = 'Balance Not Encased', FRA = 'Solde non encaissé';
+                ApplicationArea = All;
+                Editable = false;
+                Style = Strong;
+                StyleExpr = StyleTxtBalanceNotEncashed;
+
+            }
+        }
         addafter(General)
         {
             group(Detail)
@@ -198,7 +230,7 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
                     field(Report; Rec.Report)
                     {
                         ApplicationArea = all;
-                        Style = StrongAccent;
+                        Style = Strong;
                     }
                     field(Debit; Rec.Debit)
                     {
@@ -417,9 +449,13 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
     begin
         GLSetup.get;
         UserSetup.Get(UserId);
+        CustomerNoIsEditable := true;
+        If Rec."No." <> '' then
+            CustomerNoIsEditable := UserSetup."Allow Rename Customer";
         EditFields := UserSetup."Allow Modify Customer";
         Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Go Live Date");
         rec.SetFilter("Due Date Filter", '%1..', WorkDate);
+        ///rec.SetFilter("Due Date Filter for balance", '..%1', WorkDate);
     end;
 
     trigger OnAfterGetRecord()
@@ -430,17 +466,6 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
     begin
         UnpaidInProgress := 0;
         LinkedCustomerLedgerEntryNo := 0;
-        // lCustLedgEntr.Reset();
-        // lCustLedgEntr.SetCurrentKey("Document Type", "Customer No.", "Posting Date", "Currency Code");
-        // lCustLedgEntr.SetRange("Customer No.", Rec."No.");
-        // lCustLedgEntr.SetRange("Document Type", lCustLedgEntr."Document Type"::" ");
-        // lCustLedgEntr.SetFilter("Payment Slip Type", '%1|%2', lCustLedgEntr."Payment Slip Type"::Draft, lCustLedgEntr."Payment Slip Type"::Cheque);
-        // if lCustLedgEntr.FindSet() then
-        //     repeat
-        //         lCustLedgEntr.CalcFields("Remaining Amt. (LCY)");
-        //         UnpaidInProgress += lCustLedgEntr."Remaining Amt. (LCY)";
-        //     until lCustLedgEntr.Next() = 0;
-
         //<<WDC02
         lDetailedCustLedgEntry.Reset();
         lDetailedCustLedgEntry.SetCurrentKey("Document Type", "Customer No.", "Posting Date", "Currency Code");
@@ -462,10 +487,12 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
         UserSetup.Get(UserId);
         if not UserSetup."Allow Modify Customer" then
             CurrPage.Editable(false);
-        rec.CalcFields("Balance (LCY)", "Total Shipment");
+        Rec.CalcFields("Balance (LCY)", "Total Shipment");
+        Rec.CalcFields("Draft Not Due");
         TotalCustomerAmount := Rec."Balance (LCY)" + (Rec."Total Shipment");
-
+        BalanceNotEncashed := TotalCustomerAmount + Rec."Draft Not Due";
         StyleTxt := Color(); //WDC01
+        StyleTxtBalanceNotEncashed := ColorBalanceNotEncashed();
     end;
 
     procedure Color(): text[50]
@@ -477,10 +504,22 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
 
     end;
 
+    procedure ColorBalanceNotEncashed(): text[50]
+    begin
+        if BalanceNotEncashed > 0 then
+            exit('unfavorable')
+        else
+            exit('favorable');
+
+    end;
+
     var
         TotalCustomerAmount: Decimal;
+        StyleTxtBalanceNotEncashed: Text[50];
+        BalanceNotEncashed: Decimal;
         StyleTxt: Text[50];
         EditFields: Boolean;
         UnpaidInProgress: Decimal;
         LinkedCustomerLedgerEntryNo: integer;
+        CustomerNoIsEditable: Boolean;
 }

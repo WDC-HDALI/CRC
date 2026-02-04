@@ -26,5 +26,16 @@ pageextension 50048 "WDC Sales Setup" extends "Sales & Receivables Setup"
                 ApplicationArea = all;
             }
         }
+        addafter("Update Document Date When Posting Date Is Modified")
+        {
+            field("Standard Print Is Visible"; Rec."Standard Print Is Visible")
+            {
+                ApplicationArea = all;
+            }
+            field("Print Paiement Model2"; Rec."Print Paiement Model2")
+            {
+                ApplicationArea = all;
+            }
+        }
     }
 }

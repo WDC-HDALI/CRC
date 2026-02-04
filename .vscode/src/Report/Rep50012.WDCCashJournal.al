@@ -16,16 +16,21 @@ report 50012 "WDC Cash Journal"
 
     dataset
     {
+        dataitem(CompInfo; 79)
+        {
+
+            column(COMPANYNAME; CompInfo.Name)
+            {
+
+            }
+        }
         dataitem("Sales Shipment Line"; "Sales Shipment Line")
         {
             DataItemTableView = SORTING("Document No.", "Line No.")
                                     ORDER(Ascending)
                                     where("Qty. Shipped Not Invoiced" = filter(<> 0));
 
-            column(COMPANYNAME; COMPANYNAME)
-            {
 
-            }
             column(StartingDate; StartingDate)
             {
 
@@ -71,7 +76,6 @@ report 50012 "WDC Cash Journal"
                     Error('Date fin ne doit pas être antérieur à la date début !');
 
                 "Sales Shipment Line".SetFilter("Posting Date", '%1..%2', StartingDate, EndingDate);
-
                 Type_Doc := 'BL NON FACTURE';
                 ToDisplay := 0;
                 TotalBL := 0;

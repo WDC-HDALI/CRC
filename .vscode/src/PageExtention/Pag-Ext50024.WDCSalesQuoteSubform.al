@@ -7,8 +7,24 @@ pageextension 50024 "WDC Sales Quote Subform" extends "Sales Quote Subform"
             field("Unit Price Incl Discount"; Rec."Unit Price Incl Discount")
             {
                 ApplicationArea = all;
-                Editable = false;
+                //Editable = false;
                 BlankZero = true;
+                trigger OnValidate()
+                var
+                begin
+                    CurrPage.Update();
+                end;
+            }
+        }
+        addafter("Line Amount")
+        {
+            field("Amount Including VAT"; Rec."Amount Including VAT")
+            {
+                ApplicationArea = all;
+            }
+            field("Location Item Inventory"; Rec."Location Item Inventory")
+            {
+                ApplicationArea = all;
             }
         }
         modify("Qty. to Assemble to Order")
@@ -54,6 +70,7 @@ pageextension 50024 "WDC Sales Quote Subform" extends "Sales Quote Subform"
                 end;
             end;
         }
+
         modify("Substitution Available")
         {
             Visible = false;

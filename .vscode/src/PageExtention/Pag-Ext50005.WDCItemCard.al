@@ -26,6 +26,10 @@ pageextension 50005 "WDC Item Card" extends "Item Card"
             }
         }
 
+        modify("No.")
+        {
+            Editable = ItemNoIsEditable;
+        }
         modify(Replenishment)
         {
             Visible = false;
@@ -149,6 +153,23 @@ pageextension 50005 "WDC Item Card" extends "Item Card"
         {
             Visible = false;
         }
+        modify("Unit Price")
+        {
+            trigger OnAfterValidate()
+            var
+                VATPostingSetup: Record "VAT Posting Setup";
+            begin
+                //<<wdc02
+                PrixTTC := 0;
+                if rec."Unit Price" <> 0 then begin
+                    if VATPostingSetup.Get('ASSUJETTI', rec."VAT Prod. Posting Group") then
+                        PrixTTC := rec."Unit Price" * (1 + (VATPostingSetup."VAT %" / 100));
+                end;
+
+                //>>wdc02
+            end;
+        }
+
         addafter(Inventory)
         {
             field("Input Inventory"; Rec."Input Inventory")
@@ -233,6 +254,10 @@ pageextension 50005 "WDC Item Card" extends "Item Card"
         UserSetup.get(UserId);
         ShowFieldActivated := false;
         ViewSalesMarginFields := false;
+
+        ItemNoIsEditable := true;
+        If Rec."No." <> '' then
+            ItemNoIsEditable := UserSetup."Allow Rename Item";
         if not UserSetup."Allow Modify Item" then
             CurrPage.Editable(false);
 
@@ -252,6 +277,7 @@ pageextension 50005 "WDC Item Card" extends "Item Card"
         ShowFieldActivated: Boolean;
         ViewSalesMarginFields: Boolean;
         PrixTTC: decimal;
+        ItemNoIsEditable: Boolean;
     //>>wdc01
 
 }

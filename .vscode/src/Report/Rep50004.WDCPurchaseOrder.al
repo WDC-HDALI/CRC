@@ -4,6 +4,8 @@ using Microsoft.Purchases.Document;
 using System.Security.User;
 using Microsoft.Foundation.Company;
 using Microsoft.Foundation.Shipping;
+//*********************Documentation**************************
+//<<WDC01  WDC.HG  24/11/2025  Add Purchaser Code 
 
 report 50004 "WDC Purchase Order"
 {
@@ -85,6 +87,12 @@ report 50004 "WDC Purchase Order"
             {
 
             }
+            //<<WDC01
+            column(Purchaser_Code; "Purchaser Code")
+            {
+
+            }
+            //>>WDC01
 
             dataitem(PurchaseLine; "Purchase Line")
             {
@@ -127,13 +135,12 @@ report 50004 "WDC Purchase Order"
                 DestinationName := '';
                 DestinationAddress := '';
                 DestinationCity := '';
+                DestinationMF := CompanyInformation."VAT Registration No.";
                 if ShipToAddressEqualsCompanyShipToAddress() then begin
                     DestinationName := CompanyInformation.Name;
                     DestinationAddress := CompanyInformation.Address;
                     DestinationCity := CompanyInformation.City;
-                    DestinationMF := CompanyInformation."VAT Registration No.";
-                end
-                else begin
+                end else begin
                     DestinationName := PurchaseHeader."Ship-to Name";
                     DestinationAddress := PurchaseHeader."Ship-to Address";
                     DestinationCity := "Ship-to City";

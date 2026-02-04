@@ -92,17 +92,7 @@ tableextension 50004 "WDC Item" extends Item
             Quantity = filter(< 0)));
         }
         //>>WDC01s
-    }
-    trigger OnRename()
-    begin
-        if "No." <> xRec."No." then
-            if UserSetup."Allow Rename Item" = false then
-                Error(Text001);
-    end;
 
-    var
-        UserSetup: Record "User Setup";
-        Text001: TextConst ENU = 'You are not authorized to rename items. Please contact your administrator.',
-                            FRA = 'Vous n''êtes pas autorisé à renommer les articles. Veuillez contacter votre administrateur.';
+    }
 
 }

@@ -1,5 +1,6 @@
 //****************Documentation**********************
 //wdc01  WDC.FS  18/06/2025 Hide Some Fields
+//WDC02  WDC.FS  05/01/2026  Add Fields 
 pageextension 50016 "WDC Sales Order" extends "Sales Order"
 {
     layout
@@ -42,6 +43,7 @@ pageextension 50016 "WDC Sales Order" extends "Sales Order"
         modify("Salesperson Code")
         {
             ShowMandatory = true;
+            Editable = SalesPersonIsEditable;
         }
         modify("Sell-to Customer Name")
         {
@@ -263,12 +265,24 @@ pageextension 50016 "WDC Sales Order" extends "Sales Order"
             {
                 CaptionML = FRA = 'N° camion';
                 ApplicationArea = All;
+                Visible = false; //wdc02
             }
             field(ShippingAgentServiceCode; Rec."Shipping Agent Service Code")
             {
                 CaptionML = FRA = 'Code chauffeur';
                 ApplicationArea = All;
+                Visible = false; //wdc02
             }
+            //<<wdc02
+            field("Truck No."; Rec."Truck No.")
+            {
+                ApplicationArea = All;
+            }
+            field("Driver Name"; Rec."Driver Name")
+            {
+                ApplicationArea = All;
+            }
+            //>>wdc02
         }
 
     }
@@ -314,7 +328,7 @@ pageextension 50016 "WDC Sales Order" extends "Sales Order"
     begin
         if UserSetup.Get(UserId) then
             DateIsEditable := UserSetup."Allow Upd Sales Posting Date";
-
+        SalesPersonIsEditable := UserSetup."Allow Salesperson Edit";
     end;
 
     var
@@ -377,6 +391,9 @@ pageextension 50016 "WDC Sales Order" extends "Sales Order"
             until SalesOrderLine.Next() = 0;
     end;
 
+
+
     var
+        SalesPersonIsEditable: Boolean;
         InvoiceSalesHeader: Record "Sales Header";
 }

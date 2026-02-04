@@ -111,7 +111,7 @@ pageextension 50037 "WDC Vendor Card" extends "Vendor Card"
                     field(Report; Rec.Report)
                     {
                         ApplicationArea = all;
-                        Style = StrongAccent;
+                        Style = Strong;
                     }
                     field(VendorInvoice; Rec.VendorInvoice)
                     {
@@ -194,7 +194,7 @@ pageextension 50037 "WDC Vendor Card" extends "Vendor Card"
             group(ShippedNotInvoiced)
             {
                 CaptionML = ENU = 'Purchase Receipt Not Inv.', FRA = 'Réceptions non facturées';
-                part("PurchaseReceptNotInvoiced"; "WDC PurchaseReceptNotInvoiced")
+                part("PurchaseReceptNotInvoiced"; "WDC Purch. Recept Not Invoiced")
                 {
                     ApplicationArea = Basic, Suite;
                     SubPageLink = "Buy-from Vendor No." = field("No.");
@@ -273,7 +273,8 @@ pageextension 50037 "WDC Vendor Card" extends "Vendor Card"
         GLSetup.get;
         UserSetup.Get(UserId);
 
-        Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Allow Deferral Posting From");
+        //Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Allow Deferral Posting From");
+        Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Go Live Date");//WDC;HG
         rec.SetFilter("Due Date Filter", '%1..', WorkDate);
 
         if not UserSetup."Allow Modify Vendor" then
@@ -286,7 +287,7 @@ pageextension 50037 "WDC Vendor Card" extends "Vendor Card"
 
     procedure Color(): text[50]
     begin
-        if TotalvendorAmount < 0 then
+        if TotalvendorAmount > 0 then
             exit('unfavorable')
         else
             exit('favorable');

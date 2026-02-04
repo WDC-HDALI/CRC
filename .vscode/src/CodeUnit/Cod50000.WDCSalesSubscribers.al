@@ -7,6 +7,7 @@ codeunit 50000 "WDC Sales Subscribers"
 //WDC05  WDC.HG  29/08/2025  set the "Remain. Qty to Delivery" to negative while undo the shipment
 //WDC06  WDC.FS  01/09/2025  Force shipping when posting a sales order for passenger customer
 //WDC07  WDC.FS  02/09/2025  Set Posting Date to WorkDate when releasing Sales Order/Sales Invoice/Sales Credit Memo
+//WDC08  WDC.HG  14/11/2025  Implement Credit Limit 
 {
 
     // Enleve l'option de validation et laisser que l'expédition
@@ -17,6 +18,7 @@ codeunit 50000 "WDC Sales Subscribers"
                             FRA = 'Voulez-vous valider la commande?';
         lText002: TextConst ENU = 'Operation is cancelled',
                             FRA = 'Opération annulée';
+
     begin
         SalesHeader.TestField("Prices Including VAT", false);
         if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
@@ -26,14 +28,19 @@ codeunit 50000 "WDC Sales Subscribers"
             HideDialog := true;
             SalesHeader.Ship := true;
         end;
+
     end;
 
     //<< enleve le controle d'affectation Frais annexes Vente
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforeInsertICGenJnlLine, '', false, false)]
-    // local procedure OnBeforeInsertICGenJnlLine(var ICGenJournalLine: Record "Gen. Journal Line"; SalesHeader: Record "Sales Header"; SalesLine: Record "Sales Line"; CommitIsSuppressed: Boolean)
-    // begin
-    //     ICGenJournalLine.Description := SalesHeader."Sell-to Customer Name";
-    // end;
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforeFinalizePosting, '', false, false)]
+    local procedure OnBeforeInsertICGenJnlLine(var SalesHeader: Record "Sales Header"; var TempSalesLineGlobal: Record "Sales Line" temporary; var EverythingInvoiced: Boolean; SuppressCommit: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line")
+    var
+        UserSetup: Record "User Setup";
+    begin
+        UserSetup.Get(UserId);
+        if UserSetup."Allow Delete sales Invoice" then
+            SuppressCommit := true;
+    end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnCheckSalesDocumentOnAfterCalcShouldCheckItemCharge, '', false, false)]
     local procedure OnCheckSalesDocumentOnAfterCalcShouldCheckItemCharge(var SalesHeader: Record "Sales Header"; WhseReceive: Boolean; WhseShip: Boolean; var ShouldCheckItemCharge: Boolean; var ModifyHeader: Boolean)
@@ -61,6 +68,10 @@ codeunit 50000 "WDC Sales Subscribers"
 
         //>>WDC04
     end;
+
+
+
+
 
     [EventSubscriber(ObjectType::Page, page::"Sales Invoice Subform", 'OnDeleteRecordEvent', '', false, false)]
     local procedure OnAfterDeleteSalesInvSubf(VAR Rec: Record "Sales Line")
@@ -115,26 +126,68 @@ codeunit 50000 "WDC Sales Subscribers"
     local procedure OnBeforeCheckHeaderPostingType(var SalesHeader: Record "Sales Header"; var IsHandled: Boolean)
     var
         lCustomer: Record Customer;
+        TotalBalance: Decimal;
+        lTotalAmount: Decimal;
         lText001: TextConst ENU = 'You cannot release a sales order for a passenger customer. Instead, click on "Make Invoice".',
                             FRA = 'Vous ne pouvez pas valider une commande de vente pour un client passager. Cliquez plutôt sur "Créer une facture".';
         lText002: TextConst ENU = 'You must enter the salesperson code',
                             FRA = 'Vous devez saisir le code vendeur';
+        lText003: TextConst ENU = 'You must enter the Address code',
+                            FRA = 'Vous devez saisir l''adresse du client';
+        lText004: TextConst ENU = 'You must enter the VAT Registration No. code',
+                            FRA = 'Vous devez saisir le matricule fiscale';
         lUserSetup: Record "User Setup";
+        lSalesLine: Record "Sales Line";
+        lSalesReceivablesSetup: Record "Sales & Receivables Setup";
+        lErr001: TextConst ENG = 'The maximum authorized credit for customer is %1 , please contact your administration',
+                           FRA = 'Le maximum crédit autorisé pour ce  client est %1 , veuillez contacter l''administration';
+
     begin
+        lTotalAmount := 0;
+        TotalBalance := 0;
+        lCustomer.Get(SalesHeader."Sell-to Customer No.");
         if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
-            if lCustomer.Get(SalesHeader."Sell-to Customer No.") then begin
-                if (lCustomer."Customer Posting Group" = 'C-PASSAGER') then begin
-                    Error(lText001);
-                    IsHandled := true;
-                end;
+            if (lCustomer."Customer Posting Group" = 'C-PASSAGER') then begin
+                Error(lText001);
+                IsHandled := true;
             end;
         end;
+        if (lCustomer."Copy Sell-to Addr. to Qte From" = lCustomer."Copy Sell-to Addr. to Qte From"::Company) then begin
+            if SalesHeader."Sell-to Address" = '' then
+                Error(lText003);
+            if SalesHeader."VAT Registration No." = '' then
+                Error(lText004);
+        end;
+
         if SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then
             if SalesHeader."Salesperson Code" = '' then
                 Error(lText002);
         if lUserSetup.Get(UserId) then
             if Not lUserSetup."Allow Upd Sales Posting Date" then
-                SalesHeader.Validate("Posting Date", WorkDate());//WDC07
+                SalesHeader.Validate("Posting Date", WorkDate());
+
+        if (SalesHeader."Document Type" = SalesHeader."Document Type"::Invoice) or (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) then begin
+            lCustomer.SetFilter("Due Date Filter", '%1..', WorkDate);
+            lCustomer.CalcFields("Balance (LCY)", "Draft Not Due", "Total Shipment");
+            if lCustomer."Credit Limit (LCY)" <> 0 then begin
+                lSalesLine.Reset();
+                lSalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                lSalesLine.setrange("Document No.", SalesHeader."No.");
+                lSalesLine.SetFilter("Shipment No.", '');
+                lSalesLine.SetFilter("Shipment Line No.", '%1', 0);
+                if lSalesLine.FindSet() then
+                    repeat
+                        lTotalAmount += lSalesLine."Amount Including VAT";
+                    until lSalesLine.Next() = 0;
+                if lSalesLine."Document Type" = lSalesLine."Document Type"::Invoice then
+                    lTotalAmount := lTotalAmount + SalesHeader."Stamp Amount";
+                TotalBalance := lTotalAmount + (lCustomer."Balance (LCY)" + lCustomer."Total Shipment") + lCustomer."Draft Not Due";
+                if lCustomer."Credit Limit (LCY)" < TotalBalance then begin
+                    Error(lErr001, lCustomer."Credit Limit (LCY)");
+                end
+            end
+        end
+        //>>WDC08
     end;
     //>>wdc06
     var
@@ -269,7 +322,30 @@ codeunit 50000 "WDC Sales Subscribers"
     begin
         SalesInvoiceHeader."Bill-to Name" := SalesInvoiceHeaderRec."Bill-to Name";
         SalesInvoiceHeader."Sell-to Customer Name" := SalesInvoiceHeaderRec."Sell-to Customer Name";
+        //<<wdc09
+        SalesInvoiceHeader."Driver Name" := SalesInvoiceHeaderRec."Driver Name";
+        SalesInvoiceHeader."Truck No." := SalesInvoiceHeaderRec."Truck No.";
+        //>>wdc09
     end;
+    //<<wdc09
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Shipment Header - Edit", 'OnBeforeSalesShptHeaderModify', '', false, false)]
+    local procedure OnBeforeSalesShptHeaderModify(var SalesShptHeader: Record "Sales Shipment Header"; FromSalesShptHeader: Record "Sales Shipment Header")
+    begin
+
+        SalesShptHeader."Driver Name" := FromSalesShptHeader."Driver Name";
+        SalesShptHeader."Truck No." := FromSalesShptHeader."Truck No.";
+
+    end;
+
+    [EventSubscriber(ObjectType::Page, Page::"Posted Sales Shipment - Update", 'OnAfterRecordChanged', '', false, false)]
+    local procedure OnAfterRecordChangedShipment(var SalesShipmentHeader: Record "Sales Shipment Header"; xSalesShipmentHeader: Record "Sales Shipment Header"; var IsChanged: Boolean)
+    begin
+        IsChanged :=
+            IsChanged OR
+            (SalesShipmentHeader."Driver Name" <> xSalesShipmentHeader."Driver Name") OR
+            (SalesShipmentHeader."Truck No." <> xSalesShipmentHeader."Truck No.");
+    end;
+    //>>wdc09
 
     [EventSubscriber(ObjectType::Page, page::"Posted Sales Inv. - Update", 'OnAfterRecordChanged', '', false, false)]
     local procedure OnAfterRecordChanged(var SalesInvoiceHeader: Record "Sales Invoice Header"; xSalesInvoiceHeader: Record "Sales Invoice Header"; var IsChanged: Boolean)
@@ -277,7 +353,21 @@ codeunit 50000 "WDC Sales Subscribers"
         IsChanged := IsChanged OR (SalesInvoiceHeader."Salesperson Code" <> xSalesInvoiceHeader."Salesperson Code") OR
                      (SalesInvoiceHeader."Due Date" <> xSalesInvoiceHeader."Due Date") or
                      (SalesInvoiceHeader."Bill-to Name" <> xSalesInvoiceHeader."Bill-to Name") or
-                     (SalesInvoiceHeader."Sell-to Customer Name" <> xSalesInvoiceHeader."Sell-to Customer Name");
+                     (SalesInvoiceHeader."Sell-to Customer Name" <> xSalesInvoiceHeader."Sell-to Customer Name") or
+                     //<<wdc09
+                     (SalesInvoiceHeader."Driver Name" <> xSalesInvoiceHeader."Driver Name") or
+                     (SalesInvoiceHeader."Truck No." <> xSalesInvoiceHeader."Truck No.");
+        //>>wdc09
+    end;
+
+
+    [EventSubscriber(ObjectType::Page, page::"Pstd. Sales Cr. Memo - Update", 'OnAfterRecordChanged', '', false, false)]
+    local procedure OnAfterRecordChangedCrMemo(var SalesCrMemoHeader: Record "Sales Cr.Memo Header"; xSalesCrMemoHeader: Record "Sales Cr.Memo Header"; var IsChanged: Boolean)
+    begin
+        IsChanged := IsChanged OR (SalesCrMemoHeader."Salesperson Code" <> xSalesCrMemoHeader."Salesperson Code") OR
+                     (SalesCrMemoHeader."Due Date" <> xSalesCrMemoHeader."Due Date") or
+                     (SalesCrMemoHeader."Bill-to Name" <> xSalesCrMemoHeader."Bill-to Name") or
+                     (SalesCrMemoHeader."Sell-to Customer Name" <> xSalesCrMemoHeader."Sell-to Customer Name");
 
     end;
 
@@ -293,6 +383,10 @@ codeunit 50000 "WDC Sales Subscribers"
     begin
         SalesInvoiceHeader."Salesperson Code" := SalesInvoiceHeaderRec."Salesperson Code";
         SalesInvoiceHeader."Due Date" := SalesInvoiceHeaderRec."Due Date";
+        //<<wdc09
+        SalesInvoiceHeader."Driver Name" := SalesInvoiceHeaderRec."Driver Name";
+        SalesInvoiceHeader."Truck No." := SalesInvoiceHeaderRec."Truck No.";
+        //>>wdc09
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Credit Memo Hdr. - Edit", 'OnBeforeSalesCrMemoHeaderModify', '', false, false)]
@@ -304,7 +398,8 @@ codeunit 50000 "WDC Sales Subscribers"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostGLAndCustomer', '', false, false)]
     local procedure OnAfterPostGLAndCustomer(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; TotalSalesLine: Record "Sales Line"; TotalSalesLineLCY: Record "Sales Line"; CommitIsSuppressed: Boolean;
             WhseShptHeader: Record "Warehouse Shipment Header"; WhseShip: Boolean; var TempWhseShptHeader: Record "Warehouse Shipment Header"; var SalesInvHeader: Record "Sales Invoice Header"; var SalesCrMemoHeader: Record "Sales Cr.Memo Header";
-            var CustLedgEntry: Record "Cust. Ledger Entry"; var SrcCode: Code[10]; GenJnlLineDocNo: Code[20]; GenJnlLineExtDocNo: Code[35]; var GenJnlLineDocType: Enum "Gen. Journal Document Type"; PreviewMode: Boolean; DropShipOrder: Boolean)
+            var CustLedgEntry: Record "Cust. Ledger Entry"; var SrcCode: Code[10]; GenJnlLineDocNo: Code[20]; GenJnlLineExtDocNo: Code[35]; var GenJnlLineDocType: Enum "Gen. Journal Document Type"; PreviewMode: Boolean;
+                                                                                                                                                                       DropShipOrder: Boolean)
     var
         lDetCustLedgEnt: record "Detailed Cust. Ledg. Entry";
 

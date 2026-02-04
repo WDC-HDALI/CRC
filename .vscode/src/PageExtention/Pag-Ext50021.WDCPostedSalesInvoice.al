@@ -1,5 +1,6 @@
 //WDC01  WDC.HG  02/06/2025  Add New Action 
 //wdc02  WDC.FS  18/06/2025 Hide Some Fields
+//WDC02  WDC.HG  24/11/2025 change print action 
 pageextension 50021 "WDC Posted Sales Invoice" extends "Posted Sales Invoice"
 {
     layout
@@ -280,6 +281,7 @@ pageextension 50021 "WDC Posted Sales Invoice" extends "Posted Sales Invoice"
 
             Visible = false;
         }
+
         addafter("Pre-Assigned No.")
         {
             field("Remaining Amount"; Rec."Remaining Amount")
@@ -291,21 +293,38 @@ pageextension 50021 "WDC Posted Sales Invoice" extends "Posted Sales Invoice"
 
         addafter("Shipment Method Code")
         {
-            field(ShippingAgentCode; Rec."Shipping Agent Code")
+            //<<wdc04
+            //field(ShippingAgentCode; Rec."Shipping Agent Code")
+            //{
+            //    CaptionML = FRA = 'N° camion';
+            //    ApplicationArea = All;
+            //}
+            //field(ShippingAgentServiceCode; Rec."Shipping Agent Service Code")
+            //{
+            //    CaptionML = FRA = 'Code chauffeur';
+            //    ApplicationArea = All;
+            //}
+
+            field("Truck No."; Rec."Truck No.")
             {
-                CaptionML = FRA = 'N° camion';
                 ApplicationArea = All;
             }
-            field(ShippingAgentServiceCode; Rec."Shipping Agent Service Code")
+            field("Driver Name"; Rec."Driver Name")
             {
-                CaptionML = FRA = 'Code chauffeur';
                 ApplicationArea = All;
             }
+            //>>wdc04
+
+
         }
 
     }
     actions
     {
+        modify(Print)
+        {
+            Visible = StandardPrintIsVisible;
+        }
         addlast(Processing)
         {
             action(Payment)
@@ -374,7 +393,7 @@ pageextension 50021 "WDC Posted Sales Invoice" extends "Posted Sales Invoice"
                 PromotedCategory = Process;
                 Promoted = true;
                 PromotedIsBig = true;
-                Visible = IsVisible;
+                Visible = IsDeleteInvoiceVisible;
                 trigger OnAction()
                 var
                     lDeleteSalesInv: Report "WDC Cancel Pstd Sales Invoice";
@@ -393,34 +412,79 @@ pageextension 50021 "WDC Posted Sales Invoice" extends "Posted Sales Invoice"
                 end;
 
             }
-            //     action(LinkedPayment)
-            //     {
-            //         ApplicationArea = All;
-            //         CaptionML = ENU = 'Linked Payment', FRA = 'Payments liés';
-            //         Image = LinkWithExisting;
-            //         PromotedCategory = Process;
-            //         Promoted = true;
-            //         PromotedIsBig = true;
-            //         trigger OnAction()
-            //         var
-            //             lPayementDocument: Page "WDC Customer Payments";
-            //             lDetCustLedEnt: Record "Detailed Cust. Ledg. Entry";
-            //             lText001: TextConst ENU = 'No payment', FRA = 'Pas de payments pour cette facture';
-            //         begin
-            //             lDetCustLedEnt.Reset();
-            //             lDetCustLedEnt.SetFilter("Document No.", '*FC252770*');
-            //             if lDetCustLedEnt.FindFirst() then begin
-            //                 lPayementDocument.SetTableView(lDetCustLedEnt);
-            //                 lPayementDocument.Run();
-            //             end else begin
-            //                 Message(lText001)
-            //             end;
-            //         end;
-            //     }
-            //     //>>WDC01
+            //<<WDC02
+            action(DirectPrint)
+            {
+                ApplicationArea = Basic, Suite;
+                Captionml = ENU = 'Print', FRA = 'Imprimer';
+                Ellipsis = true;
+                Image = Print;
+                PromotedCategory = Process;
+                Promoted = true;
+                PromotedIsBig = true;
+                Visible = Not StandardPrintIsVisible;
+                trigger OnAction()
+                var
+                    lPostedSalesInvoice: report "WDC Posted Sales Invoice ";
+                    lSalesInvoiceHeader: record "Sales Invoice Header";
+
+                begin
+                    lSalesInvoiceHeader.reset();
+                    lSalesInvoiceHeader.SetRange("No.", rec."No.");
+                    lPostedSalesInvoice.SetTableView(lSalesInvoiceHeader);
+                    lPostedSalesInvoice.RunModal();
+
+                end;
+            }
+            //>>WDC02
+
+
         }
 
+
+
+
+
+
+
+
+
+        //     action(LinkedPayment)
+        //     {
+        //         ApplicationArea = All;
+        //         CaptionML = ENU = 'Linked Payment', FRA = 'Payments liés';
+        //         Image = LinkWithExisting;
+        //         PromotedCategory = Process;
+        //         Promoted = true;
+        //         PromotedIsBig = true;
+        //         trigger OnAction()
+        //         var
+        //             lPayementDocument: Page "WDC Customer Payments";
+        //             lDetCustLedEnt: Record "Detailed Cust. Ledg. Entry";
+        //             lText001: TextConst ENU = 'No payment', FRA = 'Pas de payments pour cette facture';
+        //         begin
+        //             lDetCustLedEnt.Reset();
+        //             lDetCustLedEnt.SetFilter("Document No.", '*FC252770*');
+        //             if lDetCustLedEnt.FindFirst() then begin
+        //                 lPayementDocument.SetTableView(lDetCustLedEnt);
+        //                 lPayementDocument.Run();
+        //             end else begin
+        //                 Message(lText001)
+        //             end;
+        //         end;
+        //     }
+        //     //>>WDC01
     }
+
+    trigger OnOpenPage()
+    var
+        SalesSetup: Record "Sales & Receivables Setup";
+    begin
+        SalesSetup.get();
+
+        StandardPrintIsVisible := SalesSetup."Standard Print Is Visible";
+    end;
+
     trigger OnAfterGetRecord()
 
     begin
@@ -437,4 +501,5 @@ pageextension 50021 "WDC Posted Sales Invoice" extends "Posted Sales Invoice"
         UserSetup: Record "User Setup";
         IsVisible: Boolean;
         IsDeleteInvoiceVisible: Boolean;
+        StandardPrintIsVisible: Boolean;
 }

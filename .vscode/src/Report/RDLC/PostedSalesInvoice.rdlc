@@ -1526,7 +1526,7 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                   <Top>2.919cm</Top>
                   <Left>3.47747cm</Left>
                   <Height>0.41275cm</Height>
-                  <Width>2.95292cm</Width>
+                  <Width>2.6707cm</Width>
                   <ZIndex>12</ZIndex>
                   <Visibility>
                     <Hidden>=iif((Globals!PageNumber=Globals!TotalPages) AND (Fields!TotalTransport.Value&lt;&gt;0),false,true)</Hidden>
@@ -1548,7 +1548,7 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>=Fields!TotalTransport.Value</Value>
+                          <Value>=Fields!TotalRedevance.Value</Value>
                           <Style>
                             <Format>#,0.000;- #,0.000;''</Format>
                           </Style>
@@ -1560,11 +1560,11 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                   <rd:DefaultName>Textbox24</rd:DefaultName>
                   <Top>2.45075cm</Top>
                   <Left>6.254cm</Left>
-                  <Height>0.508cm</Height>
+                  <Height>0.40311cm</Height>
                   <Width>2.5cm</Width>
                   <ZIndex>13</ZIndex>
                   <Visibility>
-                    <Hidden>=iif((Globals!PageNumber=Globals!TotalPages) AND (Fields!TotalTransport.Value&lt;&gt;0),false,true)</Hidden>
+                    <Hidden>=iif((Globals!PageNumber=Globals!TotalPages) AND (Fields!TotalRedevance.Value&lt;&gt;0),false,true)</Hidden>
                   </Visibility>
                   <Style>
                     <Border>
@@ -1597,7 +1597,7 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                   <Top>2.44111cm</Top>
                   <Left>3.47747cm</Left>
                   <Height>0.41275cm</Height>
-                  <Width>2.95292cm</Width>
+                  <Width>2.63542cm</Width>
                   <ZIndex>14</ZIndex>
                   <Visibility>
                     <Hidden>=iif((Globals!PageNumber=Globals!TotalPages) AND (Fields!TotalRedevance.Value&lt;&gt;0),false,true)</Hidden>
@@ -1619,7 +1619,7 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>=Fields!TotalRedevance.Value</Value>
+                          <Value>=Fields!TotalTransport.Value</Value>
                           <Style>
                             <Format>#,0.000;- #,0.000;''</Format>
                           </Style>
@@ -1629,13 +1629,13 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                     </Paragraph>
                   </Paragraphs>
                   <rd:DefaultName>Textbox26</rd:DefaultName>
-                  <Top>2.81411cm</Top>
+                  <Top>2.92442cm</Top>
                   <Left>6.254cm</Left>
-                  <Height>0.508cm</Height>
+                  <Height>0.39769cm</Height>
                   <Width>2.5cm</Width>
                   <ZIndex>15</ZIndex>
                   <Visibility>
-                    <Hidden>=iif((Globals!PageNumber=Globals!TotalPages) AND (Fields!TotalRedevance.Value&lt;&gt;0),false,true)</Hidden>
+                    <Hidden>=iif((Globals!PageNumber=Globals!TotalPages) AND (Fields!TotalTransport.Value&lt;&gt;0),false,true)</Hidden>
                   </Visibility>
                   <Style>
                     <Border>
@@ -1708,6 +1708,36 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                   <Visibility>
                     <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                   </Visibility>
+                  <Style>
+                    <Border>
+                      <Style>None</Style>
+                    </Border>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                    <PaddingBottom>2pt</PaddingBottom>
+                  </Style>
+                </Textbox>
+                <Textbox Name="Textbox29">
+                  <CanGrow>true</CanGrow>
+                  <KeepTogether>true</KeepTogether>
+                  <Paragraphs>
+                    <Paragraph>
+                      <TextRuns>
+                        <TextRun>
+                          <Value>=Fields!Salesperson_Code.Value</Value>
+                          <Style />
+                        </TextRun>
+                      </TextRuns>
+                      <Style />
+                    </Paragraph>
+                  </Paragraphs>
+                  <rd:DefaultName>Textbox29</rd:DefaultName>
+                  <Top>3.627cm</Top>
+                  <Left>10.93872cm</Left>
+                  <Height>0.81593cm</Height>
+                  <Width>3.21438cm</Width>
+                  <ZIndex>18</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -1888,6 +1918,9 @@ End Function
         </Field>
         <Field Name="PaymentMethodeText">
           <DataField>PaymentMethodeText</DataField>
+        </Field>
+        <Field Name="Salesperson_Code">
+          <DataField>Salesperson_Code</DataField>
         </Field>
         <Field Name="ItemNo">
           <DataField>ItemNo</DataField>

@@ -108,7 +108,7 @@ page 50017 "WDC term Customers Payments"
         lcustomer: record Customer;
         lUpdateDetCustLedgEntri: Report "WDC Upd Cust name Det Cust_Led";
     begin
-        lUpdateDetCustLedgEntri.UpdateDetCustLedgEntri(Rec."Entry No.");
+        // lUpdateDetCustLedgEntri.UpdateDetCustLedgEntri(Rec."Entry No.");
         // begin
         //     if (Rec."Customer Name" = '') or (Rec."Customer Name" = 'CLIENTS AU COMPTANT') then begin
         //         if (StrLen(rec."Document No.") > 5) and (CopyStr(Rec."Document No.", 1, 4) = 'REG-') then

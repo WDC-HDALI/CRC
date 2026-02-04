@@ -7,9 +7,12 @@ using Microsoft.Sales.Receivables;
 using Microsoft.Sales.Document;
 using System.Security.AccessControl;
 using System.Security.User;
+using System.EMail;
 using Microsoft.Inventory.Item;
 using Microsoft.Sales.Customer;
-
+//*********************Documentation**************************
+//<<WDC01  WDC.HG  24/11/2025  Add SalesPerson Code 
+//<<WDC02  WDC.FS  05/01/2026  Add Fields  
 report 50003 "WDC Posted Sales Invoice "
 {
     ApplicationArea = All;
@@ -104,14 +107,24 @@ report 50003 "WDC Posted Sales Invoice "
             {
 
             }
-            column(CamionNo; ShippingAgent.Name)
+            //<<wdc02
+            //column(CamionNo; ShippingAgent.Name)
+            //{
+
+            //}
+            column(CamionNo; "Truck No.")
             {
 
             }
-            column(transporteurname; ShippingService.Description)
+            //column(transporteurname; ShippingService.Description)
+            //{
+
+            //}
+            column(transporteurname; "Driver Name")
             {
 
             }
+            //>>wdc02
             column(TotalTransport; TotalTransport)
             {
 
@@ -124,6 +137,12 @@ report 50003 "WDC Posted Sales Invoice "
             {
 
             }
+            //<<WDC01
+            column(Salesperson_Code; "Salesperson Code")
+            {
+
+            }
+            //>>WDC01
 
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
             {
@@ -212,9 +231,12 @@ report 50003 "WDC Posted Sales Invoice "
             trigger OnAfterGetRecord()
             var
                 UserName: Text;
-
-
             begin
+                // if not IsReportInPreviewMode() then begin
+                //     "Sales Invoice Header"."No. Printed" := "Sales Invoice Header"."No. Printed" + 1;
+                //     "Sales Invoice Header".Modify();
+                // end;
+
                 UserR.Get(SystemCreatedBy);
 
                 if SalesInvHeader.get("Sales Invoice Header"."No.") then; //Pour récupérer le nombre d'imprime à jour
@@ -242,12 +264,10 @@ report 50003 "WDC Posted Sales Invoice "
                 if SalesInvoiceLine.findset() then
                     repeat
                         if SalesInvoiceLine.type = SalesInvoiceLine.type::"Charge (Item)" then begin
-                            ChargeItem.reset();
                             if ChargeItem.Get(SalesInvoiceLine."No.") then
                                 if ChargeItem."Gen. Prod. Posting Group" = 'REDEVANCE' then
                                     TotalRedevance += SalesInvoiceLine."Amount";
                         end;
-                        item.reset();
                         if item.get(SalesInvoiceLine."No.") then
                             if (item."Associated With Iron" = true) or (item."Associated With Cement" = true) then
                                 TotalTransport += SalesInvoiceLine."Amount"
@@ -276,9 +296,16 @@ report 50003 "WDC Posted Sales Invoice "
     trigger OnPostReport()
 
     begin
-        if not CurrReport.Preview then
-            CODEUNIT.Run(CODEUNIT::"Sales Inv.-Printed", "Sales Invoice Header");
+        //if not CurrReport.Preview then
+        CODEUNIT.Run(CODEUNIT::"Sales Inv.-Printed", "Sales Invoice Header");
 
+    end;
+
+    procedure IsReportInPreviewMode(): Boolean
+    var
+        MailManagement: Codeunit "Mail Management";
+    begin
+        exit(CurrReport.Preview() or MailManagement.IsHandlingGetEmailBody());
     end;
 
     procedure SetPaymentCodeText()

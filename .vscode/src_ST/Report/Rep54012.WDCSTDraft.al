@@ -96,7 +96,7 @@ report 54012 "WDC-ST Draft"
                 // {
                 // }
 
-                column(NomAuxiliaire_PaymentLine; CopyStr(Rec_fournisseur.Name, 1, 18))
+                column(NomAuxiliaire_PaymentLine; CopyStr(Rec_fournisseur.Name, 1, 50))
                 {
                 }
                 column(libelle; "Payment Line"."Payment Label")

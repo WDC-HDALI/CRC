@@ -1,5 +1,6 @@
 //****************Documentation**********************
 //wdc01  WDC.FS  18/06/2025 Hide Some Fields
+//WDC02  WDC.FS  05/01/2026  Add Fields  
 pageextension 50017 "WDC Sales Invoice" extends "Sales Invoice"
 {
     layout
@@ -300,14 +301,42 @@ pageextension 50017 "WDC Sales Invoice" extends "Sales Invoice"
             {
                 CaptionML = FRA = 'N° camion';
                 ApplicationArea = All;
+                Visible = false;
             }
             field(ShippingAgentServiceCode; Rec."Shipping Agent Service Code")
             {
                 CaptionML = FRA = 'Code chauffeur';
                 ApplicationArea = All;
+                Visible = false;
             }
+            //<<wdc02
+            field("Truck No."; Rec."Truck No.")
+            {
+                ApplicationArea = All;
+            }
+            field("Driver Name"; Rec."Driver Name")
+            {
+                ApplicationArea = All;
+            }
+            //>>wdc02
         }
 
+
+    }
+    actions
+    {
+        modify(ProformaInvoice)
+        {
+            Visible = false;
+        }
+        modify("Test Report")
+        {
+            Visible = false;
+        }
+        modify(DraftInvoice)
+        {
+            Visible = false;
+        }
     }
     trigger OnOpenPage()
     begin

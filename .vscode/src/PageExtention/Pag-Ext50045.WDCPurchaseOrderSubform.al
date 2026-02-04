@@ -4,6 +4,7 @@ using Microsoft.Purchases.Document;
 using System.Security.User;
 //***************Documentation*************************
 //WDC01  WDC.HG  25/06/2025  Create Current Object
+//WDC02  WDC.HG  17/11/2025  set description field not editable
 
 pageextension 50045 "WDC Purchase Order Subform" extends "Purchase Order Subform"
 {
@@ -49,6 +50,12 @@ pageextension 50045 "WDC Purchase Order Subform" extends "Purchase Order Subform
         {
             Visible = false;
         }
+        //<<WDC02
+        modify(Description)
+        {
+            Editable = false;
+        }
+        //>>WDC02
     }
 
     trigger OnOpenPage()

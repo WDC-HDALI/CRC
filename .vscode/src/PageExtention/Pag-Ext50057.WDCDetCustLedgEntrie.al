@@ -53,7 +53,7 @@ pageextension 50057 "WDC- Det. Cust. Ledg. Entrie" extends "Detailed Cust. Ledg.
     begin
 
         Clear(lUpdateCustName);
-        lUpdateCustName.UpdateDetCustLedgEntri(rec."Entry No.");
+        //lUpdateCustName.UpdateDetCustLedgEntri(rec."Entry No.");
         CurrPage.Update(false);
     end;
     //>>wdc02

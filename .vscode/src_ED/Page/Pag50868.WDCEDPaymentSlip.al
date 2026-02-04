@@ -113,6 +113,7 @@ page 50868 "WDC-ED Payment Slip"
                     ApplicationArea = All;
                     Importance = Promoted;
                 }
+
             }
         }
 

@@ -4915,7 +4915,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value EvaluationMode="Constant">CRC</Value>
+                      <Value>=First(Fields!COMPANYNAME.Value, "DataSet_Result")</Value>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>11pt</FontSize>
@@ -4928,9 +4928,9 @@
               </Paragraphs>
               <rd:DefaultName>COMPANYNAME</rd:DefaultName>
               <Top>0.3985cm</Top>
-              <Left>1.90383cm</Left>
+              <Left>0.17869cm</Left>
               <Height>0.90476cm</Height>
-              <Width>5.06117cm</Width>
+              <Width>10.39076cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>

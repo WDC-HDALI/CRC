@@ -88,6 +88,20 @@ page 50020 "WDC Receivables-Payables Lines"
 
     actions
     {
+        area(processing)
+        {
+            action(Imprimer)
+            {
+                ApplicationArea = Suite;
+                CaptionML = ENU = 'Print', FRA = 'Imprimer';
+                Image = Print;
+                trigger OnAction()
+                var
+                begin
+                    REPORT.RUNMODAL(50034);
+                end;
+            }
+        }
     }
 
     trigger OnAfterGetRecord()
@@ -127,16 +141,18 @@ page 50020 "WDC Receivables-Payables Lines"
         PeriodFormLinesMgt: Codeunit "Period Form Lines Mgt.";
         PeriodType: Enum "Analysis Period Type";
         AmountType: Enum "Analysis Amount Type";
+        VendorNo: Code[20];
 
     protected var
         GLSetup: Record "General Ledger Setup";
 
-    procedure SetLines(var NewGLSetup: Record "General Ledger Setup"; NewPeriodType: Enum "Analysis Period Type"; NewAmountType: Enum "Analysis Amount Type")
+    procedure SetLines(var NewGLSetup: Record "General Ledger Setup"; NewPeriodType: Enum "Analysis Period Type"; NewAmountType: Enum "Analysis Amount Type"; pVendorNo: Code[20])
     begin
         GLSetup.Copy(NewGLSetup);
         Rec.DeleteAll();
         PeriodType := NewPeriodType;
         AmountType := NewAmountType;
+        VendorNo := pVendorNo;
         CurrPage.Update(false);
     end;
 
@@ -157,9 +173,12 @@ page 50020 "WDC Receivables-Payables Lines"
     begin
         SetDateFilter();
         clear(PaymentLine);
+        PaymentLine.SetCurrentKey("No.", "Account No.", "Bank Branch No.", "Agency Code", "Bank Account No.", "Payment Address Code");
         PaymentLine.SetRange("Status Name", 'CONFIRMEE');
         PaymentLine.setrange("Payment Class", 'DECAISSEMENT EFFET');
         PaymentLine.setrange("Account Type", PaymentLine."Account Type"::Vendor);
+        if VendorNo <> '' then //HD14122025 
+            PaymentLine.SetFilter("Account No.", '%1', VendorNo);
         PaymentLine.SetFilter("Due Date", '>=%1', WorkDate());
         PaymentLine.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
         PAGE.Run(0, PaymentLine);
@@ -169,9 +188,11 @@ page 50020 "WDC Receivables-Payables Lines"
     begin
         SetDateFilter();
         VendLedgEntry.Reset();
+        VendLedgEntry.SetCurrentKey("Vendor No.", "Posting Date", "Currency Code");
+        if VendorNo <> '' then //HD14122025 
+            VendLedgEntry.SetFilter("Vendor No.", '%1', VendorNo);
         VendLedgEntry.SetFilter("Amount (LCY)", '>%1', 0);
         VendLedgEntry.SetRange("Payment Slip Type", VendLedgEntry."Payment Slip Type"::Draft);////HD210725 With HJ
-        //VendLedgEntry.setFilter("Payment Method Code", '%1', 'TRAITE'); //Cmt HD210725 with HJ
         VendLedgEntry.SetFilter("Due Date", '>=%1', WorkDate());
         VendLedgEntry.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
         VendLedgEntry.SetFilter("Global Dimension 1 Code", GLSetup.GetFilter("Global Dimension 1 Filter"));
@@ -193,6 +214,9 @@ page 50020 "WDC Receivables-Payables Lines"
         //New filter to vendor ledger entries       
         Balance := 0;
         VendLedgEntry.Reset();
+        VendLedgEntry.SetCurrentKey("Vendor No.", "Posting Date", "Currency Code");
+        if VendorNo <> '' then //HD14122025 
+            VendLedgEntry.SetFilter("Vendor No.", '%1', VendorNo);
         VendLedgEntry.SetFilter("Amount (LCY)", '>%1', 0);
         VendLedgEntry.SetRange("Payment Slip Type", VendLedgEntry."Payment Slip Type"::Draft);////HD210725 With HJ
         VendLedgEntry.SetFilter("Due Date", '>=%1', WorkDate());
@@ -223,9 +247,12 @@ page 50020 "WDC Receivables-Payables Lines"
         //>>Begin Draft confirmed
         clear(BalanceConfirmed);
         clear(PaymentLine);
+        PaymentLine.SetCurrentKey("No.", "Account No.", "Bank Branch No.", "Agency Code", "Bank Account No.", "Payment Address Code");
         PaymentLine.SetRange("Status Name", 'CONFIRMEE');
         PaymentLine.setrange("Payment Class", 'DECAISSEMENT EFFET');
         PaymentLine.setrange("Account Type", PaymentLine."Account Type"::Vendor);
+        if VendorNo <> '' then //HD14122025 
+            PaymentLine.SetFilter("Account No.", '%1', VendorNo);
         PaymentLine.SetFilter("Due Date", '>=%1', WorkDate());
         PaymentLine.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
         IF PaymentLine.FINDSET THEN

@@ -1,8 +1,11 @@
 //*****************Documentation********************
 //WDC01  WDC.HG  13/08/2025  Create Current Object
+//WDC02  WDC.HG  18/11/2025  Add vendor report 
+//WDC03  WDC.FS  26.12.2025  Edit report
 namespace CRC.CRC;
 
 using Microsoft.Sales.History;
+using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Purchases.Document;
 using Microsoft.Purchases.Payables;
 using Microsoft.Purchases.History;
@@ -65,6 +68,27 @@ report 50028 "WDC Global Vendor Balance"
             {
 
             }
+            //<<WDC02
+            column(VendorReport; FilteredVendor.Report)
+            {
+
+            }
+            //>>WDC02
+            //<<wdc03
+            column(TotalVendorAmount; TotalVendorAmount)
+
+            {
+            }
+            column(TotalReceiptNotInvoiced; TotalReceiptNotInvoiced)
+            {
+            }
+            //><wdc03
+
+            column(Date_Filter; DateFilterTxt)
+            {
+            }
+
+
             dataitem(Paiement; "Vendor Ledger Entry")
             {
                 DataItemLink = "vendor No." = field("No.");
@@ -82,6 +106,12 @@ report 50028 "WDC Global Vendor Balance"
                 {
 
                 }
+                //<<WDC02
+                column(External_Document_No_; "External Document No.")
+                {
+
+                }
+                //>>WDC02
                 column(Paiement_AmountLCY; PaiementAmount)
                 {
 
@@ -115,10 +145,12 @@ report 50028 "WDC Global Vendor Balance"
                 {
 
                 }
+
                 trigger OnPreDataItem()
                 begin
 
                     Paiement.SetFilter("Posting Date", '%1..%2', StartingDate, EndingDate);
+
                 end;
 
                 trigger OnAfterGetRecord()
@@ -169,17 +201,39 @@ report 50028 "WDC Global Vendor Balance"
             }
 
             trigger OnPreDataItem()
+            var
+                GLSetup: Record "General Ledger Setup";
             begin
                 if (StartingDate = 0D) or (EndingDate = 0D) then
                     Error('Les dates début et fin ne doivent pas être vide!');
                 if EndingDate < StartingDate then
                     Error('Date fin ne doit pas être antérieur à la date début !');
+                //<<wdc03
+                DateFilterTxt := StrSubstNo('%1 .. %2', StartingDate, EndingDate);
+                //>>wdc03
             end;
 
+
+
             trigger OnAfterGetRecord()
+            var
+                GLSetup: record "General Ledger Setup";
+
             begin
                 CompanyInfo.Get;
                 CompanyInfo.CalcFields(Picture);
+                //<<wdc03
+                GLSetup.get();
+                if FilteredVendor.get(Vendor."No.") then begin
+                    FilteredVendor.SetFilter("Start Year Filter", '..%1', StartingDate);
+                    FilteredVendor.CalcFields(Report);
+                    FilteredVendor.CalcFields("Balance (LCY)");
+                    FilteredVendor.CalcFields("Total Receipt");
+                    TotalVendorAmount := FilteredVendor."Balance (LCY)" - FilteredVendor."Total Receipt";
+                    TotalReceiptNotInvoiced := FilteredVendor."Total Receipt";
+
+                end;
+                //>>WDC03
             end;
         }
     }
@@ -205,7 +259,11 @@ report 50028 "WDC Global Vendor Balance"
 
                 }
             }
+
         }
+
+
+
     }
 
     labels
@@ -219,9 +277,11 @@ report 50028 "WDC Global Vendor Balance"
         Montant = 'Montant';
     }
 
+
     trigger OnInitReport()
     begin
-        StartingDate := DMY2Date(1, 1, Date2DMY(WorkDate, 3));
+        //StartingDate := DMY2Date(1, 1, Date2DMY(WorkDate, 3));
+        StartingDate := DMY2Date(1, Date2DMY(WorkDate, 2), Date2DMY(WorkDate, 3));
         EndingDate := CALCDATE('<CM>', StartingDate);
     end;
 
@@ -235,4 +295,8 @@ report 50028 "WDC Global Vendor Balance"
         CompanyInfo: Record 79;
         DueDate: Date;
         BankName: Text[100];
+        FilteredVendor: record vendor;
+        TotalVendorAmount: Decimal;
+        TotalReceiptNotInvoiced: Decimal;
+        DateFilterTxt: Text[100];
 }

@@ -11,12 +11,21 @@ pageextension 50015 "WDC Sales Order Subform" extends "Sales Order Subform"
             field("Unit Price Incl Discount"; Rec."Unit Price Incl Discount")
             {
                 ApplicationArea = all;
-                Editable = false;
+                //Editable = false;
                 BlankZero = true;
+                trigger OnValidate()
+                var
+                begin
+                    CurrPage.Update();
+                end;
             }
         }
         addafter("Line Amount")
         {
+            field("Amount Including VAT"; Rec."Amount Including VAT")
+            {
+                ApplicationArea = all;
+            }
             field("Location Item Inventory"; Rec."Location Item Inventory")
             {
                 ApplicationArea = all;
@@ -212,6 +221,7 @@ pageextension 50015 "WDC Sales Order Subform" extends "Sales Order Subform"
         moveafter("Line Amount"; "Location Code")
         moveafter("Location Code"; "Unit of Measure")
         moveafter(Quantity; "Line Discount %")
+
 
     }
     trigger OnOpenPage()

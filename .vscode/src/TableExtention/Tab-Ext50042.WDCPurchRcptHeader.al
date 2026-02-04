@@ -28,6 +28,11 @@ tableextension 50042 "WDC Purch. Rcpt. Header" extends "Purch. Rcpt. Header"
             CaptionML = ENU = 'Bill in advance', FRA = 'Facturer à l"avance';
             DataClassification = ToBeClassified;
         }
+        field(50081; "Linked Invoice advance"; Code[20])
+        {
+            CaptionML = ENU = 'Linked Invoice advance', FRA = 'Facture d"avance liée';
+            DataClassification = ToBeClassified;
+        }
     }
     var
 }

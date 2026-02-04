@@ -851,7 +851,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>LES COMPTOIRS REUNIS DU CENTRE</Value>
+                      <Value>=IIF(First(Fields!CompanyInformation.Value, "DataSet_Result") = "CRC", "LES COMPTOIRS REUNIS DU CENTRE", First(Fields!CompanyInformation.Value, "DataSet_Result"))</Value>
                       <Style />
                     </TextRun>
                   </TextRuns>
@@ -860,7 +860,7 @@
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
               <Top>0.26141cm</Top>
-              <Left>1.0287cm</Left>
+              <Left>1.3462cm</Left>
               <Height>0.6cm</Height>
               <Width>6.70688cm</Width>
               <Style>

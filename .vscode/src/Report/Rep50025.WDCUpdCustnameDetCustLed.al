@@ -25,7 +25,7 @@ report 50025 "WDC Upd Cust name Det Cust_Led"
         }
     }
 
-    procedure UpdateDetCustLedgEntri(pDetCustEntrieNo: Integer)
+    procedure UpdateDetCustLedgEntri()
     Var
         lPostedSalesInv: Record 112;
         InvoiceNo: code[20];
@@ -65,13 +65,24 @@ report 50025 "WDC Upd Cust name Det Cust_Led"
 
         //     end;
 
-        //     if (lDetCustLedgerEntry."Customer Name" = '') or (lDetCustLedgerEntry."Customer Name" = 'MR MUSTAPHA') then begin
-        //         if lcustomer.get(lDetCustLedgerEntry."Customer No.") then begin
-        //             lDetCustLedgerEntry."Customer Name" := lcustomer.Name;
-        //             lDetCustLedgerEntry.Modify();
-        //         end;
+        // if (lDetCustLedgerEntry."Customer Name" = '') or (lDetCustLedgerEntry."Customer Name" = 'MR MUSTAPHA') then begin
+        //     if lcustomer.get(lDetCustLedgerEntry."Customer No.") then begin
+        //         lDetCustLedgerEntry."Customer Name" := lcustomer.Name;
+        //         lDetCustLedgerEntry.Modify();
         //     end;
         // end;
+        // end;
+        lDetCustLedgerEntry.reset;
+        lDetCustLedgerEntry.SetCurrentKey("Customer No.", "Entry Type", "Posting Date", "Initial Document Type");
+        lDetCustLedgerEntry.SetFilter("Customer Name", '');
+        lDetCustLedgerEntry.SetFilter("Customer No.", '<>9999');
+        if lDetCustLedgerEntry.FindSet() then
+            repeat
+                if lcustomer.get(lDetCustLedgerEntry."Customer No.") then begin
+                    lDetCustLedgerEntry."Customer Name" := lcustomer.Name;
+                    lDetCustLedgerEntry.Modify();
+                end;
+            until lDetCustLedgerEntry.Next() = 0;
     end;
 
     procedure UpdateCustLedgEntri(pCustEntrieNo: Integer)

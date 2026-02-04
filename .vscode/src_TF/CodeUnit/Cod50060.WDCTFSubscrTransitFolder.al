@@ -120,12 +120,12 @@ codeunit 50060 "WDC-TF Subscr TransitFolder"
                         ERROR(Text062);
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", 'OnPostVendorEntryOnAfterInitNewLine', '', FALSE, FALSE)]
-    local procedure OnPostVendorEntryOnAfterInitNewLine(var PurchaseHeader: Record "Purchase Header"; var GenJnlLine: Record "Gen. Journal Line")
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", 'OnPostVendorEntryOnAfterInitNewLine', '', FALSE, FALSE)]
+    // local procedure OnPostVendorEntryOnAfterInitNewLine(var PurchaseHeader: Record "Purchase Header"; var GenJnlLine: Record "Gen. Journal Line")
 
-    begin
-        GenJnlLine."Transit Folder No." := PurchaseHeader."Transit Folder No.";
-    end;
+    // begin
+    //     GenJnlLine."Transit Folder No." := PurchaseHeader."Transit Folder No.";
+    // end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", 'OnBeforePostPurchLine', '', FALSE, FALSE)]
     local procedure OnBeforePostPurchLine(var PurchHeader: Record "Purchase Header"; var PurchLine: Record "Purchase Line"; var IsHandled: Boolean)

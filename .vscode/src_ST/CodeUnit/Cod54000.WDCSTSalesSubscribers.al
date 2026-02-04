@@ -8,6 +8,8 @@ codeunit 54000 "WDC-ST Sales Subscribers"
     begin
         IF lCustomerPostingGroup.GET(Rec."Customer Posting Group") THEN BEGIN
             Rec."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+            If Rec."Document Type" = Rec."Document Type"::"Credit Memo" then
+                Rec."Apply Fiscal Stamp" := false;
             if Rec."Apply Fiscal Stamp" THEN
                 Rec."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
             else
@@ -25,6 +27,8 @@ codeunit 54000 "WDC-ST Sales Subscribers"
         if BillToCustTemplate.Get(SalesHeader."Bill-to Customer Templ. Code") then begin // CHG01
             IF lCustomerPostingGroup.GET(SalesHeader."Customer Posting Group") THEN BEGIN
                 SalesHeader."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+                If SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then
+                    SalesHeader."Apply Fiscal Stamp" := false;
                 if lCustomerPostingGroup."Apply Fiscal Stamp" THEN
                     SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount";
             END;
@@ -38,6 +42,8 @@ codeunit 54000 "WDC-ST Sales Subscribers"
     begin
         IF lCustomerPostingGroup.GET(SalesHeader."Customer Posting Group") THEN BEGIN
             SalesHeader."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+            If SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then
+                SalesHeader."Apply Fiscal Stamp" := false;
             if lCustomerPostingGroup."Apply Fiscal Stamp" THEN
                 SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
             else
@@ -52,6 +58,8 @@ codeunit 54000 "WDC-ST Sales Subscribers"
     begin
         lCustomerPostingGroup.GET(SalesHeader."Customer Posting Group");
         SalesHeader."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+        If SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then
+            SalesHeader."Apply Fiscal Stamp" := false;
         IF lCustomerPostingGroup."Apply Fiscal Stamp" THEN
             SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
         else

@@ -847,7 +847,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>LES COMPTOIRS REUNIS DU CENTRE</Value>
+                      <Value>=IIF(First(Fields!CompanyInformation.Value, "DataSet_Result")="CRC","LES COMPTOIRS REUNIS DU CENTRE",First(Fields!CompanyInformation.Value, "DataSet_Result"))</Value>
                       <Style />
                     </TextRun>
                   </TextRuns>

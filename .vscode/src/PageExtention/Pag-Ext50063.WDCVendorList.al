@@ -31,24 +31,24 @@ pageextension 50063 "WDC Vendor List" extends "Vendor List"
         {
             Visible = false;
         }
-        addafter(Name)
-        {
-            field(Address; Rec.Address)
-            {
-                ApplicationArea = All;
-            }
-            field(City; Rec.City)
-            {
-                ApplicationArea = All;
-            }
+        // addafter(Name)
+        // {
+        //     field(Address; Rec.Address)
+        //     {
+        //         ApplicationArea = All;
+        //     }
+        //     field(City; Rec.City)
+        //     {
+        //         ApplicationArea = All;
+        //     }
 
-        }
+        // }
         addafter("Phone No.")
         {
             field(Report; Rec.Report)
             {
                 ApplicationArea = all;
-                Style = StrongAccent;
+                Style = Strong;
             }
             field(VendorInvoice; Rec.VendorInvoice)
             {
@@ -130,17 +130,20 @@ pageextension 50063 "WDC Vendor List" extends "Vendor List"
         GLSetup.get;
         UserSetup.Get(UserId);
 
-        Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Allow Deferral Posting From");
+        //Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Allow Deferral Posting From");
+        Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Go Live Date");//WDC;HG
         rec.SetFilter("Due Date Filter", '%1..', WorkDate);
-
+        rec.CalcFields("Balance (LCY)");
+        rec.CalcFields("Total Receipt");
         TotalvendorAmount := rec."Balance (LCY)" - rec."Total Receipt";
 
         StyleTxt := Color();
+
     end;
 
     procedure Color(): text[50]
     begin
-        if TotalvendorAmount < 0 then
+        if TotalvendorAmount > 0 then
             exit('unfavorable')
         else
             exit('favorable');

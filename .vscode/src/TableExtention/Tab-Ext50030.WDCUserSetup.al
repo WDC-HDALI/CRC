@@ -67,5 +67,15 @@ tableextension 50030 "WDC User Setup" extends "User Setup"
             CaptionML = ENU = 'See Payment Posting Date', FRA = 'Voir date compta. paiement Comptant';
             DataClassification = ToBeClassified;
         }
+        field(50012; "Allow Salesperson Edit"; Boolean)
+        {
+            CaptionML = ENU = 'Allow Salesperson Edit', FRA = 'Autoriser modif. code vendeur';
+            DataClassification = ToBeClassified;
+        }
+        field(50013; "Allow Rename Customer"; Boolean)
+        {
+            CaptionML = ENU = 'Allow Rename Customer', FRA = 'Autoriser renommer Client';
+            DataClassification = ToBeClassified;
+        }
     }
 }

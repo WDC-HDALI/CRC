@@ -498,32 +498,32 @@ report 50016 "WDC Posted Purchase Receipt"
                     PurchLine.Get(PurchLine."Document Type"::Order, "Order No.", "Order Line No.");
 
                     if Type = Type::Item then begin
+                        if ("Purch. Rcpt. Line"."No." <> '') and ("Purch. Rcpt. Line".Quantity = 0) then
+                            CurrReport.Skip();
                         if Item.Get("No.") then begin
                             if PurchHeader.Get(PurchLine."Document Type", PurchLine."Document No.") then begin
-                                if VATPostingSetup.Get(
-                                        PurchHeader."VAT Bus. Posting Group",
-                                        Item."VAT Prod. Posting Group") then begin
-                                    LineVATAmount := ("Quantity" * "Unit Cost") * VATPostingSetup."VAT %" / 100;
-                                    TotalVATAmount += LineVATAmount;
-                                end;
+                                // if VATPostingSetup.Get(
+                                //         PurchHeader."VAT Bus. Posting Group",
+                                //         Item."VAT Prod. Posting Group") then begin
+                                //     LineVATAmount := ("Quantity" * "Unit Cost") * VATPostingSetup."VAT %" / 100;
+                                //     TotalVATAmount += LineVATAmount;
+                                // end;
+                                LineVATAmount := ("Quantity" * "Direct Unit Cost") * "Purch. Rcpt. Line"."VAT %" / 100;
+                                TotalVATAmount += LineVATAmount;
                             end;
                         end;
                     end;
 
-                    TotalTTCLine := "Quantity" * "Unit Cost" + LineVATAmount;//HD01
+                    TotalTTCLine := "Quantity" * "Direct Unit Cost" + LineVATAmount;
 
                     PurchRcptLine.Reset();
                     PurchRcptLine.SetRange("Document No.", "Document No.");
                     if PurchRcptLine.FindSet() then
                         repeat
                             if PurchLineLocal.Get(PurchLineLocal."Document Type"::Order, PurchRcptLine."Order No.", PurchRcptLine."Order Line No.") and (PurchLineLocal.Quantity <> 0) then
-                                TotalAmount += PurchRcptLine."quantity" * PurchLineLocal."Unit Cost";
+                                TotalAmount += PurchRcptLine."quantity" * PurchLineLocal."Direct Unit Cost";
 
                         until PurchRcptLine.Next() = 0;
-
-
-
-
 
                     TotalIncVATAmount := TotalAmount + TotalVATAmount;
                 end;
@@ -534,7 +534,6 @@ report 50016 "WDC Posted Purchase Receipt"
     trigger OnPreReport()
     var
     begin
-
         CompanyInfo.Get();
         CompanyInfo.CalcFields(Picture);
     end;

@@ -6,7 +6,8 @@ using Microsoft.Sales.Document;
 using System.Security.AccessControl;
 using Microsoft.Sales.Customer;
 using Microsoft.Inventory.Item;
-
+//*********************Documentation**************************
+//<<WDC01  WDC.HG  24/11/2025  Add SalesPerson Code 
 report 50001 "WDC Devis "
 {
     ApplicationArea = All;
@@ -101,6 +102,12 @@ report 50001 "WDC Devis "
             {
 
             }
+            //<<WDC01
+            column(Salesperson_Code; "Salesperson Code")
+            {
+
+            }
+            //>>WDC01
             dataitem("Sales Line"; "Sales Line")
             {
                 DataItemLink = "Document No." = FIELD("No."), "Document type" = field("document type");

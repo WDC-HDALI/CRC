@@ -108,7 +108,7 @@ page 50024 "WDC Cash Customers Payments"
         lcustomer: record Customer;
         lUpdateDetCustLedgEntri: Report "WDC Upd Cust name Det Cust_Led";
     begin
-        lUpdateDetCustLedgEntri.UpdateDetCustLedgEntri(Rec."Entry No.");
+        // lUpdateDetCustLedgEntri.UpdateDetCustLedgEntri(Rec."Entry No.");
 
         CurrPage.Update(false);
     end;

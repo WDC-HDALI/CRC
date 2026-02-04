@@ -5,13 +5,15 @@ using System.Security.User;
 using Microsoft.Sales.Receivables;
 using Microsoft.Sales.History;
 using Microsoft.Sales.Document;
-
+//*************Documentation***************************
+//wdc01  WDC.FS  23/12/2025 : Existant Customer Name and VAT Registration No.  Couldn't be added
 tableextension 50002 "WDC Customer" extends Customer
 {
 
 
     fields
     {
+
         field(50000; Report; Decimal)
         {
             CaptionML = ENU = 'Report', FRA = 'Report';
@@ -38,7 +40,7 @@ tableextension 50002 "WDC Customer" extends Customer
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Customer No." = field("No."),
-                                                                                  "Entry Type" = const("Initial Entry"),
+                                                                                 "Entry Type" = const("Initial Entry"),
                                                                                   "Credit Amount (LCY)" = filter('<>0'),
                                                                                   "Currency Code" = field("Currency Filter")));
         }
@@ -118,12 +120,71 @@ tableextension 50002 "WDC Customer" extends Customer
             CaptionML = ENU = 'Due Date Filter', FRA = 'Filtre date d''échéance';
             FieldClass = FlowFilter;
         }
+        // field(50014; "Due Date Filter for balance"; Date)
+        // {
+        //     CaptionML = ENU = 'Due Date Filter', FRA = 'Filtre date d''échéance';
+        //     FieldClass = FlowFilter;
+        // }
 
+        // field(50015; "WDC Balance (LCY)"; Decimal)
+        // {
+        //     AutoFormatType = 1;
+        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Amount (LCY)" where("Customer No." = field("No."),
+        //                                                                          "Initial Entry Global Dim. 1" = field("Global Dimension 1 Filter"),
+        //                                                                          "Initial Entry Global Dim. 2" = field("Global Dimension 2 Filter"),
+        //                                                                          "Currency Code" = field("Currency Filter"),
+        //                                                                          "Initial Entry Due Date" = FIELD("Due Date Filter for balance")
+        //                                                                          ));
+        //     CaptionML = ENU = 'Balance (LCY)', FRA = 'Solde DS';
+        //     Editable = false;
+        //     FieldClass = FlowField;
+        //     ToolTip = 'Specifies the payment amount that the customer owes for completed sales. This value is also known as the customer''s balance.';
+        // }
+        //<<wdc01
+        modify(Name)
+        {
+            trigger OnAfterValidate()
+            var
+                Customer: Record Customer;
+                Text001: Label 'Un client avec le nom "%1" existe déjà (Client N° %2).';
+            begin
+                Customer.Reset();
+                Customer.SetFilter("No.", '<>%1', Rec."No.");
+                if Customer.FindFirst() then begin
+                    repeat
+                        IF UpperCase(Customer.Name) = UpperCase(Rec.Name) THEN
+                            Error(Text001, Rec.Name, Customer."No.");
+                    until Customer.next() = 0;
+                end;
+            end;
+        }
+        modify("VAT Registration No.")
+        {
+            trigger OnAfterValidate()
+            var
+                Customer: Record Customer;
+                Text001: Label 'Un client avec N° identif. intracomm. "%1" existe déjà (Client N° %2).';
+            begin
+                Customer.Reset();
+                Customer.SetFilter("No.", '<>%1', Rec."No.");
+                if Customer.FindFirst() then begin
+                    repeat
+                        IF UpperCase(Customer."VAT Registration No.") = UpperCase(Rec."VAT Registration No.") THEN
+                            Error(Text001, Rec."VAT Registration No.", Customer."No.");
+                    until Customer.next() = 0;
+                end;
+            end;
+        }
+        //>>wdc01
 
     }
+
+
     trigger OnInsert()
+
     begin
         rec.Blocked := rec.Blocked::All;
+
     end;
 }
 

@@ -156,10 +156,10 @@ report 50005 "WDC Inventory Shipment"
     trigger OnPostReport()
 
     begin
-        if not CurrReport.Preview then begin
-            InvtShipmentHeader."No. Printed" := InvtShipmentHeader."No. Printed" + 1;
-            InvtShipmentHeader.modify();
-        end
+        //if not CurrReport.Preview then begin
+        InvtShipmentHeader."No. Printed" := InvtShipmentHeader."No. Printed" + 1;
+        InvtShipmentHeader.modify();
+        //end
 
     end;
 

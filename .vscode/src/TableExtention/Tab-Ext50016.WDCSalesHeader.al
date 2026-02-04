@@ -3,8 +3,10 @@ namespace CRC.CRC;
 using Microsoft.Sales.Document;
 using Microsoft.Sales.Setup;
 using Microsoft.Sales.Customer;
+using Microsoft.Foundation.Shipping;
 //****************Documentation***************
 //WDC01  WDC.HG  27/06/2025  Change Posting Serie No.
+//WDC04  WDC.FS  05/01/2026  Add Fields   
 
 tableextension 50016 "WDC Sales Header" extends "Sales Header"
 {
@@ -43,5 +45,17 @@ tableextension 50016 "WDC Sales Header" extends "Sales Header"
             DataClassification = ToBeClassified;
         }
         //>WDC03
+        //<<WDC04
+        field(50017; "Truck No."; Code[20])
+        {
+            CaptionML = ENU = 'Truck No.', FRA = 'N° camion';
+            DataClassification = ToBeClassified;
+        }
+        field(50018; "Driver Name"; Text[100])
+        {
+            CaptionML = ENU = 'Driver Name', FRA = 'Nom chauffeur';
+            DataClassification = ToBeClassified;
+        }
+        //>>WDC04
     }
 }

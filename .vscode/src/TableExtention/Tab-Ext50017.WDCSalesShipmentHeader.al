@@ -2,10 +2,12 @@ namespace CRC.CRC;
 
 using Microsoft.Sales.History;
 using Microsoft.Inventory.Ledger;
+using Microsoft.Foundation.Shipping;
 //****************Documentation**********************
 //wdc01  WDC.FS  25/06/2025 Add field "Invoice No." to Sales Shipment Header
 //WDC02  WDC.HG  01/07/2025  Add the No. of the posted invoice
 //WDC03  WDC.HG  29/08/2025  Distinct Undo Shipment
+//WDC04  WDC.FS  05/01/2026  Add Fields
 tableextension 50017 "WDC Sales Shipment Header" extends "Sales Shipment Header"
 {
     fields
@@ -61,7 +63,20 @@ tableextension 50017 "WDC Sales Shipment Header" extends "Sales Shipment Header"
             "Document No." = field("No.")));
             Editable = false;
         }
+        //<<wdc04
+        field(50017; "Truck No."; Code[20])
+        {
+            CaptionML = ENU = 'Truck No.', FRA = 'N° camion';
+            DataClassification = ToBeClassified;
 
 
+        }
+        field(50018; "Driver Name"; Text[100])
+        {
+            CaptionML = ENU = 'Driver Name', FRA = 'Nom chauffeur';
+            DataClassification = ToBeClassified;
+
+        }
+        //>>wdc04
     }
 }

@@ -5,9 +5,11 @@ using Microsoft.Sales.Pricing;
 using Microsoft.Inventory.Ledger;
 using Microsoft.Inventory.Item;
 using Microsoft.Finance.VAT.Setup;
+using Microsoft.Finance.Currency;
 //****************Documentation**********************
 //wdc01  WDC.FS  17/06/2025 Show Error Message if the line discount exceeds the allowed discount plan font
 //wdc02  WDC.HG  03/07/2025 Add "Unit Price Incl Discount" field 
+//wdc03  WDC.FS  07/01/2026 "Line Discount %" will be Modified Accordingly while Editing "Unit Price Incl. Discount"
 tableextension 50011 "WDC Sales Lines" extends "Sales Line"
 {
     fields
@@ -18,7 +20,7 @@ tableextension 50011 "WDC Sales Lines" extends "Sales Line"
         {
             trigger OnAfterValidate()
             begin
-                rec."Unit Price Incl Discount" := GetUnitPriceTTC()
+                rec."Unit Price Incl Discount" := CalcUnitPriceTTC()
             end;
         }
         //>>WDC02
@@ -33,7 +35,7 @@ tableextension 50011 "WDC Sales Lines" extends "Sales Line"
                         rec."Unit Price Incl Discount" := "Amount Including VAT" / Quantity;
                     end;
                     if "Line Discount %" = 0 then
-                        rec."Unit Price Incl Discount" := GetUnitPriceTTC();
+                        rec."Unit Price Incl Discount" := CalcUnitPriceTTC();
                 end
                 //>>WDC02
             end;
@@ -60,8 +62,27 @@ tableextension 50011 "WDC Sales Lines" extends "Sales Line"
         //<<WDC02
         field(50002; "Unit Price Incl Discount"; Decimal)
         {
-            CaptionML = ENU = 'Unit Price Incl. Discount', FRA = 'Prix Unitaire Incl. Remise';
+            CaptionML = ENU = 'Unit Price Incl. Discount', FRA = 'Prix TTC après Remise';
             DataClassification = ToBeClassified;
+            //<<wdc03
+            Editable = true;
+            trigger Onvalidate()
+            var
+                DiscountPct: Decimal;
+                LineAmountExclVAT: Decimal;
+                UnitPriceExclVAT: Decimal;
+                Currency: Record Currency;
+
+            begin
+                if (Rec."Unit Price" = 0) or (Quantity = 0) then
+                    exit;
+
+                UnitPriceExclVAT := Rec."Unit Price Incl Discount" / (1 + "VAT %" / 100);
+                LineAmountExclVAT := Round(UnitPriceExclVAT * Quantity, 0.001);
+                DiscountPct := ((Rec."Unit Price" * Quantity - LineAmountExclVAT) / (Rec."Unit Price" * Quantity)) * 100;
+                Rec.Validate("Line Discount %", Round(DiscountPct, 0.001));
+            end;
+            //>>wdc03
         }
         //>>WDC02
 
@@ -192,18 +213,24 @@ tableextension 50011 "WDC Sales Lines" extends "Sales Line"
         end;
     end;
 
-    procedure GetUnitPriceTTC(): Decimal
+    procedure CalcUnitPriceTTC(): Decimal
     var
         item: record Item;
         VATPostingSetup: Record "VAT Posting Setup";
     begin
-        item.reset();
-        if item.get("No.") then
-            if item."Unit Price" <> 0 then begin
-                VATPostingSetup.reset();
-                if VATPostingSetup.Get('ASSUJETTI', item."VAT Prod. Posting Group") then
-                    exit(item."Unit Price" * (1 + (VATPostingSetup."VAT %" / 100)));
+        if rec.Type = rec.Type::Item then begin
+            item.get("No.");
+            if rec."Unit Price" <> 0 then begin
+
+                if VATPostingSetup.Get('ASSUJETTI', rec."VAT Prod. Posting Group") then
+                    exit(rec."Unit Price" * (1 + (VATPostingSetup."VAT %" / 100)));
+            end else begin
+                if item."Unit Price" <> 0 then begin
+                    if VATPostingSetup.Get('ASSUJETTI', item."VAT Prod. Posting Group") then
+                        exit(item."Unit Price" * (1 + (VATPostingSetup."VAT %" / 100)));
+                end;
             end;
+        end;
     end;
     //>>wdc01
 }
