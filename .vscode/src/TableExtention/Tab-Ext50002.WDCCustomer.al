@@ -6,7 +6,7 @@ using Microsoft.Sales.Receivables;
 using Microsoft.Sales.History;
 using Microsoft.Sales.Document;
 //*************Documentation***************************
-//wdc01  WDC.FS  23/12/2025 : Existant Customer Name and VAT Registration No.  Couldn't be added
+//wdc01  WDC.FS  23/12/2025 : Existant Customer Name and VAT Registration No.  Couldn't be added.
 tableextension 50002 "WDC Customer" extends Customer
 {
 
