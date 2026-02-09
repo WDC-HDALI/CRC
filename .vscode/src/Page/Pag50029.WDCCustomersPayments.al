@@ -169,6 +169,7 @@ page 50029 "WDC Customers Payments"
                     end;
                 end;
             }
+
         }
     }
     trigger OnOpenPage()
