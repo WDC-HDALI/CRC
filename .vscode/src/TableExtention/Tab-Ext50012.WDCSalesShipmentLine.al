@@ -1,8 +1,13 @@
+//****************Documentation***************
+//WDC01  WDC.HG 29/07/2025 Continuation of  valuation of posted sales shipment
+//WDC02  WDC.HG 02/09/2025  Distinct the canceled shipment line from the customer shipment 
 namespace CRC.CRC;
 
 using Microsoft.Sales.History;
-
+using Microsoft.Sales.Document;
+using Microsoft.Inventory.Ledger;
 tableextension 50012 "WDC Sales Shipment Line" extends "Sales Shipment Line"
+
 {
     fields
     {
@@ -36,11 +41,55 @@ tableextension 50012 "WDC Sales Shipment Line" extends "Sales Shipment Line"
             DecimalPlaces = 0 : 5;
             Editable = false;
         }
+        //<<WDC02
+        field(50903; "Totally Cancelled"; Boolean)
+        {
+            CaptionML = ENU = 'Totally Cancelled', FRA = 'Totallement annulée';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = exist("Item Ledger Entry" where("Document No." = field("Document No."), "Document Line No." = field("Line No."), "Shipped Qty. Not Returned" = filter(0)));
+        }
+        //<<WDC02
+        // WDC01
+        // field(50018; "Line Amount"; Decimal)
+        // {
+        //     CaptionML = ENU = 'Total Line Amount HT', FRA = 'Montant Total ligne HT';
+        //     FieldClass = FlowField;
+        //     CalcFormula = Lookup("Sales Line"."Line Amount" WHERE("Document Type" = const(Order),
+        //                                                            "Document No." = field("Order No."),
+        //                                                            "Line No." = field("Order Line No.")));
+        // }
+        // field(50019; "Amount Incl VAT"; Decimal)
+        // {
+        //     CaptionML = ENU = 'Amount Incl. VAT', FRA = 'Montant TTC';
+        //     FieldClass = FlowField;
+        //     CalcFormula = Lookup("Sales Line"."Amount Including VAT" WHERE("Document Type" = const(Order),
+        //                                                            "Document No." = field("Order No."),
+        //                                                            "Line No." = field("Order Line No.")));
+        // }
+        // field(50020; "Line Discount amount"; Decimal)
+        // {
+        //     CaptionML = ENU = 'Line Discount amount', FRA = 'Montant remise ligne';
+        //     FieldClass = FlowField;
+        //     CalcFormula = Lookup("Sales Line"."Line Discount Amount" WHERE("Document Type" = const(Order),
+        //                                                            "Document No." = field("Order No."),
+        //                                                            "Line No." = field("Order Line No.")));
+        // }
+        field(50021; "Line Amount"; Decimal)
+        {
+            CaptionML = ENU = 'Line Amount HT', FRA = 'Montant ligne HT';
+            DataClassification = ToBeClassified;
+
+        }
+
+        //>>WDC01
     }
+
     keys
     {
         key("Remain. Qty to Delivery"; "Qty Totally Delivered")
         {
         }
     }
+
 }

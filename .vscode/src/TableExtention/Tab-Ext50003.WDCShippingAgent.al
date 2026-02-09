@@ -41,5 +41,10 @@ tableextension 50003 "WDC Shipping Agent" extends "Shipping Agent"
             CaptionML = ENU = 'Rep & Spare Part Amount LCY', FRA = 'Montant Rép. & Pièce';
             DataClassification = ToBeClassified;
         }
+        field(50007; "Company Vehicule"; Boolean)
+        {
+            CaptionML = ENU = 'Company Vehicle', FRA = 'Véhicule de l''entreprise';
+            DataClassification = ToBeClassified;
+        }
     }
 }

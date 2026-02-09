@@ -49,6 +49,16 @@ tableextension 54024 "WDC-ST Payment Step" extends "WDC-ED Payment Step"
             DataClassification = ToBeClassified;
 
         }
+        field(54010; "Payment No. Required"; Boolean)
+        {
+            CaptionML = ENU = 'Payment No. Required', FRA = 'N° Paiement Obligatoire';
+            DataClassification = ToBeClassified;
+        }
+        field(54014; "Comment Required"; Boolean)
+        {
+            CaptionML = ENU = 'Comment Required', FRA = 'Commentaire Obligatoire';
+            DataClassification = ToBeClassified;
+        }
 
     }
 }

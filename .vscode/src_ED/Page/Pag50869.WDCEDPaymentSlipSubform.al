@@ -5,7 +5,6 @@ page 50869 "WDC-ED Payment Slip Subform"
     DelayedInsert = true;
     PageType = ListPart;
     SourceTable = "WDC-ED Payment Line";
-
     layout
     {
         area(content)
@@ -41,25 +40,21 @@ page 50869 "WDC-ED Payment Slip Subform"
                 {
                     ApplicationArea = All;
                 }
-                field("Posting Group"; Rec."Posting Group")
-                {
-                    ApplicationArea = All;
-                    Visible = false;
-                }
+
                 field("Due Date"; Rec."Due Date")
                 {
                     ApplicationArea = All;
                 }
-                field("Debit Amount"; Rec."Debit Amount")
-                {
-                    ApplicationArea = All;
-                    Visible = DebitAmountVisible;
-                }
-                field("Credit Amount"; Rec."Credit Amount")
-                {
-                    ApplicationArea = All;
-                    Visible = CreditAmountVisible;
-                }
+                // field("Debit Amount"; Rec."Debit Amount")
+                // {
+                //     ApplicationArea = All;
+                //     Visible = DebitAmountVisible;
+                // }
+                // field("Credit Amount"; Rec."Credit Amount")
+                // {
+                //     ApplicationArea = All;
+                //     Visible = CreditAmountVisible;
+                // }
                 field(Amount; Rec.Amount)
                 {
                     ApplicationArea = All;
@@ -85,22 +80,22 @@ page 50869 "WDC-ED Payment Slip Subform"
                     ApplicationArea = All;
                     Visible = AcceptationCodeVisible;
                 }
-                field("Payment Address Code"; Rec."Payment Address Code")
-                {
-                    ApplicationArea = All;
-                }
-                field("Bank Branch No."; Rec."Bank Branch No.")
-                {
-                    ApplicationArea = All;
-                    Editable = BankInfoEditable;
-                    Visible = RIBVisible;
-                }
-                field("Agency Code"; Rec."Agency Code")
-                {
-                    ApplicationArea = All;
-                    Editable = BankInfoEditable;
-                    Visible = RIBVisible;
-                }
+                // field("Payment Address Code"; Rec."Payment Address Code")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Bank Branch No."; Rec."Bank Branch No.")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = BankInfoEditable;
+                //     Visible = RIBVisible;
+                // }
+                // field("Agency Code"; Rec."Agency Code")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = BankInfoEditable;
+                //     Visible = RIBVisible;
+                // }
                 field("Bank Account No."; Rec."Bank Account No.")
                 {
                     ApplicationArea = All;
@@ -119,21 +114,21 @@ page 50869 "WDC-ED Payment Slip Subform"
                     Editable = BankInfoEditable;
                     Visible = false;
                 }
-                field("RIB Key"; Rec."RIB Key")
-                {
-                    ApplicationArea = All;
-                    Editable = BankInfoEditable;
-                    Visible = RIBVisible;
-                }
-                field("RIB Checked"; Rec."RIB Checked")
-                {
-                    ApplicationArea = All;
-                    Visible = RIBVisible;
-                }
-                field("Has Payment Export Error"; Rec."Has Payment Export Error")
-                {
-                    ApplicationArea = All;
-                }
+                // field("RIB Key"; Rec."RIB Key")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = BankInfoEditable;
+                //     Visible = RIBVisible;
+                // }
+                // field("RIB Checked"; Rec."RIB Checked")
+                // {
+                //     ApplicationArea = All;
+                //     Visible = RIBVisible;
+                // }
+                // field("Has Payment Export Error"; Rec."Has Payment Export Error")
+                // {
+                //     ApplicationArea = All;
+                // }
             }
         }
     }

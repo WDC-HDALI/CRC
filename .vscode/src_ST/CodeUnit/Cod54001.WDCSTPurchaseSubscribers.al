@@ -1,5 +1,23 @@
+//****************Documentation*************
+//WDC01  WDC.HG  22/09/2025 Correct the Credit Memo Entry 
 codeunit 54001 "WDC-ST Purchase Subscribers"
 {
+    [EventSubscriber(ObjectType::Table, Database::"Purchase Header", 'OnAfterValidateEvent', "Buy-from Vendor No.", false, false)]
+    local procedure OnAfterUpdateBuyFromVend(var Rec: Record "Purchase Header")
+    var
+        lVendorPostingGroup: Record "Vendor Posting Group";
+        BillToVendorTemplate: Record "Vendor Templ.";
+    begin
+        IF lVendorPostingGroup.GET(Rec."Vendor Posting Group") THEN BEGIN
+            Rec."Apply Fiscal Stamp" := lVendorPostingGroup."Apply Fiscal Stamp";
+            if Rec."Apply Fiscal Stamp" THEN
+                Rec."Stamp Amount" := lVendorPostingGroup."Stamp Amount"
+            else
+                Rec."Stamp Amount" := 0;
+        end;
+    end;
+
+
 
     [EventSubscriber(ObjectType::Table, Database::"Purchase Header", 'OnValidatePaytoVendorNoBeforeRecreateLines', '', false, false)]
     local procedure OnValidatePayToVendorTemplateCodeBeforeRecreatePurchaseLinesValidateStamp(var PurchaseHeader: Record "Purchase Header"; CallingFieldNo: Integer)
@@ -10,7 +28,9 @@ codeunit 54001 "WDC-ST Purchase Subscribers"
         IF lVendorPostingGroup.GET(PurchaseHeader."Vendor Posting Group") THEN BEGIN
             PurchaseHeader."Apply Fiscal Stamp" := lVendorPostingGroup."Apply Fiscal Stamp";
             if PurchaseHeader."Apply Fiscal Stamp" THEN
-                PurchaseHeader."Stamp Amount" := lVendorPostingGroup."Stamp Amount";
+                PurchaseHeader."Stamp Amount" := lVendorPostingGroup."Stamp Amount"
+            else
+                PurchaseHeader."Stamp Amount" := 0;
         end;
 
     end;
@@ -23,7 +43,9 @@ codeunit 54001 "WDC-ST Purchase Subscribers"
         IF lVendorPostingGroup.GET(PurchaseHeader."vendor Posting Group") THEN BEGIN
             PurchaseHeader."Apply Fiscal Stamp" := lVendorPostingGroup."Apply Fiscal Stamp";
             if PurchaseHeader."Apply Fiscal Stamp" THEN
-                PurchaseHeader."Stamp Amount" := lVendorPostingGroup."Stamp Amount";
+                PurchaseHeader."Stamp Amount" := lVendorPostingGroup."Stamp Amount"
+            else
+                PurchaseHeader."Stamp Amount" := 0;
         end;
     end;
 
@@ -35,7 +57,9 @@ codeunit 54001 "WDC-ST Purchase Subscribers"
         lVendorPostingGroup.GET(PurchaseHeader."Vendor Posting Group");
         PurchaseHeader."Apply Fiscal Stamp" := lVendorPostingGroup."Apply Fiscal Stamp";
         IF lVendorPostingGroup."Apply Fiscal Stamp" THEN
-            PurchaseHeader."Stamp Amount" := lVendorPostingGroup."Stamp Amount";
+            PurchaseHeader."Stamp Amount" := lVendorPostingGroup."Stamp Amount"
+        else
+            PurchaseHeader."Stamp Amount" := 0;
     end;
 
 
@@ -78,9 +102,18 @@ codeunit 54001 "WDC-ST Purchase Subscribers"
             VendorPostingGroup.TESTFIELD("Stamp Amount");
             MntTimbre := 0;
             MntTimbre := VendorPostingGroup."Stamp Amount";
-            GenJnlLine.Amount := GenJnlLine.Amount - MntTimbre;
-            GenJnlLine."Source Currency Amount" := GenJnlLine."Source Currency Amount" - MntTimbre;
-            GenJnlLine."Amount (LCY)" := GenJnlLine."Amount (LCY)" - MntTimbre;
+            //<<WDC01
+            if GenJnlLine.Amount < 0 then begin
+                GenJnlLine.Amount := GenJnlLine.Amount - MntTimbre;
+                GenJnlLine."Source Currency Amount" := GenJnlLine."Source Currency Amount" - MntTimbre;
+                GenJnlLine."Amount (LCY)" := GenJnlLine."Amount (LCY)" - MntTimbre;
+            end
+            else begin
+                GenJnlLine.Amount := GenJnlLine.Amount + MntTimbre;
+                GenJnlLine."Source Currency Amount" := GenJnlLine."Source Currency Amount" + MntTimbre;
+                GenJnlLine."Amount (LCY)" := GenJnlLine."Amount (LCY)" + MntTimbre;
+            end;
+            //>>WDC01
         end;
     end;
 

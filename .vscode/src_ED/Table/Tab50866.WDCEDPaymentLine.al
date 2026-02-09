@@ -45,7 +45,7 @@ table 50866 "WDC-ED Payment Line"
         field(4; "Account Type"; enum "Gen. Journal Account Type")
         {
             CaptionML = ENU = 'Account Type', FRA = 'Type compte';
-
+            ValuesAllowed = Vendor, Customer, "G/L Account", "Bank Account";
             trigger OnValidate()
             begin
                 UpdateEntry(false);
@@ -216,7 +216,7 @@ table 50866 "WDC-ED Payment Line"
                         "Agency Code" := CustomerBank."Agency Code";
                         "Bank Account Name" := CustomerBank.Name;
                         "RIB Key" := CustomerBank."RIB Key";
-                        "RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
+                        //"RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
                         "Bank City" := CustomerBank.City;
                     end else
                         if "Account Type" = "Account Type"::Vendor then begin
@@ -227,7 +227,7 @@ table 50866 "WDC-ED Payment Line"
                             "Agency Code" := VendorBank."Agency Code";
                             "Bank Account Name" := VendorBank.Name;
                             "RIB Key" := VendorBank."RIB Key";
-                            "RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
+                            //"RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
                             "Bank City" := VendorBank.City;
                         end;
                 end else
@@ -239,7 +239,7 @@ table 50866 "WDC-ED Payment Line"
             CaptionML = ENU = 'Bank Branch No.', FRA = 'Code établissement';
             trigger OnValidate()
             begin
-                "RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
+                //"RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
             end;
         }
         field(27; "Bank Account No."; Text[30])
@@ -248,7 +248,7 @@ table 50866 "WDC-ED Payment Line"
 
             trigger OnValidate()
             begin
-                "RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
+                //"RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
             end;
         }
         field(28; "Agency Code"; Text[5])
@@ -257,7 +257,7 @@ table 50866 "WDC-ED Payment Line"
 
             trigger OnValidate()
             begin
-                "RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
+                //"RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
             end;
         }
         field(29; "RIB Key"; Integer)
@@ -266,14 +266,14 @@ table 50866 "WDC-ED Payment Line"
 
             trigger OnValidate()
             begin
-                "RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
+                //"RIB Checked" := RibKey.Check("Bank Branch No.", "Agency Code", "Bank Account No.", "RIB Key");
             end;
         }
-        field(30; "RIB Checked"; Boolean)
-        {
-            CaptionML = ENU = 'RIB Checked', FRA = 'Vérification RIB';
-            Editable = false;
-        }
+        // field(30; "RIB Checked"; Boolean)
+        // {
+        //     CaptionML = ENU = 'RIB Checked', FRA = 'Vérification RIB';
+        //     Editable = false;
+        // }
         field(31; "Acceptation Code"; Option)
         {
             CaptionML = ENU = 'Acceptation Code', FRA = 'Code acceptation';
@@ -613,7 +613,7 @@ table 50866 "WDC-ED Payment Line"
         "Bank Account No." := '';
         "Agency Code" := '';
         "RIB Key" := 0;
-        "RIB Checked" := false;
+        //"RIB Checked" := false;
         "Bank Account Name" := '';
         "Bank City" := '';
         IBAN := '';

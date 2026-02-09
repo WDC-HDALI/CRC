@@ -1,6 +1,6 @@
 pageextension 50018 "WDC Shipping Agent Services" extends "Shipping Agent Services"
 {
-    Caption = 'Liste Chauffeur';
+    CaptionML = FRA = 'Liste Chauffeurs';
 
     layout
     {
@@ -17,6 +17,12 @@ pageextension 50018 "WDC Shipping Agent Services" extends "Shipping Agent Servic
         {
             Visible = false;
         }
-
+        addafter(Description)
+        {
+            field("Company Transporter"; Rec."Company Transporter")
+            {
+                ApplicationArea = all;
+            }
+        }
     }
 }

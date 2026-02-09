@@ -1,8 +1,11 @@
+
+//***************Documentation********************
+//WDC01  WDC.HG  24/07/2025  ADD "Payment Method Code"  field 
 Tableextension 50015 "WDC Gen. Journal Batch" extends 232
 {
     fields
     {
-        field(50015; "Account Type"; Enum "Gen. Journal Account Type")
+        field(50001; "Account Type"; Enum "Gen. Journal Account Type")
         {
             trigger OnValidate()
             begin
@@ -16,7 +19,7 @@ Tableextension 50015 "WDC Gen. Journal Batch" extends 232
                       FieldCaption("Account Type"), FieldCaption("Bal. Account Type"));
             end;
         }
-        field(50001; "Account No."; Code[20])
+        field(50002; "Account No."; Code[20])
         {
             Caption = 'Account No.';
             TableRelation = IF ("Account Type" = CONST("G/L Account")) "G/L Account" WHERE("Account Type" = CONST(Posting),
@@ -37,5 +40,12 @@ Tableextension 50015 "WDC Gen. Journal Batch" extends 232
 
 
         }
+        //<<WDC01
+        field(50003; "Payment Method Code"; Code[10])
+        {
+            Caption = 'Payment Method Code';
+            TableRelation = "Payment Method";
+        }
+        //<<WDC01
     }
 }

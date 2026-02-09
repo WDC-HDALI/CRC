@@ -1,3 +1,5 @@
+//***************Documentation*********************
+//WDC01  WDC.HG  30/05/2025  Add New Fields 
 tableextension 50010 "WDC JLEntry" extends "G/L Entry"
 {
     fields
@@ -14,6 +16,19 @@ tableextension 50010 "WDC JLEntry" extends "G/L Entry"
         {
             DataClassification = ToBeClassified;
         }
+        //<<WDC01
+        field(50003; "Cheque No."; code[50])
+        {
+            DataClassification = ToBeClassified;
+            CaptionML = ENU = 'Payment Reference', FRA = 'Réference Paiement';
+        }
+        field(50004; "Initial Payment No."; code[20])
+        {
+            DataClassification = ToBeClassified;
+            CaptionML = ENU = 'Initial Payment No.', FRA = 'N° paiement initial';
+        }
+        //>>WDC01
+
 
     }
 

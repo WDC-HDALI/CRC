@@ -33,15 +33,11 @@ pageextension 54020 "WDC-ST Payment Status" extends "WDC-ED Payment Status"
             {
                 ApplicationArea = All;
             }
-            field("Cheque/Traite Required"; Rec."Cheque/Traite Required")
+            field(cancelation; Rec.cancelation)
             {
                 ApplicationArea = All;
             }
-            field("Obligatoire Code Banque"; Rec."Obligatoire Code Banque")
-            {
-                ApplicationArea = All;
-            }
-            field("Obligatoire Commentaire"; Rec."Obligatoire Commentaire")
+            field(Modifiable; Rec.Modifiable)
             {
                 ApplicationArea = All;
             }
@@ -49,36 +45,6 @@ pageextension 54020 "WDC-ST Payment Status" extends "WDC-ED Payment Status"
             {
                 ApplicationArea = All;
             }
-            field("Header Account"; Rec."Header Account")
-            {
-                ApplicationArea = All;
-            }
-            field("Mofi automatique BQ Entê"; Rec."Mofi automatique BQ Entê")
-            {
-                ApplicationArea = All;
-            }
-            field(Editable; Rec.Editable)
-            {
-                ApplicationArea = All;
-            }
-
-            field("Type Compte Contrepartie"; Rec."Type Compte Contrepartie")
-            {
-                ApplicationArea = All;
-            }
-            field("Contrepartie Ligne de paiement"; Rec."Contrepartie Ligne de paiement")
-            {
-                ApplicationArea = All;
-            }
-            field("Pay Line Counterparty Acc."; Rec."Pay Line Counterparty Acc.")
-            {
-                ApplicationArea = All;
-            }
-            field(cancelation; Rec.cancelation)
-            {
-                ApplicationArea = All;
-            }
-
         }
     }
 

@@ -29,7 +29,11 @@ enum 54000 "WDC-ST Payment Slip Type"
     {
         CaptionML = ENU = 'TPE', FRA = 'TPE';
     }
-    value(7; Other)
+    value(7; RS)
+    {
+        CaptionML = ENU = 'RS', FRA = 'RS';
+    }
+    value(8; Other)
     {
         CaptionML = ENU = 'Other', FRA = 'Autre';
     }

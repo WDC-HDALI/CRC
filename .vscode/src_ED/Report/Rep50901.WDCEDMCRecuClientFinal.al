@@ -73,6 +73,9 @@ report 50901 "WDC-ED MC-Recu Client Final"
                 column(DraweeRef; "Payment Line"."Drawee Reference")
                 {
                 }
+                column(PaymentLineComment; "Payment Line"."Comments")
+                {
+                }
                 column(BankAccountName; "Payment Line"."Bank Account Name")
                 {
                 }

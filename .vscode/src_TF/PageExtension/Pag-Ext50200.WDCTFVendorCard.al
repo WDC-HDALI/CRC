@@ -8,10 +8,7 @@ pageextension 50200 "WDC-TF Vendor Card" extends "Vendor Card"
             {
                 ApplicationArea = all;
             }
-            field(Status; Rec.Status)
-            {
-                ApplicationArea = all;
-            }
+
         }
     }
 }

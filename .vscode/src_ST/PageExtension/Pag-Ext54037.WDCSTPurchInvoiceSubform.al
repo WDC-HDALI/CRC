@@ -11,6 +11,35 @@ pageextension 54037 "WDC-ST Purch. Invoice Subform" extends "Purch. Invoice Subf
         {
             Visible = false;
         }
+        modify(Quantity)
+        {
+            trigger OnAfterValidate()
+            begin
+                CurrPage.Update();
+            end;
+        }
+        modify("Line Discount %")
+        {
+            trigger OnAfterValidate()
+            begin
+                CurrPage.Update();
+            end;
+        }
+        modify("Line Discount Amount")
+        {
+            trigger OnAfterValidate()
+            begin
+                CurrPage.Update();
+            end;
+        }
+        modify("Direct Unit Cost")
+        {
+            trigger OnAfterValidate()
+            begin
+                CurrPage.Update();
+            end;
+        }
+
         addafter("Total Amount Incl. VAT")
         {
             field(StampAmount; StampAmount)
@@ -34,7 +63,22 @@ pageextension 54037 "WDC-ST Purch. Invoice Subform" extends "Purch. Invoice Subf
         StampAmount := 0;
     end;
 
+    trigger OnAfterGetCurrRecord()
+    var
+    begin
+        UpdateAmountIncludingVAT;
+    end;
+
     trigger OnAfterGetRecord()
+    var
+
+    begin
+        UpdateAmountIncludingVAT;
+    end;
+
+
+
+    procedure UpdateAmountIncludingVAT()
     var
         lPurchLine: Record "Purchase Line";
         lPurchHeader: Record "Purchase Header";
@@ -44,7 +88,8 @@ pageextension 54037 "WDC-ST Purch. Invoice Subform" extends "Purch. Invoice Subf
         if lPurchHeader.Get(Rec."Document Type", Rec."Document No.") then begin
             StampAmount := lPurchHeader."Stamp Amount";
             lPurchHeader.CalcFields("Amount Including VAT");
-            TotalInvoice := lPurchHeader."Amount Including VAT" + StampAmount;
+            if lPurchHeader."Amount Including VAT" <> 0 then
+                TotalInvoice := lPurchHeader."Amount Including VAT" + StampAmount;
         end;
     end;
 

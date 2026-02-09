@@ -1,4 +1,6 @@
 pageextension 50019 "WDC Posted Sales shpt Update" extends "Posted Sales Shipment - Update"
+//*****************Documentation*************************
+//wdc01  WDC.FS  06/01/2026 add New fields
 {
     layout
     {
@@ -13,16 +15,28 @@ pageextension 50019 "WDC Posted Sales shpt Update" extends "Posted Sales Shipmen
 
         addafter("Shipping Agent Code")
         {
-            field(ShippingAgentCode; Rec."Shipping Agent Code")
+            //<<wdc01
+            //field(ShippingAgentCode; Rec."Shipping Agent Code")
+            //{
+            //    CaptionML = FRA = 'N° camion';
+            //    ApplicationArea = All;
+            //}
+            //field(ShippingAgentServiceCode; Rec."Shipping Agent Service Code")
+            //{
+            //    CaptionML = FRA = 'Code chauffeur';
+            //    ApplicationArea = All;
+            //}
+            field("Truck No."; Rec."Truck No.")
             {
-                CaptionML = FRA = 'N° camion';
                 ApplicationArea = All;
+                Editable = true;
             }
-            field(ShippingAgentServiceCode; Rec."Shipping Agent Service Code")
+            field("Driver Name"; Rec."Driver Name")
             {
-                CaptionML = FRA = 'Code chauffeur';
                 ApplicationArea = All;
+                Editable = true;
             }
+            //>>wdc01
         }
 
     }

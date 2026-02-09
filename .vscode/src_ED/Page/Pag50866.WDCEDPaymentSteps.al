@@ -92,6 +92,7 @@ page 50866 "WDC-ED Payment Steps"
                     ApplicationArea = All;
                 }
 
+
             }
         }
     }

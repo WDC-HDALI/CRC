@@ -2,20 +2,20 @@ tableextension 50212 "WDC-TF Vendor" extends Vendor
 {
     fields
     {
-        field(50200; Status; Option)
-        {
-            CaptionML = ENU = 'Status', FRA = 'Statut';
-            DataClassification = ToBeClassified;
-            OptionMembers = Waiting,Validated;
-            OptionCaptionML = ENU = 'Waiting,Validated', FRA = 'En attente,Validé';
-            trigger OnValidate()
-            var
-                UserSetup: Record "User Setup";
-            BEGIN
+        // field(50200; Status; Option)
+        // {
+        //     CaptionML = ENU = 'Status', FRA = 'Statut';
+        //     DataClassification = ToBeClassified;
+        //     OptionMembers = Waiting,Validated;
+        //     OptionCaptionML = ENU = 'Waiting,Validated', FRA = 'En attente,Validé';
+        //     trigger OnValidate()
+        //     var
+        //         UserSetup: Record "User Setup";
+        //     BEGIN
 
-            END;
+        //     END;
 
-        }
+        // }
         field(50201; "Trade Register"; Code[20])
         {
             CaptionML = ENU = 'Trade Register', FRA = 'Regsitre de Commerce';

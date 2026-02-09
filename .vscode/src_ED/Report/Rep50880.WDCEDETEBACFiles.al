@@ -47,9 +47,10 @@ report 50880 "WDC-ED ETEBAC Files"
                     if StrLen("Bank Account No.") > 11 then
                         Error(Text006, "Bank Account Code");
 
-                    if not "RIB Checked" then
-                        Error(Text007, "Bank Account Code", "Account No.");
-
+                    // if not "RIB Checked" then
+                    //     Error(Text007, "Bank Account Code", "Account No.");
+                    if "Bank Account No." = '' then
+                        Error(Text007, "Bank Account Code", Cust.Name);
                     LineNo := LineNo + 1;
 
                     RecordCode := '06';

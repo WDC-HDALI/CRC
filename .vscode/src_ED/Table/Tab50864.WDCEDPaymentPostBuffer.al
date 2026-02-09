@@ -1,3 +1,5 @@
+//**************Documentation********************
+//WDC01  WDC.HG  22/07/2025   display the "reference payement" in vendor ledger entries 
 table 50864 "WDC-ED Payment Post. Buffer"
 {
     CaptionML = ENU = 'Payment Post. Buffer', FRA = 'Tampon validation paiement';
@@ -332,6 +334,12 @@ table 50864 "WDC-ED Payment Post. Buffer"
         {
             CaptionML = ENU = 'Line No.', FRA = 'N° ligne';
         }
+        //<<WDC01 
+        field(5626; "Payment Reference"; code[20])
+        {
+            CaptionML = ENU = 'Payment Reference', FRA = 'Reference Paiement';
+        }
+        //WDC01
     }
 
     keys

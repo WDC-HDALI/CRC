@@ -9,6 +9,14 @@ pageextension 54027 "WDC-ST Payment Step" Extends "WDC-ED Payment Steps"
             {
                 ApplicationArea = All;
             }
+            field("Payment No. Required"; Rec."Payment No. Required")
+            {
+                ApplicationArea = All;
+            }
+            field("Comment Required"; Rec."Comment Required")
+            {
+                ApplicationArea = All;
+            }
             field("Mandatory Drawer"; Rec."Mandatory Drawer")
             {
                 ApplicationArea = All;
@@ -33,25 +41,5 @@ pageextension 54027 "WDC-ST Payment Step" Extends "WDC-ED Payment Steps"
 
 
     }
-    // actions
-    // {
-    //     addlast(Creation)
-    //     {
-    //         action("Autorisation Etapes")
-    //         {
-    //             ApplicationArea = All;
-    //             Promoted = true;
-    //             PromotedCategory = Process;
-    //             PromotedIsBig = true;
-    //             RunObject = Page "WDC-ST Permission Step";
-    //             RunPageView = SORTING(Step, "Payment Type", "Payment Slip Profile") ORDER(Ascending);
-    //             RunPageLink = "Payment Type" = FIELD("Payment Class"), Step = FIELD(Line);
-    //             RunPageOnRec = false;
-    //         }
-
-    //     }
-
-    // }
-
 
 }

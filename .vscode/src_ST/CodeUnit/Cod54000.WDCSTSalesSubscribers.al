@@ -1,5 +1,22 @@
 codeunit 54000 "WDC-ST Sales Subscribers"
 {
+
+    [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnAfterValidateEvent', "Bill-to Customer No.", false, false)]
+    local procedure OnAfterUpdateBuyFromVend(var Rec: Record "Sales Header")
+    var
+        lCustomerPostingGroup: Record "Customer Posting Group";
+    begin
+        IF lCustomerPostingGroup.GET(Rec."Customer Posting Group") THEN BEGIN
+            Rec."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+            If Rec."Document Type" = Rec."Document Type"::"Credit Memo" then
+                Rec."Apply Fiscal Stamp" := false;
+            if Rec."Apply Fiscal Stamp" THEN
+                Rec."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
+            else
+                Rec."Stamp Amount" := 0;
+        end;
+    end;
+
     [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnValidateBilltoCustomerTemplCodeOnBeforeRecreateSalesLines', '', false, false)]
     local procedure OnValidateBilltoCustomerTemplateCodeBeforeRecreateSalesLinesValidateStamp(var SalesHeader: Record "Sales Header"; CallingFieldNo: Integer)
     var
@@ -10,6 +27,8 @@ codeunit 54000 "WDC-ST Sales Subscribers"
         if BillToCustTemplate.Get(SalesHeader."Bill-to Customer Templ. Code") then begin // CHG01
             IF lCustomerPostingGroup.GET(SalesHeader."Customer Posting Group") THEN BEGIN
                 SalesHeader."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+                If SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then
+                    SalesHeader."Apply Fiscal Stamp" := false;
                 if lCustomerPostingGroup."Apply Fiscal Stamp" THEN
                     SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount";
             END;
@@ -23,8 +42,12 @@ codeunit 54000 "WDC-ST Sales Subscribers"
     begin
         IF lCustomerPostingGroup.GET(SalesHeader."Customer Posting Group") THEN BEGIN
             SalesHeader."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+            If SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then
+                SalesHeader."Apply Fiscal Stamp" := false;
             if lCustomerPostingGroup."Apply Fiscal Stamp" THEN
-                SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount";
+                SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
+            else
+                SalesHeader."Stamp Amount" := 0;
         end;
     end;
 
@@ -35,8 +58,12 @@ codeunit 54000 "WDC-ST Sales Subscribers"
     begin
         lCustomerPostingGroup.GET(SalesHeader."Customer Posting Group");
         SalesHeader."Apply Fiscal Stamp" := lCustomerPostingGroup."Apply Fiscal Stamp";
+        If SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then
+            SalesHeader."Apply Fiscal Stamp" := false;
         IF lCustomerPostingGroup."Apply Fiscal Stamp" THEN
-            SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount";
+            SalesHeader."Stamp Amount" := lCustomerPostingGroup."Stamp Amount"
+        else
+            SalesHeader."Stamp Amount" := 0;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, 825, 'OnPostLedgerEntryOnAfterGenJnlPostLine', '', false, false)]
@@ -105,5 +132,18 @@ codeunit 54000 "WDC-ST Sales Subscribers"
     begin
         AmountInclVAT := AmountInclVAT + SalesInvoiceHeader."Stamp Amount";
     end;
+
+    [EventSubscriber(ObjectType::table, Database::"Sales Shipment Line", 'OnAfterDescriptionSalesLineInsert', '', true, true)]
+    local procedure OnAfterDescriptionSalesLineInsert(var SalesLine: Record "Sales Line"; SalesShipmentLine: Record "Sales Shipment Line"; var NextLineNo: Integer)
+    var
+        MyText000: Label 'Shipment No. %1: %2';
+        SalesShipmentheader: Record "Sales shipment Header";
+    begin
+        if SalesShipmentheader.Get(SalesShipmentLine."Document No.") then begin
+            SalesLine.Description := StrSubstNo(MyText000, SalesShipmentLine."Document No.", SalesShipmentheader."Posting Date");
+            SalesLine.Modify();
+        end;
+    end;
+
 
 }

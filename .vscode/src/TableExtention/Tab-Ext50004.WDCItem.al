@@ -2,7 +2,10 @@ namespace CRC.CRC;
 
 using Microsoft.Sales.History;
 using Microsoft.Inventory.Item;
-
+using System.Security.User;
+using Microsoft.Inventory.Ledger;
+//****************Documentation**********************
+//wdc01  WDC.HG  15/05/2025 Add new fields 
 tableextension 50004 "WDC Item" extends Item
 {
     fields
@@ -58,6 +61,38 @@ tableextension 50004 "WDC Item" extends Item
             CaptionML = ENU = 'Royalty Unit Price LCY', FRA = 'Prix Unit. Redevance DS';
             DataClassification = ToBeClassified;
         }
+        //<<WDC01 
+        field(50011; "Associated With Cement"; Boolean)
+        {
+            CaptionML = ENU = 'Associated With Cement', FRA = 'Associé au ciment';
+            DataClassification = ToBeClassified;
+        }
+        field(50012; "Associated With Iron"; Boolean)
+        {
+            CaptionML = ENU = 'Associated With Iron', FRA = 'Associé au Fer';
+            DataClassification = ToBeClassified;
+        }
+
+        field(50013; "Input Inventory"; Decimal)
+        {
+            CaptionML = ENU = 'Input Inventory', FRA = 'Stock entrant';
+            Editable = false;
+            FieldClass = FlowField;
+            DecimalPlaces = 0 : 5;
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = field("No."),
+            Quantity = filter(> 0)));
+        }
+        field(50014; "Output Inventory"; Decimal)
+        {
+            CaptionML = ENU = 'Output Inventory', FRA = 'Stock sortant';
+            Editable = false;
+            FieldClass = FlowField;
+            DecimalPlaces = 0 : 5;
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = field("No."),
+            Quantity = filter(< 0)));
+        }
+        //>>WDC01s
+
     }
 
 }

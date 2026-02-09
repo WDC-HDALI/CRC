@@ -10,6 +10,7 @@ pageextension 54014 "WDC-ST Customer Card" extends "Customer Card"
                 ApplicationArea = All;
             }
         }
+
     }
 
 }

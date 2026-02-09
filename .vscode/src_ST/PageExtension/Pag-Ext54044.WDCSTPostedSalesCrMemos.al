@@ -2,6 +2,10 @@ pageextension 54044 "WDC-ST Posted Sales Cr. Memos" extends "Posted Sales Credit
 {
     layout
     {
+        modify("Posting Date")
+        {
+            Visible = true;
+        }
         addafter("Amount Including VAT")
         {
             field("Stamp Amount"; Rec."Stamp Amount")
@@ -13,6 +17,7 @@ pageextension 54044 "WDC-ST Posted Sales Cr. Memos" extends "Posted Sales Credit
             {
                 CaptionML = ENU = 'Credit Memo Amount', FRA = 'Montant Avoir';
                 ApplicationArea = All;
+                Style = Strong;
                 Editable = false;
             }
         }
@@ -21,6 +26,11 @@ pageextension 54044 "WDC-ST Posted Sales Cr. Memos" extends "Posted Sales Credit
     trigger OnAfterGetRecord()
     begin
         CreditMemoAmount := Rec."Amount Including VAT" + Rec."Stamp Amount";
+    end;
+
+    trigger OnOpenPage()
+    begin
+        rec.SetCurrentKey("Posting Date");
     end;
 
     Var

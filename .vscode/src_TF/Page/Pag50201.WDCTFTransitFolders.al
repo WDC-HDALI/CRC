@@ -182,8 +182,5 @@ page 50201 "WDC-TF Transit Folders"
         }
     }
 
-    actions
-    {
-    }
 }
 

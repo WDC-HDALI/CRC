@@ -4,6 +4,8 @@ using Microsoft.Inventory.Document;
 using Microsoft.Foundation.Reporting;
 using Microsoft.Inventory.Tracking;
 using Microsoft.Inventory.Comment;
+//****************Documentation********************
+//WDC01  WDC.HG  16/05/2025  show new fields 
 page 50009 "WDC Invt. Shipment"
 {
     CaptionML = ENU = 'Inventory Shipment', FRA = 'Sortie Stock';
@@ -13,6 +15,7 @@ page 50009 "WDC Invt. Shipment"
     AboutTitle = 'Sortie Stock';
     SourceTableView = where("Document Type" = const(Shipment));
     ApplicationArea = all;
+    RefreshOnActivate = true;
     layout
     {
         area(content)
@@ -32,6 +35,27 @@ page 50009 "WDC Invt. Shipment"
                             CurrPage.Update();
                     end;
                 }
+                //>>WDC01
+                field(CustomerNo; Rec.CustomerNo)
+                {
+                    ApplicationArea = Basic, Suite;
+
+                }
+                field(CustomerName; Rec.CustomerName)
+                {
+                    ApplicationArea = Basic, Suite;
+                }
+                field(CustomerAddress; Rec.CustomerAddress)
+                {
+                    ApplicationArea = Basic, Suite;
+
+                }
+                field(CustomerPhoneNo; Rec.CustomerPhoneNo)
+                {
+                    ApplicationArea = Basic, Suite;
+                }
+                //>>WDC01
+
                 field("Posting Description"; Rec."Posting Description")
                 {
                     ApplicationArea = Basic, Suite;
@@ -45,6 +69,7 @@ page 50009 "WDC Invt. Shipment"
                 field("Gen. Bus. Posting Group"; Rec."Gen. Bus. Posting Group")
                 {
                     ApplicationArea = Basic, Suite;
+                    visible = false;
                     ToolTip = 'Specifies the vendor''s or customer''s trade type to link transactions made for this business partner with the appropriate general ledger account according to the general posting setup.';
                 }
                 field("Posting Date"; Rec."Posting Date")
@@ -94,10 +119,33 @@ page 50009 "WDC Invt. Shipment"
                 ApplicationArea = Basic, Suite;
                 SubPageLink = "Document Type" = field("Document Type"),
                               "Document No." = field("No.");
+                UpdatePropagation = Both;
             }
+            //<<WDC01
+            group(totaux)
+            {
+                Caption = 'Totaux';
+                ShowCaption = false;
+
+
+                field("Total HT"; Rec."Total HT")
+                {
+                    ApplicationArea = all;
+                }
+                field("Total TVA"; Rec."Total TVA")
+                {
+                    ApplicationArea = all;
+                }
+                field("Total TTC"; Rec."Total TTC")
+                {
+                    ApplicationArea = all;
+                }
+            }
+            //>>WDC01
             group(Control1900309501)
             {
                 Caption = 'Dimensions';
+                Visible = false;
                 field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
                 {
                     ApplicationArea = Dimensions;
@@ -355,7 +403,6 @@ page 50009 "WDC Invt. Shipment"
             }
         }
     }
-
     local procedure PostingDateOnAfterValidate()
     begin
         CurrPage.ShipmentLines.PAGE.UpdateForm(true);

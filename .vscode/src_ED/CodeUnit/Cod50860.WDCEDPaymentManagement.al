@@ -29,10 +29,10 @@ codeunit 50860 "WDC-ED Payment Management"
         end;
 
         if PaymentStep."Verify Lines RIB" then begin
-            PaymentLine.SetRange("RIB Checked", false);
+            PaymentLine.SetFilter("Bank Account No.", '');
             if PaymentLine.FINDSET then
                 Error(Text003);
-            PaymentLine.SetRange("RIB Checked");
+            // PaymentLine.SetRange("RIB Checked");
         end;
 
         if PaymentStep."Verify Due Date" then begin
@@ -185,7 +185,8 @@ codeunit 50860 "WDC-ED Payment Management"
             Process.Get(FromPaymentLine."Payment Class");
             if PayNum = '' then begin
                 i := 10000;
-                NoSeriesMgt.AreRelated(Step."Header Nos. Series", ToBord."No. Series");
+                //NoSeriesMgt.AreRelated(Step."Header Nos. Series", ToBord."No. Series");//HD09062025
+                ToBord."No." := NoSeriesMgt.GetNextNo(Process."Header No. Series");
                 ToBord."Payment Class" := FromPaymentLine."Payment Class";
                 ToBord."Status No." := Step."Next Status";
                 PaymentStatus.Get(ToBord."Payment Class", ToBord."Status No.");
@@ -607,6 +608,7 @@ codeunit 50860 "WDC-ED Payment Management"
                 GenJnlLine."Source Code" := PaymentHeader."Source Code";
                 GenJnlLine."Reason Code" := Step."Reason Code";
                 GenJnlLine."Document Date" := PaymentHeader."Document Date";
+                GenJnlLine."Payment Slip Type" := PaymentHeader."Payment Slip Type";
                 GenJnlPostLine.RunWithCheck(GenJnlLine);
             end;
         end;
@@ -970,6 +972,7 @@ codeunit 50860 "WDC-ED Payment Management"
         GenJnlLine.Init;
         GenJnlLine."Posting Date" := PaymentHeader."Posting Date";
         GenJnlLine."Document Date" := PaymentHeader."Document Date";
+        GenJnlLine."Payment Slip Type" := PaymentHeader."Payment Slip Type";
         GenJnlLine.Description := InvPostingBuffer[1].Description;
         GenJnlLine."Reason Code" := Step."Reason Code";
         PaymentClass.Get(PaymentHeader."Payment Class");

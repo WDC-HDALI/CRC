@@ -5,7 +5,7 @@ pageextension 54016 "WDC-ST General Ledger Setup" extends "General Ledger Setup"
 
         addlast(General)
         {
-            field("Default RS"; Rec."Default RS")
+            field("Min RS Amount LCY"; Rec."Min RS Amount LCY")
             {
                 ApplicationArea = all;
             }

@@ -113,6 +113,7 @@ page 50868 "WDC-ED Payment Slip"
                     ApplicationArea = All;
                     Importance = Promoted;
                 }
+
             }
         }
 
@@ -304,7 +305,7 @@ page 50868 "WDC-ED Payment Slip"
 
     local procedure DocumentDateOnAfterValidate()
     begin
-        CurrPage.Update;
+        CurrPage.Update(False);
     end;
 
     var

@@ -13,25 +13,10 @@ tableextension 54003 "WDC-ST Sales Invoice Header" extends "Sales Invoice Header
             CaptionML = ENU = 'Stamp Amount', FRA = 'Montant timbre fiscal';
             DataClassification = ToBeClassified;
         }
-        field(54004; "% Prep. Amount"; Decimal)
+        field(54100; "Date Filter"; Date)
         {
-            CaptionML = ENU = '% Prep. Amount', FRA = '% Prep. Montant';
-            DataClassification = ToBeClassified;
-            MaxValue = 100;
-            MinValue = 0;
-        }
-        field(54005; "Prep. Amount"; Decimal)
-        {
-            CaptionML = ENU = 'Prep. Amount', FRA = 'Montant Prep.';
-            DataClassification = ToBeClassified;
-        }
-        field(54006; "Payment Amount (LCY)"; Decimal)
-        {
-            CaptionML = ENU = 'Payment Amount (LCY)', FRA = 'Montant paiement (LCY)';
-            Editable = false;
-            FieldClass = FlowField;
-            CalcFormula = - Sum("Detailed Cust. Ledg. Entry"."Amount (LCY)" WHERE("Commande No." = FIELD("No.")));
-
+            CaptionML = ENU = 'Date Filter', FRA = 'Filtre de date';
+            FieldClass = FlowFilter;
         }
 
     }

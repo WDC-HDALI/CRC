@@ -88,7 +88,7 @@ table 50201 "WDC-TF Transit Folder"
         field(13; "Freight Forwarder Code"; Code[20])
         {
             CaptionML = ENU = 'Freight Forwarder Code', FRA = 'Code Transitaire';
-            TableRelation = Vendor."No." WHERE(Status = filter(validated));
+            TableRelation = Vendor."No.";
             trigger OnValidate()
             var
                 myInt: Integer;
@@ -192,7 +192,7 @@ table 50201 "WDC-TF Transit Folder"
         field(30; "Transporter code"; Code[20])
         {
             CaptionML = ENU = 'Transporter code', FRA = 'Code transporteur';
-            TableRelation = Vendor."No." WHERE(Status = filter(Validated));
+            TableRelation = Vendor."No.";
             trigger onValidate()
             var
                 myInt: Integer;
@@ -299,6 +299,7 @@ table 50201 "WDC-TF Transit Folder"
             AutoFormatType = 2;
         }
     }
+
     keys
     {
         key(Key1; "No.")
@@ -313,6 +314,13 @@ table 50201 "WDC-TF Transit Folder"
         {
 
         }
+
+    }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "No.", "Vendor No.", "Vendor Name", "Opening Date")
+        {
+        }
     }
     trigger OnInsert()
     VAR
@@ -324,7 +332,7 @@ table 50201 "WDC-TF Transit Folder"
             // NoSeriesMgt.InitSeries(PurchSetup."Transit Folder Nos.", xRec.Souche, WORKDATE, "No.", Souche);
             "No." := NoSeriesMgt.GetNextNo(PurchSetup."Transit Folder Nos.", WorkDate(), TRUE);
         END;
-        "Opening Date" := TODAY;
+        "Opening Date" := WorkDate();
         InsertDefaultCharges;
         Statut := Statut::Open;
     END;
