@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -428,7 +428,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!name.Value</Value>
+                                      <Value>=Fields!NomAuxiliaire_PaymentLine.Value</Value>
                                       <Style>
                                         <FontSize>9pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
@@ -482,9 +482,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox24</rd:DefaultName>
                               <Top>7.1825cm</Top>
-                              <Left>3.44696in</Left>
+                              <Left>3.49104in</Left>
                               <Height>0.61412in</Height>
-                              <Width>1.63712in</Width>
+                              <Width>1.59304in</Width>
                               <ZIndex>11</ZIndex>
                               <Style>
                                 <Border>
@@ -890,7 +890,6 @@
                                   <TextRuns>
                                     <TextRun>
                                       <Value>=Fields!name.Value</Value>
-                                      <Value>=Fields!NomAuxiliaire_PaymentLine.Value</Value>
                                       <Style>
                                         <FontSize>9pt</FontSize>
                                         <FontWeight>Bold</FontWeight>

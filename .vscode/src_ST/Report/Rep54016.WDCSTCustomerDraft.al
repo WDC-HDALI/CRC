@@ -31,7 +31,6 @@ report 54016 "WDC-ST Customer Draft"
             {
             }
             column(Cutomeradresse2; Customer."Address 2")
-
             {
             }
             column(ch2; ch2)
@@ -64,7 +63,6 @@ report 54016 "WDC-ST Customer Draft"
             begin
                 montant_en_lettre := '';
                 Customer.get("Customer No.");
-
                 Convert_cdu."Montant en texte"(montant_en_lettre, ABS(Amount));
                 IF RecCompany.GET() THEN
                     RecCompany.CALCFIELDS(RecCompany.Picture);
