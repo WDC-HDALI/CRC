@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-02-11T13:53:24.5088347Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-02-12T07:39:49.9600220Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -22,6 +22,181 @@
       <rd:DataSourceID>4978e3ce-f9c8-4ff3-9c77-33bcd43e18b1</rd:DataSourceID>
     </DataSource>
   </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+      <Fields>
+        <Field Name="Picture">
+          <DataField>Picture</DataField>
+        </Field>
+        <Field Name="No_">
+          <DataField>No_</DataField>
+        </Field>
+        <Field Name="Bill_to_Customer_No_">
+          <DataField>Bill_to_Customer_No_</DataField>
+        </Field>
+        <Field Name="Sell_to_Phone_No_">
+          <DataField>Sell_to_Phone_No_</DataField>
+        </Field>
+        <Field Name="Bill_to_Name">
+          <DataField>Bill_to_Name</DataField>
+        </Field>
+        <Field Name="Bill_to_Address">
+          <DataField>Bill_to_Address</DataField>
+        </Field>
+        <Field Name="Bill_to_City">
+          <DataField>Bill_to_City</DataField>
+        </Field>
+        <Field Name="Bill_to_Post_Code">
+          <DataField>Bill_to_Post_Code</DataField>
+        </Field>
+        <Field Name="customerCIN">
+          <DataField>customerCIN</DataField>
+        </Field>
+        <Field Name="Posting_Date">
+          <DataField>Posting_Date</DataField>
+        </Field>
+        <Field Name="SystemCreatedBy">
+          <DataField>SystemCreatedBy</DataField>
+        </Field>
+        <Field Name="Order_No_">
+          <DataField>Order_No_</DataField>
+        </Field>
+        <Field Name="customer">
+          <DataField>customer</DataField>
+        </Field>
+        <Field Name="TotalBrut">
+          <DataField>TotalBrut</DataField>
+        </Field>
+        <Field Name="TotalBrutFormat">
+          <DataField>TotalBrutFormat</DataField>
+        </Field>
+        <Field Name="totalRemise">
+          <DataField>totalRemise</DataField>
+        </Field>
+        <Field Name="totalRemiseFormat">
+          <DataField>totalRemiseFormat</DataField>
+        </Field>
+        <Field Name="TotalNetvcRemise">
+          <DataField>TotalNetvcRemise</DataField>
+        </Field>
+        <Field Name="TotalNetvcRemiseFormat">
+          <DataField>TotalNetvcRemiseFormat</DataField>
+        </Field>
+        <Field Name="MontantTva7">
+          <DataField>MontantTva7</DataField>
+        </Field>
+        <Field Name="MontantTva7Format">
+          <DataField>MontantTva7Format</DataField>
+        </Field>
+        <Field Name="MontantTva13">
+          <DataField>MontantTva13</DataField>
+        </Field>
+        <Field Name="MontantTva13Format">
+          <DataField>MontantTva13Format</DataField>
+        </Field>
+        <Field Name="MontantTva19">
+          <DataField>MontantTva19</DataField>
+        </Field>
+        <Field Name="MontantTva19Format">
+          <DataField>MontantTva19Format</DataField>
+        </Field>
+        <Field Name="TotalPayer">
+          <DataField>TotalPayer</DataField>
+        </Field>
+        <Field Name="TotalPayerFormat">
+          <DataField>TotalPayerFormat</DataField>
+        </Field>
+        <Field Name="amountletter">
+          <DataField>amountletter</DataField>
+        </Field>
+        <Field Name="CamionNo">
+          <DataField>CamionNo</DataField>
+        </Field>
+        <Field Name="StampAmount">
+          <DataField>StampAmount</DataField>
+        </Field>
+        <Field Name="StampAmountFormat">
+          <DataField>StampAmountFormat</DataField>
+        </Field>
+        <Field Name="ChauffeurName">
+          <DataField>ChauffeurName</DataField>
+        </Field>
+        <Field Name="paymentmethod">
+          <DataField>paymentmethod</DataField>
+        </Field>
+        <Field Name="No__Printed">
+          <DataField>No__Printed</DataField>
+        </Field>
+        <Field Name="TotalTransport">
+          <DataField>TotalTransport</DataField>
+        </Field>
+        <Field Name="TotalTransportFormat">
+          <DataField>TotalTransportFormat</DataField>
+        </Field>
+        <Field Name="TotalRedevance">
+          <DataField>TotalRedevance</DataField>
+        </Field>
+        <Field Name="TotalRedevanceFormat">
+          <DataField>TotalRedevanceFormat</DataField>
+        </Field>
+        <Field Name="Customer_Posting_Group">
+          <DataField>Customer_Posting_Group</DataField>
+        </Field>
+        <Field Name="Salesperson_Code">
+          <DataField>Salesperson_Code</DataField>
+        </Field>
+        <Field Name="ItemNo">
+          <DataField>ItemNo</DataField>
+        </Field>
+        <Field Name="itemDescription">
+          <DataField>itemDescription</DataField>
+        </Field>
+        <Field Name="Quantityshipped">
+          <DataField>Quantityshipped</DataField>
+        </Field>
+        <Field Name="QuantityshippedFormat">
+          <DataField>QuantityshippedFormat</DataField>
+        </Field>
+        <Field Name="Unit_of_Measure_Code">
+          <DataField>Unit_of_Measure_Code</DataField>
+        </Field>
+        <Field Name="Unit_Price">
+          <DataField>Unit_Price</DataField>
+        </Field>
+        <Field Name="Unit_PriceFormat">
+          <DataField>Unit_PriceFormat</DataField>
+        </Field>
+        <Field Name="Line_Discount__">
+          <DataField>Line_Discount__</DataField>
+        </Field>
+        <Field Name="Line_Discount__Format">
+          <DataField>Line_Discount__Format</DataField>
+        </Field>
+        <Field Name="Item_Charge_Base_Amount">
+          <DataField>Item_Charge_Base_Amount</DataField>
+        </Field>
+        <Field Name="Item_Charge_Base_AmountFormat">
+          <DataField>Item_Charge_Base_AmountFormat</DataField>
+        </Field>
+        <Field Name="VAT__">
+          <DataField>VAT__</DataField>
+        </Field>
+        <Field Name="VAT__Format">
+          <DataField>VAT__Format</DataField>
+        </Field>
+        <Field Name="NumberOfLine">
+          <DataField>NumberOfLine</DataField>
+        </Field>
+        <Field Name="NumberOfPage">
+          <DataField>NumberOfPage</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -591,7 +766,7 @@
                                   <Value>=Fields!Quantityshipped.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <Format>=Fields!QuantityshippedFormat.Value</Format>
+                                    <Format>#,0.000;-#,0.000;''</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -606,14 +781,10 @@
                               <Style>None</Style>
                             </Border>
                             <LeftBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </LeftBorder>
                             <RightBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -679,7 +850,7 @@
                                   <Value>=Fields!Unit_Price.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <Format>=Fields!Unit_PriceFormat.Value</Format>
+                                    <Format>#,0.000;-#,0.000;''</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -694,14 +865,10 @@
                               <Style>None</Style>
                             </Border>
                             <LeftBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </LeftBorder>
                             <RightBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -723,7 +890,7 @@
                                   <Value>=Fields!Line_Discount__.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <Format>=Fields!Line_Discount__Format.Value</Format>
+                                    <Format>#,0.00;-#,0.00;''</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -736,14 +903,10 @@
                               <Style>None</Style>
                             </Border>
                             <LeftBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </LeftBorder>
                             <RightBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -765,7 +928,7 @@
                                   <Value>=Fields!Item_Charge_Base_Amount.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <Format>=Fields!Item_Charge_Base_AmountFormat.Value</Format>
+                                    <Format>#,0.000;-#,0.000;''</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -780,14 +943,10 @@
                               <Style>None</Style>
                             </Border>
                             <LeftBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </LeftBorder>
                             <RightBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -809,7 +968,7 @@
                                   <Value>=Fields!VAT__.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <Format>=Fields!VAT__Format.Value</Format>
+                                    <Format>#,0.00;-#,0.00;''</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -824,14 +983,10 @@
                               <Style>None</Style>
                             </Border>
                             <LeftBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </LeftBorder>
                             <RightBorder>
-                              <Color>Black</Color>
                               <Style>Solid</Style>
-                              <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1022,7 +1177,7 @@
         <Height>14.41471cm</Height>
         <Style />
       </Body>
-      <Width>20.40651cm</Width>
+      <Width>20.40652cm</Width>
       <Page>
         <PageHeader>
           <Height>6.97351cm</Height>
@@ -1036,13 +1191,15 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>BON DE LIVRAISON N°</Value>
+                      <Value EvaluationMode="Constant">FACTURE N°:</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style />
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
@@ -1148,7 +1305,7 @@
               <rd:DefaultName>Textbox48</rd:DefaultName>
               <Top>6.16203cm</Top>
               <Left>17.08725cm</Left>
-              <Height>0.31072cm</Height>
+              <Height>0.46947cm</Height>
               <Width>2.56338cm</Width>
               <ZIndex>3</ZIndex>
               <Style>
@@ -1225,73 +1382,6 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="Textbox7">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Fields!Order_No_.Value</Value>
-                      <Style>
-                        <FontSize>8pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>6.14792cm</Top>
-              <Left>10.17761cm</Left>
-              <Height>0.37042cm</Height>
-              <Width>2.70107cm</Width>
-              <ZIndex>6</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Top</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox28">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>="Facture N° : " &amp; "   " &amp; Fields!Posted_description.Value</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox28</rd:DefaultName>
-              <Top>0.12912cm</Top>
-              <Left>12.01882cm</Left>
-              <Height>0.6cm</Height>
-              <Width>7.42125cm</Width>
-              <ZIndex>7</ZIndex>
-              <Visibility>
-                <Hidden>=iif(Fields!Customer_Posting_Group.Value="C-PASSAGER",false,true)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Textbox Name="Textbox30">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -1315,46 +1405,11 @@
               <Left>8.8999cm</Left>
               <Height>0.52917cm</Height>
               <Width>1.2001cm</Width>
-              <ZIndex>8</ZIndex>
+              <ZIndex>6</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox31">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>N° B.C</Value>
-                      <Style>
-                        <FontSize>8pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                        <Format>dd/MM/yyyy</Format>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox6</rd:DefaultName>
-              <Top>6.14792cm</Top>
-              <Left>8.90696cm</Left>
-              <Height>0.37042cm</Height>
-              <Width>1.2001cm</Width>
-              <ZIndex>9</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Top</VerticalAlign>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -1608,7 +1663,7 @@
               <Left>10.8072cm</Left>
               <Height>3.71153cm</Height>
               <Width>9.59931cm</Width>
-              <ZIndex>10</ZIndex>
+              <ZIndex>7</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1644,13 +1699,48 @@
               <Left>0.9635cm</Left>
               <Height>4.25582cm</Height>
               <Width>7.56147cm</Width>
-              <ZIndex>11</ZIndex>
+              <ZIndex>8</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
               </Style>
             </Image>
+            <Textbox Name="Textbox7">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Duplicata</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox7</rd:DefaultName>
+              <Top>3.28869cm</Top>
+              <Left>8.70136cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.82634cm</Width>
+              <ZIndex>9</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Fields!No__Printed.Value &gt; 0, False, True)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -1680,9 +1770,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox38</rd:DefaultName>
               <Top>0.88725cm</Top>
-              <Left>0.127cm</Left>
+              <Left>0.065cm</Left>
               <Height>1.89429cm</Height>
-              <Width>2.70841cm</Width>
+              <Width>2.21452cm</Width>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Visibility>
@@ -1704,7 +1794,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Fields!totalRemise.Value</Value>
+                      <Value>=Fields!TotalBrut.Value - Fields!TotalNetvcRemise.Value</Value>
                       <Style>
                         <Format>#,0.000;- #,0.000;''</Format>
                       </Style>
@@ -1715,9 +1805,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox39</rd:DefaultName>
               <Top>0.88725cm</Top>
-              <Left>2.90597cm</Left>
+              <Left>2.4cm</Left>
               <Height>1.89429cm</Height>
-              <Width>2.5cm</Width>
+              <Width>2.21452cm</Width>
               <ZIndex>1</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -1771,9 +1861,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox40</rd:DefaultName>
               <Top>0.88725cm</Top>
-              <Left>5.58847cm</Left>
+              <Left>4.79091cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.38629cm</Width>
+              <Width>2.78982cm</Width>
               <ZIndex>2</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -1830,9 +1920,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox41</rd:DefaultName>
               <Top>0.88725cm</Top>
-              <Left>17.0174cm</Left>
+              <Left>17.08725cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.38911cm</Width>
+              <Width>3.31927cm</Width>
               <ZIndex>3</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -1888,9 +1978,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox42</rd:DefaultName>
               <Top>0.88725cm</Top>
-              <Left>9.32174cm</Left>
+              <Left>7.75712cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.4518cm</Width>
+              <Width>2.18722cm</Width>
               <ZIndex>4</ZIndex>
               <Visibility>
                 <Hidden>=iif(
@@ -1947,9 +2037,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox43</rd:DefaultName>
               <Top>0.88725cm</Top>
-              <Left>14.43182cm</Left>
+              <Left>12.44906cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.38802cm</Width>
+              <Width>2.18722cm</Width>
               <ZIndex>5</ZIndex>
               <Visibility>
                 <Hidden>=iif(
@@ -2006,9 +2096,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox42</rd:DefaultName>
               <Top>0.88725cm</Top>
-              <Left>11.88477cm</Left>
+              <Left>10.12073cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.4518cm</Width>
+              <Width>2.18722cm</Width>
               <ZIndex>6</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -2119,9 +2209,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox46</rd:DefaultName>
               <Top>1.62836cm</Top>
-              <Left>5.58847cm</Left>
+              <Left>4.79091cm</Left>
               <Height>1.15318cm</Height>
-              <Width>14.81804cm</Width>
+              <Width>15.5831cm</Width>
               <ZIndex>8</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -2174,7 +2264,7 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               <rd:DefaultName>Textbox47</rd:DefaultName>
               <Top>4.50709cm</Top>
               <Left>3.57272cm</Left>
-              <Height>0.44125cm</Height>
+              <Height>0.54125cm</Height>
               <Width>9.27504cm</Width>
               <ZIndex>9</ZIndex>
               <Visibility>
@@ -2502,9 +2592,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox38</rd:DefaultName>
               <Top>0.20964cm</Top>
-              <Left>0.127cm</Left>
+              <Left>0.065cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.70841cm</Width>
+              <Width>2.21452cm</Width>
               <ZIndex>15</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -2559,9 +2649,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox39</rd:DefaultName>
               <Top>0.20964cm</Top>
-              <Left>2.90597cm</Left>
+              <Left>2.4cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.5cm</Width>
+              <Width>2.21452cm</Width>
               <ZIndex>16</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -2616,9 +2706,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox40</rd:DefaultName>
               <Top>0.20964cm</Top>
-              <Left>5.58847cm</Left>
+              <Left>4.79091cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.38629cm</Width>
+              <Width>2.78982cm</Width>
               <ZIndex>17</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -2676,9 +2766,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox41</rd:DefaultName>
               <Top>0.20964cm</Top>
-              <Left>17.0174cm</Left>
+              <Left>17.08725cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.38911cm</Width>
+              <Width>3.30775cm</Width>
               <ZIndex>18</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -2735,9 +2825,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox42</rd:DefaultName>
               <Top>0.20964cm</Top>
-              <Left>9.32174cm</Left>
+              <Left>7.75712cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.4518cm</Width>
+              <Width>2.18722cm</Width>
               <ZIndex>19</ZIndex>
               <Visibility>
                 <Hidden>=iif(
@@ -2795,9 +2885,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox43</rd:DefaultName>
               <Top>0.20964cm</Top>
-              <Left>14.43182cm</Left>
+              <Left>12.44906cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.38802cm</Width>
+              <Width>2.18722cm</Width>
               <ZIndex>20</ZIndex>
               <Visibility>
                 <Hidden>=iif(
@@ -2855,9 +2945,9 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox42</rd:DefaultName>
               <Top>0.20964cm</Top>
-              <Left>11.88477cm</Left>
+              <Left>10.12073cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.4518cm</Width>
+              <Width>2.18722cm</Width>
               <ZIndex>21</ZIndex>
               <Visibility>
                 <Hidden>=iif(Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
@@ -2960,7 +3050,7 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
               <rd:DefaultName>Textbox47</rd:DefaultName>
               <Top>4.50709cm</Top>
               <Left>0.127cm</Left>
-              <Height>0.44125cm</Height>
+              <Height>0.54125cm</Height>
               <Width>3.27991cm</Width>
               <ZIndex>23</ZIndex>
               <Visibility>
@@ -3079,6 +3169,125 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
                 </Border>
               </Style>
             </Line>
+            <Textbox Name="Textbox61">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Fields!StampAmount.Value</Value>
+                      <Style>
+                        <Format>#,0.000;- #,0.000;''</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox43</rd:DefaultName>
+              <Top>0.88725cm</Top>
+              <Left>14.77739cm</Left>
+              <Height>0.6cm</Height>
+              <Width>2.18722cm</Width>
+              <ZIndex>27</ZIndex>
+              <Visibility>
+                <Hidden>=iif(
+Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>Solid</Style>
+                </Border>
+                <TopBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </TopBorder>
+                <BottomBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </BottomBorder>
+                <LeftBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </LeftBorder>
+                <RightBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </RightBorder>
+                <VerticalAlign>Middle</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox62">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>TIMBRE</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                        <Format>#,0.000;- #,0.000;''</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox43</rd:DefaultName>
+              <Top>0.20964cm</Top>
+              <Left>14.77739cm</Left>
+              <Height>0.6cm</Height>
+              <Width>2.18722cm</Width>
+              <ZIndex>28</ZIndex>
+              <Visibility>
+                <Hidden>=iif(
+Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>Solid</Style>
+                </Border>
+                <TopBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </TopBorder>
+                <BottomBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </BottomBorder>
+                <LeftBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </LeftBorder>
+                <RightBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </RightBorder>
+                <VerticalAlign>Middle</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -3094,6 +3303,12 @@ Globals!PageNumber=Globals!TotalPages,false,true)</Hidden>
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -3133,179 +3348,4 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Fields>
-        <Field Name="Picture">
-          <DataField>Picture</DataField>
-        </Field>
-        <Field Name="No_">
-          <DataField>No_</DataField>
-        </Field>
-        <Field Name="Bill_to_Customer_No_">
-          <DataField>Bill_to_Customer_No_</DataField>
-        </Field>
-        <Field Name="Sell_to_Phone_No_">
-          <DataField>Sell_to_Phone_No_</DataField>
-        </Field>
-        <Field Name="Bill_to_Name">
-          <DataField>Bill_to_Name</DataField>
-        </Field>
-        <Field Name="Bill_to_Address">
-          <DataField>Bill_to_Address</DataField>
-        </Field>
-        <Field Name="Bill_to_City">
-          <DataField>Bill_to_City</DataField>
-        </Field>
-        <Field Name="Bill_to_Post_Code">
-          <DataField>Bill_to_Post_Code</DataField>
-        </Field>
-        <Field Name="customerCIN">
-          <DataField>customerCIN</DataField>
-        </Field>
-        <Field Name="Posting_Date">
-          <DataField>Posting_Date</DataField>
-        </Field>
-        <Field Name="SystemCreatedBy">
-          <DataField>SystemCreatedBy</DataField>
-        </Field>
-        <Field Name="Order_No_">
-          <DataField>Order_No_</DataField>
-        </Field>
-        <Field Name="customer">
-          <DataField>customer</DataField>
-        </Field>
-        <Field Name="TotalBrut">
-          <DataField>TotalBrut</DataField>
-        </Field>
-        <Field Name="TotalBrutFormat">
-          <DataField>TotalBrutFormat</DataField>
-        </Field>
-        <Field Name="totalRemise">
-          <DataField>totalRemise</DataField>
-        </Field>
-        <Field Name="totalRemiseFormat">
-          <DataField>totalRemiseFormat</DataField>
-        </Field>
-        <Field Name="TotalNetvcRemise">
-          <DataField>TotalNetvcRemise</DataField>
-        </Field>
-        <Field Name="TotalNetvcRemiseFormat">
-          <DataField>TotalNetvcRemiseFormat</DataField>
-        </Field>
-        <Field Name="MontantTva7">
-          <DataField>MontantTva7</DataField>
-        </Field>
-        <Field Name="MontantTva7Format">
-          <DataField>MontantTva7Format</DataField>
-        </Field>
-        <Field Name="MontantTva13">
-          <DataField>MontantTva13</DataField>
-        </Field>
-        <Field Name="MontantTva13Format">
-          <DataField>MontantTva13Format</DataField>
-        </Field>
-        <Field Name="MontantTva19">
-          <DataField>MontantTva19</DataField>
-        </Field>
-        <Field Name="MontantTva19Format">
-          <DataField>MontantTva19Format</DataField>
-        </Field>
-        <Field Name="TotalPayer">
-          <DataField>TotalPayer</DataField>
-        </Field>
-        <Field Name="TotalPayerFormat">
-          <DataField>TotalPayerFormat</DataField>
-        </Field>
-        <Field Name="amountletter">
-          <DataField>amountletter</DataField>
-        </Field>
-        <Field Name="CamionNo">
-          <DataField>CamionNo</DataField>
-        </Field>
-        <Field Name="ChauffeurName">
-          <DataField>ChauffeurName</DataField>
-        </Field>
-        <Field Name="paymentmethod">
-          <DataField>paymentmethod</DataField>
-        </Field>
-        <Field Name="DestinationAddress">
-          <DataField>DestinationAddress</DataField>
-        </Field>
-        <Field Name="No__Printed">
-          <DataField>No__Printed</DataField>
-        </Field>
-        <Field Name="TotalTransport">
-          <DataField>TotalTransport</DataField>
-        </Field>
-        <Field Name="TotalTransportFormat">
-          <DataField>TotalTransportFormat</DataField>
-        </Field>
-        <Field Name="TotalRedevance">
-          <DataField>TotalRedevance</DataField>
-        </Field>
-        <Field Name="TotalRedevanceFormat">
-          <DataField>TotalRedevanceFormat</DataField>
-        </Field>
-        <Field Name="Posted_description">
-          <DataField>Posted_description</DataField>
-        </Field>
-        <Field Name="Customer_Posting_Group">
-          <DataField>Customer_Posting_Group</DataField>
-        </Field>
-        <Field Name="Salesperson_Code">
-          <DataField>Salesperson_Code</DataField>
-        </Field>
-        <Field Name="ItemNo">
-          <DataField>ItemNo</DataField>
-        </Field>
-        <Field Name="itemDescription">
-          <DataField>itemDescription</DataField>
-        </Field>
-        <Field Name="Quantityshipped">
-          <DataField>Quantityshipped</DataField>
-        </Field>
-        <Field Name="QuantityshippedFormat">
-          <DataField>QuantityshippedFormat</DataField>
-        </Field>
-        <Field Name="Unit_of_Measure_Code">
-          <DataField>Unit_of_Measure_Code</DataField>
-        </Field>
-        <Field Name="Unit_Price">
-          <DataField>Unit_Price</DataField>
-        </Field>
-        <Field Name="Unit_PriceFormat">
-          <DataField>Unit_PriceFormat</DataField>
-        </Field>
-        <Field Name="Line_Discount__">
-          <DataField>Line_Discount__</DataField>
-        </Field>
-        <Field Name="Line_Discount__Format">
-          <DataField>Line_Discount__Format</DataField>
-        </Field>
-        <Field Name="Item_Charge_Base_Amount">
-          <DataField>Item_Charge_Base_Amount</DataField>
-        </Field>
-        <Field Name="Item_Charge_Base_AmountFormat">
-          <DataField>Item_Charge_Base_AmountFormat</DataField>
-        </Field>
-        <Field Name="VAT__">
-          <DataField>VAT__</DataField>
-        </Field>
-        <Field Name="VAT__Format">
-          <DataField>VAT__Format</DataField>
-        </Field>
-        <Field Name="NumberOfLine">
-          <DataField>NumberOfLine</DataField>
-        </Field>
-        <Field Name="NumberOfPage">
-          <DataField>NumberOfPage</DataField>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-    </DataSet>
-  </DataSets>
 </Report>

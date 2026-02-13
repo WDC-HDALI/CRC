@@ -1,6 +1,7 @@
 //WDC01  WDC.HG  02/06/2025  Add New Action 
 //wdc02  WDC.FS  18/06/2025 Hide Some Fields
 //WDC02  WDC.HG  24/11/2025 change print action 
+//WDC04  WDC.FS  12/02/2026 Change Print Action
 pageextension 50021 "WDC Posted Sales Invoice" extends "Posted Sales Invoice"
 {
     layout
@@ -427,12 +428,20 @@ pageextension 50021 "WDC Posted Sales Invoice" extends "Posted Sales Invoice"
                 var
                     lPostedSalesInvoice: report "WDC Posted Sales Invoice ";
                     lSalesInvoiceHeader: record "Sales Invoice Header";
+                    lReportSelection: Record "Report Selections";
 
                 begin
-                    lSalesInvoiceHeader.reset();
-                    lSalesInvoiceHeader.SetRange("No.", rec."No.");
-                    lPostedSalesInvoice.SetTableView(lSalesInvoiceHeader);
-                    lPostedSalesInvoice.RunModal();
+                    //<<WDC04
+                    // lSalesInvoiceHeader.reset();
+                    // lSalesInvoiceHeader.SetRange("No.", rec."No.");
+                    // lPostedSalesInvoice.SetTableView(lSalesInvoiceHeader);
+                    // lPostedSalesInvoice.RunModal();
+                    lReportSelection.RESET();
+                    lReportSelection.SetRange(Usage, lReportSelection.Usage::"S.Invoice");
+                    Rec.SetRecFilter();
+                    if lReportSelection.FindFirst() then
+                        Report.Run(lReportSelection."Report ID", true, true, Rec);
+                    //>>WDC04
 
                 end;
             }
