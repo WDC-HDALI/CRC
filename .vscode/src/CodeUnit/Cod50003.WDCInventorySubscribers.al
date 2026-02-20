@@ -24,14 +24,15 @@ using Microsoft.Purchases.Document;
 using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Sales.Receivables;
 using Microsoft.Finance.GeneralLedger.Journal;
+using Microsoft.Warehouse.Journal;
 //*******************Documentation************************
 //WDC01  WDC.HG  19/05/2025  post invt. Shipment document
 //WDC02  WDC.HG  29/05/2025  Post Payment Statut
 //WDC03  WDC.HG  30/05/2025  Post bank payment 
 //WDC04  WDC.HG  10/06/2025  InsertBorderauLookup
 //WDC06  WDC.HG  23/06/2025  block the purchase order printout if the status is open
-//wdc07  WDC.FS  26/06/2025 Transfer the Order Transfer to Posted Transfer Shipments
-
+//wdc07  WDC.FS  26/06/2025  Transfer the Order Transfer to Posted Transfer Shipments
+//WDC08  WDC.FS  20/02/2026  Add the Price Unit to Posted Transfer Expedition 
 codeunit 50003 "WDC Inventory Subscribers"
 {
     // Enleve l'option de la réception et laisser que l'expédition 
@@ -228,5 +229,20 @@ codeunit 50003 "WDC Inventory Subscribers"
     begin
         error(ltext001)
     end;
+
+    //<<WDC08
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnBeforeInsertTransShptLine', '', false, false)]
+    local procedure OnBeforeInsertTransShptLine(var TransShptLine: Record "Transfer Shipment Line"; TransLine: Record "Transfer Line"; CommitIsSuppressed: Boolean; PreviewMode: Boolean; var IsHandled: Boolean; TransShptHeader: Record "Transfer Shipment Header")
+    var
+        Item: Record Item;
+
+    begin
+        if TransLine."Item No." = '' then
+            Exit;
+        if Item.Get(TransLine."Item No.") then begin
+            TransShptLine."Last Direct Cost" := Item."Last Direct Cost";
+        end
+    end;
+    //>>WDC08
     //>>Control Deleting Posted document
 }
