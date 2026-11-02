@@ -194,6 +194,5 @@ pageextension 50023 "WDC Sales Invoice Subform" extends "Sales Invoice Subform"
         FieldEditable: Boolean;
         UnitPriceEditable: Boolean;
 
-
     //<<wdc01
 }

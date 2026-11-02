@@ -15,7 +15,7 @@ page 50024 "WDC Cash Customers Payments"
     SourceTable = "Detailed Cust. Ledg. Entry";
     SourceTableView = sorting("Customer No.", "Entry Type", "Posting Date", "Initial Document Type")
                                                                             where("Document Type" = filter(Payment),
-                                                                            "Posting Group" = filter(<> 'C-GROUPE'),
+                                                                            "Customer No." = filter(<> '9999'),
                                                                             "Amount (LCY)" = filter(< 0),
                                                                             "Entry Type" = const("Initial Entry"));
 

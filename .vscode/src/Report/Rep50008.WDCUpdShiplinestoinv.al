@@ -22,7 +22,7 @@ report 50008 "WDC Upd Ship. lines to inv."
             trigger OnPreDataItem();
             var
                 lText001: TextConst ENU = 'Please select Shipment No. to proceed.',
-                                FRA = 'Veuillez sélectionner le numéro d''expédition pour continuer.';
+                                    FRA = 'Veuillez sélectionner le numéro d''expédition pour continuer.';
             begin
                 if ShipmentNo = '' then
                     Error(lText001);

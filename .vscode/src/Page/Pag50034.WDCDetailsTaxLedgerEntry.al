@@ -51,10 +51,12 @@ page 50034 "WDC Details Tax Ledger Entry"
                 field("Type Mouvement"; Rec."Type Mouvement")
                 {
                     ApplicationArea = All;
+                    BlankZero = true;
                 }
                 field("Line No."; Rec."Line No.")
                 {
                     ApplicationArea = All;
+                    BlankZero = true;
                 }
                 field("No."; Rec."No.")
                 {
@@ -71,10 +73,12 @@ page 50034 "WDC Details Tax Ledger Entry"
                 field("Quantité"; Rec."Quantité")
                 {
                     ApplicationArea = All;
+                    BlankZero = true;
                 }
                 field("Prix unitaire"; Rec."Prix unitaire")
                 {
                     ApplicationArea = All;
+                    BlankZero = true;
                 }
                 field("Montant HT"; Rec."Montant HT")
                 {
@@ -83,14 +87,17 @@ page 50034 "WDC Details Tax Ledger Entry"
                 field("TVA %"; Rec."TVA %")
                 {
                     ApplicationArea = All;
+                    BlankZero = true;
                 }
                 field("Montant TVA"; Rec."Montant TVA")
                 {
                     ApplicationArea = All;
+                    BlankZero = true;
                 }
                 field("Montant TTC"; Rec."Montant TTC")
                 {
                     ApplicationArea = All;
+                    BlankZero = true;
                 }
                 field("Posting Group"; Rec."Posting Group")
                 {

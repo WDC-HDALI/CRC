@@ -9,7 +9,6 @@ using System.Security.User;
 //***************Documentation*******************
 //WDC01  WDC.HG  29/05/2025  Create Current Object
 //WDC02  WDC.HG  24/07/2025  customize default account type 
-
 pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
 {
     layout
@@ -52,7 +51,6 @@ pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
                             end
 
             end;
-
         }
         //>>WDC02
 
@@ -143,7 +141,6 @@ pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
             {
                 ApplicationArea = all;
             }
-
         }
     }
     actions
@@ -159,12 +156,9 @@ pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
                 Promoted = true;
                 PromotedIsBig = true;
                 visible = setvisible;
-
-
                 trigger OnAction()
                 var
                     lPayementLine: page "WDC Payment Lines";
-
                 begin
                     clear(lPayementLine);
                     lPayementLine.LookupMode := true;
@@ -172,11 +166,9 @@ pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
                     if lPayementLine.RunModal() = Action::LookupOK then
                         lPayementLine.InsertSelectedJournalLine();
                 end;
-
             }
         }
     }
-
     local procedure SetsetvisibleExtrairePaymentLine()
     var
         lGeneraLLedgerSetup: record "General Ledger Setup";
@@ -193,8 +185,6 @@ pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
         lGenJournalBatch: record "Gen. Journal Batch";
     begin
         SetsetvisibleExtrairePaymentLine();
-
-
     end;
 
     trigger OnAfterGetRecord()
@@ -211,7 +201,6 @@ pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
     begin
         SetsetvisibleExtrairePaymentLine();
         CurrPage.update(false);
-
     end;
 
     trigger OnDeleteRecord(): Boolean
@@ -225,7 +214,6 @@ pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
             lcustomerledgerentry.IsInserted := false;
             lcustomerledgerentry.modify();
         end;
-
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
@@ -262,9 +250,7 @@ pageextension 50029 "WDC Payment Journal" extends "Payment Journal"
         end;
     end;
     //<<WDC02
-
     var
-        DocNo: Code[20];
         NoSeries: Codeunit "No. Series";
         setvisible: Boolean;
         editompanyBank: Boolean;

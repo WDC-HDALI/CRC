@@ -20,8 +20,12 @@ pageextension 54043 "WDC-ST Posted Sales Invoices" extends "Posted Sales Invoice
 
     }
     trigger OnAfterGetRecord()
+    var
+        lCustLedgEntris: Record "Cust. Ledger Entry";
     begin
-        InvoiceAmount := Rec."Amount Including VAT" + Rec."Stamp Amount";
+        if lCustLedgEntris.Get(rec."Cust. Ledger Entry No.") then
+            lCustLedgEntris.CalcFields("Amount (LCY)");
+        InvoiceAmount := lCustLedgEntris."Amount (LCY)"; //Rec."Amount Including VAT" + Rec."Stamp Amount";
     end;
 
     trigger OnOpenPage()

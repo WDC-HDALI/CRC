@@ -8,7 +8,10 @@ codeunit 50000 "WDC Sales Subscribers"
 //WDC06  WDC.FS  01/09/2025  Force shipping when posting a sales order for passenger customer
 //WDC07  WDC.FS  02/09/2025  Set Posting Date to WorkDate when releasing Sales Order/Sales Invoice/Sales Credit Memo
 //WDC08  WDC.HG  14/11/2025  Implement Credit Limit 
+//WDC09  WDC.IM  03/03/2026  Add control when posting sales document
 {
+    Permissions = tabledata "Detailed Cust. Ledg. Entry" = RIMD,
+             tabledata "Cust. Ledger Entry" = RIMD;
 
     // Enleve l'option de validation et laisser que l'expédition
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post (Yes/No)", 'OnBeforeConfirmSalesPost', '', FALSE, FALSE)]
@@ -18,8 +21,29 @@ codeunit 50000 "WDC Sales Subscribers"
                             FRA = 'Voulez-vous valider la commande?';
         lText002: TextConst ENU = 'Operation is cancelled',
                             FRA = 'Opération annulée';
-
+        lSalesInvoiceHeader: Record "Sales Invoice Header";
+        lSalesSetup: Record "Sales & Receivables Setup";
+        lText003: TextConst ENU = 'You have to pay the unpaid invoices before you can post this invoice.',
+                             FRA = 'Vous devez payer les factures impayées avant de pouvoir valider cette facture.';
     begin
+        //<<WDC09
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::Invoice then begin
+            lSalesSetup.Get();
+            if lSalesSetup."Enable Cash Credit Control" then begin
+                lSalesInvoiceHeader.Reset();
+                lSalesInvoiceHeader.SetRange("Salesperson Code", SalesHeader."Salesperson Code");
+                lSalesInvoiceHeader.Setfilter("Posting Date", '<=%1', CalcDate(lSalesSetup."Authorized Cash Credit Period", SalesHeader."Posting Date"));
+                lSalesInvoiceHeader.SetRange("Customer Posting Group", 'C-PASSAGER');
+                if lSalesInvoiceHeader.FindSet() then begin
+                    repeat
+                        lSalesInvoiceHeader.CalcFields("Remaining Amount");
+                        if lSalesInvoiceHeader."Remaining Amount" > 0 then
+                            Error(lText003);
+                    until (lSalesInvoiceHeader.Next() = 0);
+                end;
+            end;
+        end;
+        //>>WDC09
         SalesHeader.TestField("Prices Including VAT", false);
         if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
             if Not Confirm(StrSubstNo(lText001)) then
@@ -28,10 +52,8 @@ codeunit 50000 "WDC Sales Subscribers"
             HideDialog := true;
             SalesHeader.Ship := true;
         end;
-
     end;
-
-    //<< enleve le controle d'affectation Frais annexes Vente
+    //<< Enleve le controle d'affectation Frais annexes Vente
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforeFinalizePosting, '', false, false)]
     local procedure OnBeforeInsertICGenJnlLine(var SalesHeader: Record "Sales Header"; var TempSalesLineGlobal: Record "Sales Line" temporary; var EverythingInvoiced: Boolean; SuppressCommit: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line")
     var
@@ -68,10 +90,6 @@ codeunit 50000 "WDC Sales Subscribers"
 
         //>>WDC04
     end;
-
-
-
-
 
     [EventSubscriber(ObjectType::Page, page::"Sales Invoice Subform", 'OnDeleteRecordEvent', '', false, false)]
     local procedure OnAfterDeleteSalesInvSubf(VAR Rec: Record "Sales Line")
@@ -155,7 +173,7 @@ codeunit 50000 "WDC Sales Subscribers"
         if (lCustomer."Copy Sell-to Addr. to Qte From" = lCustomer."Copy Sell-to Addr. to Qte From"::Company) then begin
             if SalesHeader."Sell-to Address" = '' then
                 Error(lText003);
-            if SalesHeader."VAT Registration No." = '' then
+            if (SalesHeader."VAT Registration No." = '') And (lCustomer."No." <> '9999') then
                 Error(lText004);
         end;
 
@@ -322,6 +340,7 @@ codeunit 50000 "WDC Sales Subscribers"
     begin
         SalesInvoiceHeader."Bill-to Name" := SalesInvoiceHeaderRec."Bill-to Name";
         SalesInvoiceHeader."Sell-to Customer Name" := SalesInvoiceHeaderRec."Sell-to Customer Name";
+        SalesInvoiceHeader."VAT Registration No." := SalesInvoiceHeaderRec."VAT Registration No.";
         //<<wdc09
         SalesInvoiceHeader."Driver Name" := SalesInvoiceHeaderRec."Driver Name";
         SalesInvoiceHeader."Truck No." := SalesInvoiceHeaderRec."Truck No.";
@@ -354,6 +373,7 @@ codeunit 50000 "WDC Sales Subscribers"
                      (SalesInvoiceHeader."Due Date" <> xSalesInvoiceHeader."Due Date") or
                      (SalesInvoiceHeader."Bill-to Name" <> xSalesInvoiceHeader."Bill-to Name") or
                      (SalesInvoiceHeader."Sell-to Customer Name" <> xSalesInvoiceHeader."Sell-to Customer Name") or
+                     (SalesInvoiceHeader."VAT Registration No." <> xSalesInvoiceHeader."VAT Registration No.") or
                      //<<wdc09
                      (SalesInvoiceHeader."Driver Name" <> xSalesInvoiceHeader."Driver Name") or
                      (SalesInvoiceHeader."Truck No." <> xSalesInvoiceHeader."Truck No.");
@@ -383,6 +403,7 @@ codeunit 50000 "WDC Sales Subscribers"
     begin
         SalesInvoiceHeader."Salesperson Code" := SalesInvoiceHeaderRec."Salesperson Code";
         SalesInvoiceHeader."Due Date" := SalesInvoiceHeaderRec."Due Date";
+        SalesInvoiceHeader."VAT Registration No." := SalesInvoiceHeaderRec."VAT Registration No.";
         //<<wdc09
         SalesInvoiceHeader."Driver Name" := SalesInvoiceHeaderRec."Driver Name";
         SalesInvoiceHeader."Truck No." := SalesInvoiceHeaderRec."Truck No.";
@@ -404,7 +425,6 @@ codeunit 50000 "WDC Sales Subscribers"
         lDetCustLedgEnt: record "Detailed Cust. Ledg. Entry";
 
     begin
-
         if SalesHeader."Sell-to Customer No." = '9999' then begin
             CustLedgEntry."Customer Name" := SalesHeader."Sell-to Customer Name";
         end;
@@ -421,6 +441,10 @@ codeunit 50000 "WDC Sales Subscribers"
         lSalesInvoiceHeader: record "Sales Invoice Header";
         lcustomer: record Customer;
         GeneralSetup: record "General Ledger Setup";
+        lPaymentMethode: record "Payment Method";
+        lCustLedgerEntry: record "Cust. Ledger Entry";
+        lDetCustLedgEntry: Record "Detailed Cust. Ledg. Entry";
+        lReportUpdtUnpaid: report "WDC Upd Unpaid Cust. Entries";
     begin
         GeneralSetup.get();
         if GenJournalLine."Document Type" = GenJournalLine."Document Type"::Invoice then begin
@@ -442,6 +466,36 @@ codeunit 50000 "WDC Sales Subscribers"
             end
         end;
 
+        iF GenJournalLine."Document Type" = GenJournalLine."Document Type"::" " then begin
+            if lPaymentMethode.Get(GenJournalLine."Payment Method Code") then begin
+                if (lPaymentMethode.Unpaid) and (GenJournalLine."Debit Amount" <> 0) and
+                ((CustLedgerEntry."Payment Slip Type" = CustLedgerEntry."Payment Slip Type"::Draft) or
+                (CustLedgerEntry."Payment Slip Type" = CustLedgerEntry."Payment Slip Type"::Cheque)) and
+                (GenJournalLine."Payment Reference" <> '') then begin
+                    lCustLedgerEntry.reset();
+                    lCustLedgerEntry.SetRange("Document Type", lCustLedgerEntry."Document Type"::Payment);
+                    lCustLedgerEntry.SetFilter("Payment Reference", GenJournalLine."Payment Reference");
+                    lCustLedgerEntry.SetRange("Customer No.", GenJournalLine."Account No.");
+                    lCustLedgerEntry.SetFilter("Payment Slip Type", '%1|%2', lCustLedgerEntry."Payment Slip Type"::Cheque, lCustLedgerEntry."Payment Slip Type"::Draft);
+                    if lCustLedgerEntry.FindFirst() then begin
+                        lCustLedgerEntry.Unpaid := true;
+                        lCustLedgerEntry.Modify();
+
+                        lDetCustLedgEntry.Reset();
+                        lDetCustLedgEntry.SetCurrentKey("Cust. Ledger Entry No.", "Posting Date", "Ledger Entry Amount");
+                        lDetCustLedgEntry.SetRange("Cust. Ledger Entry No.", lCustLedgerEntry."Entry No.");
+                        lDetCustLedgEntry.SetRange("Entry Type", lDetCustLedgEntry."Entry Type"::"Initial Entry");
+                        if lDetCustLedgEntry.FindFirst() then begin
+                            lDetCustLedgEntry.Unpaid := true;
+                            lDetCustLedgEntry.Modify();
+                        end;
+                    end else
+                        //CustLedgerEntry.Unpaid := true;
+                    CustLedgerEntry."Unpaid Before GoLive" := true;
+                end;
+            end;
+        end;
+
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnBeforeInsertDtldCustLedgEntry', '', false, false)]
@@ -450,6 +504,10 @@ codeunit 50000 "WDC Sales Subscribers"
         lSalesInvoiceHeader: record "Sales Invoice Header";
         lcustomer: record Customer;
         GeneralSetup: record "General Ledger Setup";
+        lPaymentMethode: record "Payment Method";
+        lCustLedgerEntry: record "Cust. Ledger Entry";
+        lDetCustLedgEntry: Record "Detailed Cust. Ledg. Entry";
+        lReportUpdtUnpaid: report "WDC Upd Unpaid Cust. Entries";
     begin
         GeneralSetup.get();
         if GenJournalLine."Document Type" = GenJournalLine."Document Type"::Invoice then begin
@@ -471,6 +529,36 @@ codeunit 50000 "WDC Sales Subscribers"
                 end;
             end
         end;
+
+        if lCustLedgerEntry.Get(DtldCustLedgEntry."Cust. Ledger Entry No.") then begin
+            DtldCustLedgEntry.Unpaid := lCustLedgerEntry.Unpaid;
+            DtldCustLedgEntry."Unpaid Before GoLive" := lCustLedgerEntry."Unpaid Before GoLive";
+        end;
+
+        // iF GenJournalLine."Document Type" = GenJournalLine."Document Type"::" " then begin
+        //     if lPaymentMethode.Get(GenJournalLine."Payment Method Code") then begin
+        //         if (lPaymentMethode.Unpaid) and (GenJournalLine."Debit Amount" <> 0) and
+        //         ((CustLedgerEntry."Payment Slip Type" = CustLedgerEntry."Payment Slip Type"::Draft) or
+        //         (CustLedgerEntry."Payment Slip Type" = CustLedgerEntry."Payment Slip Type"::Cheque)) then begin
+        //             lCustLedgerEntry.reset();
+        //             lCustLedgerEntry.SetRange("Document Type", lCustLedgerEntry."Document Type"::Payment);
+        //             lCustLedgerEntry.SetFilter("Payment Reference", GenJournalLine."Payment Reference");
+        //             lCustLedgerEntry.SetRange("Customer No.", GenJournalLine."Account No.");
+        //             lCustLedgerEntry.SetFilter("Payment Slip Type", '%1|%2', lCustLedgerEntry."Payment Slip Type"::Cheque, lCustLedgerEntry."Payment Slip Type"::Draft);
+        //             if lCustLedgerEntry.FindFirst() then begin
+        //                 lDetCustLedgEntry.Reset();
+        //                 lDetCustLedgEntry.SetCurrentKey("Cust. Ledger Entry No.", "Posting Date", "Ledger Entry Amount");
+        //                 lDetCustLedgEntry.SetRange("Cust. Ledger Entry No.", lCustLedgerEntry."Entry No.");
+        //                 lDetCustLedgEntry.SetRange("Entry Type", lDetCustLedgEntry."Entry Type"::"Initial Entry");
+        //                 if lDetCustLedgEntry.FindFirst() then begin
+        //                     lDetCustLedgEntry.Unpaid := true;
+        //                     lDetCustLedgEntry.Modify();
+        //                 end;
+        //             end else
+        //                 DtldCustLedgEntry.Unpaid := true;
+        //         end;
+        //     end;
+        // end;
     end;
 
     //<<WDC05

@@ -80,7 +80,13 @@ tableextension 50011 "WDC Sales Lines" extends "Sales Line"
                 UnitPriceExclVAT := Rec."Unit Price Incl Discount" / (1 + "VAT %" / 100);
                 LineAmountExclVAT := Round(UnitPriceExclVAT * Quantity, 0.001);
                 DiscountPct := ((Rec."Unit Price" * Quantity - LineAmountExclVAT) / (Rec."Unit Price" * Quantity)) * 100;
-                Rec.Validate("Line Discount %", Round(DiscountPct, 0.001));
+                if DiscountPct >= 0 Then
+                    Rec.Validate("Line Discount %", Round(DiscountPct, 0.001))
+                else Begin
+                    Rec.Validate("Line Discount %", 0);
+                    Rec.Validate("Unit Price", UnitPriceExclVAT); //HD22052026
+                End;
+
             end;
             //>>wdc03
         }

@@ -12,14 +12,12 @@ table 50005 "WDC Tax Ledger Entry"
             DataClassification = SystemMetadata;
             AutoIncrement = true;
         }
-        field(2; "Type Taxe"; Option)
+        field(2; "Type Taxe"; Enum "WDC Tax Entry Type")
         {
-            OptionMembers = Vente,Achat;
             DataClassification = ToBeClassified;
         }
-        field(3; "Type Document"; Option)
+        field(3; "Type Document"; Enum "WDC Tax Document Type")
         {
-            OptionMembers = "Facture Vente","Avoir Vente","Facture Achat","Avoir Achat";
             DataClassification = ToBeClassified;
         }
         field(4; "Document No."; Code[20])
@@ -54,26 +52,32 @@ table 50005 "WDC Tax Ledger Entry"
         field(11; "Quantité"; Decimal)
         {
             DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 3;
         }
         field(12; "Prix unitaire"; Decimal)
         {
             DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 3;
         }
         field(13; "Montant HT"; Decimal)
         {
             DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 3;
         }
         field(14; "TVA %"; Decimal)
         {
             DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 3;
         }
         field(15; "Montant TVA"; Decimal)
         {
             DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 3;
         }
         field(16; "Montant TTC"; Decimal)
         {
             DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 3;
         }
         field(17; "Posting group"; Code[20])
         {

@@ -276,12 +276,11 @@ pageextension 50037 "WDC Vendor Card" extends "Vendor Card"
         //Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Allow Deferral Posting From");
         Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Go Live Date");//WDC;HG
         rec.SetFilter("Due Date Filter", '%1..', WorkDate);
-
+        Rec.SetFilter("Start date Filter", '%1..', GLSetup."Go Live Date" + 1);//wdc.chg 26/02/2026 
         if not UserSetup."Allow Modify Vendor" then
             CurrPage.Editable(false);
-        rec.CalcFields("Balance (LCY)", "Total Receipt");
-        TotalvendorAmount := rec."Balance (LCY)" - rec."Total Receipt";
-
+        rec.CalcFields("Balance (LCY)", "Total Receipt", "Balance (LCY) Amount");
+        TotalvendorAmount := rec."Balance (LCY) Amount" - rec."Total Receipt";
         StyleTxt := Color();
     end;
 

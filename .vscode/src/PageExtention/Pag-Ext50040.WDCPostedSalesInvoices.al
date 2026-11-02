@@ -7,11 +7,11 @@ pageextension 50040 "WDC Posted Sales Invoices" extends "Posted Sales Invoices"
 {
 
     layout
-    {   //<<WDC03
+    {
+        //<<WDC03
 
         addlast(Control1)
         {
-
 
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
@@ -206,13 +206,20 @@ pageextension 50040 "WDC Posted Sales Invoices" extends "Posted Sales Invoices"
                 Visible = Not StandardPrintIsVisible;
                 trigger OnAction()
                 var
-                    lklk: Report 1306;
                     lPostedSalesInvoice: report "WDC Posted Sales Invoice ";
+                    lReportSelection: Record "Report Selections";
                 begin
-                    CurrPage.SetSelectionFilter(Rec);
-                    lPostedSalesInvoice.SetTableView(Rec);
-                    lPostedSalesInvoice.RunModal();
-
+                    //<<WDC04
+                    // lSalesInvoiceHeader.reset();
+                    // lSalesInvoiceHeader.SetRange("No.", rec."No.");
+                    // lPostedSalesInvoice.SetTableView(lSalesInvoiceHeader);
+                    // lPostedSalesInvoice.RunModal();
+                    lReportSelection.RESET();
+                    lReportSelection.SetRange(Usage, lReportSelection.Usage::"S.Invoice");
+                    Rec.SetRecFilter();
+                    if lReportSelection.FindFirst() then
+                        Report.Run(lReportSelection."Report ID", true, true, Rec);
+                    //>>WDC04
                 end;
             }
         }
@@ -229,12 +236,13 @@ pageextension 50040 "WDC Posted Sales Invoices" extends "Posted Sales Invoices"
         SalesSetup: Record "Sales & Receivables Setup";
     begin
         SalesSetup.get();
-
         StandardPrintIsVisible := SalesSetup."Standard Print Is Visible";
-
         rec.SetCurrentKey("Posting Date");
     end;
 
+
+
     var
         StandardPrintIsVisible: Boolean;
+
 }

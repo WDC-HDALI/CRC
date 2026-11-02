@@ -6,9 +6,9 @@ using Microsoft.Sales.Customer;
 
 report 50025 "WDC Upd Cust name Det Cust_Led"
 {
-    Caption = 'Update Update Det Cust Ledger';
-    RDLCLayout = './.vscode/src/Report/RDLC/UpdtDetCust.rdl';
+    Caption = 'Update Det Cust Ledger';
     // UseRequestPage = false;
+    ProcessingOnly = true;
     Permissions = tabledata "Detailed Cust. Ledg. Entry" = RIMD,
                   tabledata "Cust. Ledger Entry" = RIMD;
     ApplicationArea = All;

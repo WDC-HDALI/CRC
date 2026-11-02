@@ -925,7 +925,6 @@
                             </Border>
                           </Style>
                         </Rectangle>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -962,7 +961,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>9.79174cm</Height>
+        <Height>9.60653cm</Height>
         <Style />
       </Body>
       <Width>19.33188cm</Width>

@@ -2,7 +2,7 @@ namespace CRC.CRC;
 
 using Microsoft.Inventory.Ledger;
 
-page 50030 "WDC Upd Item Application Entry"
+page 50707 "WDC Upd Item Application Entry"
 {
     ApplicationArea = All;
     Caption = 'WDC Upd Item Application Entry';

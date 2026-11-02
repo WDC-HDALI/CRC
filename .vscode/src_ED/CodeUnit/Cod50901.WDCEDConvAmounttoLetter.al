@@ -209,7 +209,7 @@ Codeunit 50901 "WDC-ED Conv Amount to Letter"
     procedure "Montant en texte sans millimes"(var strprix: Text[250]; prix: Decimal)
     begin
         entiere := ROUND(prix, 1, '<');
-        decimal := ROUND((prix - entiere) * 1000, 1, '<');
+        decimal := ROUND((prix - entiere) * 1000, 1, '=');
         nbre := entiere;
 
         million := '';

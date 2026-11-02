@@ -2,13 +2,14 @@ namespace CRC.CRC;
 
 using Microsoft.Purchases.Payables;
 
-page 50025 "WDC Vendor Ledger Entry"
+page 50703 "WDC Vendor Ledger Entry"
 {
     ApplicationArea = All;
     Caption = 'WDC Vendor Ledger Entry';
     PageType = List;
     SourceTable = "Vendor Ledger Entry";
-    UsageCategory = Lists;
+    Permissions = tabledata "Vendor Ledger Entry" = RIMD;
+    UsageCategory = Administration;
     Editable = true;
     layout
     {

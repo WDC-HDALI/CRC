@@ -6,10 +6,10 @@ using Microsoft.Sales.Receivables;
 report 50014 "WDC Update Det Cust Ledger"
 {
     CaptionML = ENU = 'Update Update Det Cust Ledger', FRA = 'Modif écritures clients détaillées';
-    RDLCLayout = './.vscode/src/Report/RDLC/Updt.rdl';
     // UseRequestPage = false;
     Permissions = tabledata "Detailed Cust. Ledg. Entry" = RIMD;
     ApplicationArea = All;
+    ProcessingOnly = false;
     UsageCategory = Lists;
     dataset
     {

@@ -1,6 +1,7 @@
 namespace CRC.CRC;
 using Microsoft.Purchases.Posting;
 using Microsoft.Purchases.Document;
+using System.Security.User;
 using Microsoft.Warehouse.Document;
 using Microsoft.Warehouse.History;
 using Microsoft.Purchases.History;
@@ -30,32 +31,44 @@ codeunit 50001 "WDC Purchase Subscribers"
     local procedure OnBeforeDeleteEvent(var Rec: Record "Purch. Inv. Header")
     var
         ltext001: TextConst ENU = 'You cannot delete a posted document', FRA = 'Vous ne pouvez pas supprimer un document validé';
+        luserSetup: Record "User Setup";
     begin
-        error(ltext001)
+        if luserSetup.Get(UserId) then
+            if not luserSetup."Allow Delete Purch. Invoice" then
+                error(ltext001)
     end;
 
     [EventSubscriber(ObjectType::Table, database::"Purch. Cr. Memo Hdr.", OnBeforeDeleteEvent, '', FALSE, FALSE)]
     local procedure OnBeforeDeleteEventCRMemo(var Rec: Record "Purch. Cr. Memo Hdr.")
     var
         ltext001: TextConst ENU = 'You cannot delete a posted document', FRA = 'Vous ne pouvez pas supprimer un document validé';
+        luserSetup: Record "User Setup";
     begin
-        error(ltext001)
+        if luserSetup.Get(UserId) then
+            if not luserSetup."Allow Delete Purch. cr memo" then
+                error(ltext001)
     end;
 
     [EventSubscriber(ObjectType::Table, database::"Purch. Rcpt. Header", OnBeforeDeleteEvent, '', FALSE, FALSE)]
     local procedure OnBeforeDeleteEventshp(var Rec: Record "Purch. Rcpt. Header")
     var
         ltext001: TextConst ENU = 'You cannot delete a posted document', FRA = 'Vous ne pouvez pas supprimer un document validé';
+        luserSetup: Record "User Setup";
     begin
-        error(ltext001)
+        if luserSetup.Get(UserId) then
+            if not luserSetup."Allow Delete Purch. Invoice" then
+                error(ltext001)
     end;
 
     [EventSubscriber(ObjectType::Table, database::"Return Shipment Header", OnBeforeDeleteEvent, '', FALSE, FALSE)]
     local procedure OnBeforeDeleteEventRetRec(var Rec: Record "Return Shipment Header")
     var
         ltext001: TextConst ENU = 'You cannot delete a posted document', FRA = 'Vous ne pouvez pas supprimer un document validé';
+        luserSetup: Record "User Setup";
     begin
-        error(ltext001)
+        if luserSetup.Get(UserId) then
+            if not luserSetup."Allow Delete Purch. cr memo" then
+                error(ltext001)
     end;
     //>>Control Deleting Posted document
 

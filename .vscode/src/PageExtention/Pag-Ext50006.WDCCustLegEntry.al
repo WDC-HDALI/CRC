@@ -39,6 +39,10 @@ pageextension 50006 "WDC CustLegEntry" extends "Customer Ledger Entries"
             {
                 ApplicationArea = all;
             }
+            field(Unpaid; Rec.Unpaid)
+            {
+                ApplicationArea = all;
+            }
         }
 
         modify("Original Amount")

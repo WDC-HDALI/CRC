@@ -2,7 +2,7 @@ namespace CRC.CRC;
 
 using Microsoft.Sales.Receivables;
 
-page 50032 "WDC Detailed Cust. Ledg. Entry"
+page 50702 "WDC Detailed Cust. Ledg. Entry"
 {
     ApplicationArea = All;
     Caption = 'WDC Detailed Cust. Ledg. Entry';
@@ -73,6 +73,18 @@ page 50032 "WDC Detailed Cust. Ledg. Entry"
                     ApplicationArea = All;
                 }
                 field("Payment Reference"; Rec."Payment Reference")
+                {
+                    ApplicationArea = All;
+                }
+                field(Unpaid; Rec.Unpaid)
+                {
+                    ApplicationArea = All;
+                }
+                field("Unpaid is Encaissed"; Rec."Unpaid is Encaissed")
+                {
+                    ApplicationArea = All;
+                }
+                field("Unpaid Enc. Reference"; Rec."Unpaid Enc. Reference")
                 {
                     ApplicationArea = All;
                 }

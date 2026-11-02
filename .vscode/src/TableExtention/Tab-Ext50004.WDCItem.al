@@ -93,6 +93,13 @@ tableextension 50004 "WDC Item" extends Item
         }
         //>>WDC01s
 
+        field(50015; "Item Unit Cost"; Decimal)
+        {
+            CaptionML = ENU = 'Item Unit Cost', FRA = 'Coût unitaire article';
+            MinValue = 0;
+            DecimalPlaces = 0 : 5;
+        }
+
     }
 
 }

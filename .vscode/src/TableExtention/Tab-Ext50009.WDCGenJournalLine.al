@@ -4,6 +4,7 @@ tableextension 50009 "WDC GenJournalLine" extends "Gen. Journal Line"
 {
     fields
     {
+
         modify("Payment Method Code")
         {
             trigger OnAfterValidate()
@@ -63,6 +64,14 @@ tableextension 50009 "WDC GenJournalLine" extends "Gen. Journal Line"
         }
 
         //>>WDC02
-
+        field(50008; "Total Amount"; Decimal)
+        {
+            CaptionML = ENU = 'Total Amount', FRA = 'Montant total';
+            Editable = false;
+            DataClassification = ToBeClassified;
+            // FieldClass = FlowField;
+            // CalcFormula = SUM("Gen. Journal Line"."Amount (LCY)" where("Journal Template Name" = field("Journal Template Name"),
+            //                                                        "Journal Batch Name" = field("Journal Batch Name")));
+        }
     }
 }

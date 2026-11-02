@@ -25,7 +25,12 @@ pageextension 50025 "WDC Customer List" extends "Customer List"
         }
         modify("Sales (LCY)")
         {
+            CaptionML = ENU = 'CA NET', FRA = 'CA Net';
             Visible = true;
+        }
+        modify("Payments (LCY)")
+        {
+            Visible = false;
         }
         modify(Contact)
         {
@@ -92,6 +97,7 @@ pageextension 50025 "WDC Customer List" extends "Customer List"
         UserSetup.Get(UserId);
 
         Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Go Live Date");
+        rec.SetFilter("Start Date Filter", '%1..', GLSetup."Go Live Date" + 1);//WDC.CHG
         rec.SetFilter("Due Date Filter", '%1..', WorkDate);
         //rec.SetFilter("Due Date Filter for balance", '..%1', WorkDate);
     end;
@@ -101,7 +107,7 @@ pageextension 50025 "WDC Customer List" extends "Customer List"
         UserSetup: Record "User Setup";
     begin
 
-        rec.CalcFields("Balance (LCY)", "Total Shipment");
+        Rec.CalcFields("Balance (LCY)", "Total Shipment");
         TotalCustomerAmount := Rec."Balance (LCY)" + (Rec."Total Shipment");
 
         StyleTxt := Color(); //WDC01

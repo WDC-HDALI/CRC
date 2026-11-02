@@ -9,10 +9,10 @@ report 50035 "Rename Cr Memo"
 
    TableData "VAT Entry" = rimd,
    TableData "Value Entry" = rimd,
-   TableData "Sales Invoice Line" = rimd,
+   TableData "Sales Cr.Memo Line" = rimd,
    TableData "Cust. Ledger Entry" = rimd,
    TableData "Detailed Cust. Ledg. Entry" = rimd,
-   TableData "Sales Invoice Header" = rimd,
+   TableData "Sales Cr.Memo Header" = rimd,
    tableData "Item Ledger Entry" = rimd;
 
     dataset

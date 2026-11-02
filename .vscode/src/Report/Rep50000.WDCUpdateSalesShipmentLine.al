@@ -28,7 +28,11 @@ report 50000 "WDC Update Sales Shipment Line"
     begin
         if lSalesShipmentLine.get(pDocumentNo, pLineNo) then begin
             lSalesShipmentLine."Real Delivered Qty" += pQty;
-            lSalesShipmentLine."Remain. Qty to Delivery" -= pQty;
+            if lSalesShipmentLine."Remain. Qty to Delivery" >= pQty then
+                lSalesShipmentLine."Remain. Qty to Delivery" -= pQty
+            else
+                lSalesShipmentLine."Remain. Qty to Delivery" := 0;
+
             if lSalesShipmentLine."Real Delivered Qty" >= lSalesShipmentLine.Quantity then
                 lSalesShipmentLine."Qty Totally Delivered" := true;
             lSalesShipmentLine.Modify();

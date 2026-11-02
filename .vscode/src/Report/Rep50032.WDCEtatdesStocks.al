@@ -51,6 +51,7 @@ report 50032 "WDC Etat des Stocks"
             }
             column(QteStock; QteStock)
             {
+                DecimalPlaces = 0 : 3;
             }
             column(Blocked; Item.Blocked)
             {
@@ -58,7 +59,7 @@ report 50032 "WDC Etat des Stocks"
             column(CUTotal; CUTotal)
             {
                 //DecimalPlaces = 4 : 4;
-                DecimalPlaces = 5; //WDC.HG
+                DecimalPlaces = 0 : 5; //WDC.HG
             }
             column(NewTotStockVal; NewTotStockVal)
             {
@@ -84,6 +85,7 @@ report 50032 "WDC Etat des Stocks"
                 }
                 column(Quantity; Quantity)
                 {
+                    DecimalPlaces = 0 : 3;
                 }
                 column(LotNo; "Lot No.")
                 {

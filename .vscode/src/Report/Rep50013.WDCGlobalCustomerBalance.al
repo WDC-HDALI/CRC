@@ -73,6 +73,18 @@ report 50013 "WDC Global Customer Balance"
             {
 
             }
+            column(StartingDate; StartingDate)
+            {
+
+            }
+            column(EndingDate; EndingDate)
+            {
+
+            }
+            column(Date_Period_Report; DatePeridoReport)
+            {
+
+            }
             column(Report; FilteredCustomer.Report)
             {
 
@@ -193,6 +205,7 @@ report 50013 "WDC Global Customer Balance"
 
                     Type_Doc := 'RETOUR NON FACTURE';
                     "Return Receipt Line".SetFilter("Posting Date", '%1..%2', StartingDate, EndingDate);
+
                 end;
 
                 trigger OnAfterGetRecord()
@@ -221,6 +234,10 @@ report 50013 "WDC Global Customer Balance"
                 DataItemTableView = SORTING("Entry No.") ORDER(Ascending) where(Reversed = filter(false));
 
                 column(Paiement_PostingDate; Paiement."Posting Date")
+                {
+
+                }
+                column(Paiement_DescText; DescriptionText)
                 {
 
                 }
@@ -297,6 +314,20 @@ report 50013 "WDC Global Customer Balance"
                     Paiement.CalcFields("Amount (LCY)", "Debit Amount (LCY)", "Credit Amount (LCY)");
                     ShipAmount := Paiement."Amount (LCY)"; //* (-1);
                     TotalPaiement += ShipAmount;
+
+                    if (Paiement."Document No." = 'CLOT-300625') then
+                        DescriptionText := Paiement.Description
+                    else begin
+                        if Paiement."Document Type" = Paiement."Document Type"::Invoice Then
+                            DescriptionText := 'Facture à terme N° ' + Paiement."Document No."
+                        Else if Paiement."Document Type" = Paiement."Document Type"::Payment then
+                            DescriptionText := 'Reçu N° ' + Paiement."Document No."
+                        Else
+                            DescriptionText := Format(Paiement."Document Type") + ' N° ' + Paiement."Document No."
+
+                    end;
+
+
                 end;
             }
 
@@ -346,6 +377,8 @@ report 50013 "WDC Global Customer Balance"
                 GLSetup.get();
                 CompanyInfo.Get;
                 CompanyInfo.CalcFields(Picture);
+                if StartingDate <> 0D then
+                    DatePeridoReport := StartingDate - 1;
                 //<<WDC02
                 if FilteredCustomer.get(Customer."No.") then begin
                     FilteredCustomer.SetFilter("Start Year Filter", '..%1', StartingDate);
@@ -400,6 +433,7 @@ report 50013 "WDC Global Customer Balance"
     begin
         StartingDate := DMY2Date(1, Date2DMY(WorkDate, 2), Date2DMY(WorkDate, 3));
         EndingDate := CALCDATE('<CM>', StartingDate);
+
     end;
 
     var
@@ -426,4 +460,6 @@ report 50013 "WDC Global Customer Balance"
         Customer2: Record Customer;
         CustBalanceUntilToday: Decimal;
         DateFilterTxt: Text[100];
+        DatePeridoReport: Date;
+        DescriptionText: Text;
 }

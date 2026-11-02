@@ -483,7 +483,6 @@ report 50016 "WDC Posted Purchase Receipt"
                 begin
                     TotalAmount := 0;
                     TotalVATAmount := 0;
-
                 end;
 
                 trigger OnAfterGetRecord()
@@ -496,7 +495,6 @@ report 50016 "WDC Posted Purchase Receipt"
                     TotalAmount := 0;
                     LineVATAmount := 0;
                     PurchLine.Get(PurchLine."Document Type"::Order, "Order No.", "Order Line No.");
-
                     if Type = Type::Item then begin
                         if ("Purch. Rcpt. Line"."No." <> '') and ("Purch. Rcpt. Line".Quantity = 0) then
                             CurrReport.Skip();
@@ -508,21 +506,20 @@ report 50016 "WDC Posted Purchase Receipt"
                                 //     LineVATAmount := ("Quantity" * "Unit Cost") * VATPostingSetup."VAT %" / 100;
                                 //     TotalVATAmount += LineVATAmount;
                                 // end;
-                                LineVATAmount := ("Quantity" * "Direct Unit Cost") * "Purch. Rcpt. Line"."VAT %" / 100;
+                                LineVATAmount := (("Quantity" * "Direct Unit Cost") * (1 - PurchLine."line discount %" / 100)) * "Purch. Rcpt. Line"."VAT %" / 100;
                                 TotalVATAmount += LineVATAmount;
                             end;
                         end;
                     end;
 
-                    TotalTTCLine := "Quantity" * "Direct Unit Cost" + LineVATAmount;
+                    TotalTTCLine := (("Quantity" * "Direct Unit Cost") * (1 - PurchLine."line discount %" / 100)) + LineVATAmount;
 
                     PurchRcptLine.Reset();
                     PurchRcptLine.SetRange("Document No.", "Document No.");
                     if PurchRcptLine.FindSet() then
                         repeat
                             if PurchLineLocal.Get(PurchLineLocal."Document Type"::Order, PurchRcptLine."Order No.", PurchRcptLine."Order Line No.") and (PurchLineLocal.Quantity <> 0) then
-                                TotalAmount += PurchRcptLine."quantity" * PurchLineLocal."Direct Unit Cost";
-
+                                TotalAmount += PurchRcptLine."quantity" * PurchLineLocal."Direct Unit Cost" * (1 - PurchLineLocal."line discount %" / 100);
                         until PurchRcptLine.Next() = 0;
 
                     TotalIncVATAmount := TotalAmount + TotalVATAmount;

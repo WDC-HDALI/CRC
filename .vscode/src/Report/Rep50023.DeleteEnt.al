@@ -1,9 +1,8 @@
 report 50023 "Delete Ent"
 {
-    RDLCLayout = './.vscode/src/Report/RDLC/UpdateDate_.rdlc';
     ApplicationArea = All;
     Caption = 'Delete Vendor Ent';
-    UsageCategory = Lists;
+    //UsageCategory = Lists;
     Permissions = TableData "G/L Entry" = rimd,
    TableData "Detailed Vendor Ledg. Entry" = rimd,
    TableData "Vendor Ledger Entry" = rimd;

@@ -38,7 +38,6 @@ codeunit 50002 "WDC Payment Subscribers"
         lCustomerLedgEntry: Record "Cust. Ledger Entry";
     begin
         lCustomerLedgEntry.Reset();
-        //lCustomerLedgEntry.SetCurrentKey()
         lCustomerLedgEntry.setrange("Document Type", lCustomerLedgEntry."Document Type"::Payment);
         lCustomerLedgEntry.SetRange("Payment Reference", pGenJournalLine."Payment Reference");
         lCustomerLedgEntry.SetRange(PaymentStatut, lCustomerLedgEntry.PaymentStatut::PayementToCollect);
@@ -54,7 +53,6 @@ codeunit 50002 "WDC Payment Subscribers"
         LookupRec: Record "WDC borderau lookup";
     begin
         LookupRec.DeleteAll();
-
         if BorderauLineQuery.Open() then begin
             while BorderauLineQuery.Read() do begin
                 LookupRec.Init();
@@ -64,7 +62,6 @@ codeunit 50002 "WDC Payment Subscribers"
                 LookupRec.Insert(true);
                 Commit();
             end;
-
             BorderauLineQuery.Close();
         end;
     end;
@@ -110,7 +107,8 @@ codeunit 50002 "WDC Payment Subscribers"
                         FRA = 'Type Document doit avoir un valeur vide dans ligne impayé %1';
     begin
         if lPaymentMethod.get(GenJnlLine."Payment Method Code") then
-            if lPaymentMethod.Unpaid and (GenJnlLine."Document Type" <> GenJnlLine."Document Type"::" ") then
+            if lPaymentMethod.Unpaid and (GenJnlLine."Document Type" <> GenJnlLine."Document Type"::" ") and
+            (GenJnlLine."Amount (LCY)" > 0) then
                 Error(ltext001, GenJnlLine."Line No.");
     end;
     //<<WDC07
@@ -134,7 +132,25 @@ codeunit 50002 "WDC Payment Subscribers"
             end;
     end;
     //>>WDC07
-    // local procedure OnAfterPostGenJnlLine(var GenJournalLine: Record "Gen. Journal Line"; CommitIsSuppressed: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; IsPosted: Boolean; var PostingGenJournalLine: Record "Gen. Journal Line")
+    // [EventSubscriber(ObjectType::Table, Database::"Gen. Journal Line", 'onafterupd', '', FALSE, FALSE)]
+    // local procedure OnUpdateLineBalanceOnBeforeUpdateAmounts(var GenJnlLine: Record "Gen. Journal Line"; var IsHandled: Boolean)
     // begin
+    //     GenJnlLine."Total Amount" := GetTotalAmount(GenJnlLine."Journal Template Name", GenJnlLine."Journal Batch Name")
+    // end;
+
+    // procedure GetTotalAmount(pTemplatename: Code[10]; pBatchName: Code[10]): Decimal
+    // var
+    //     lGenJnlLine: Record "Gen. Journal Line";
+    //     lTotalAmount: Decimal;
+    // begin
+    //     lGenJnlLine.Reset();
+    //     lGenJnlLine.SetCurrentKey("Journal Batch Name", "Journal Template Name");
+    //     lGenJnlLine.SetRange("Journal Template Name", pTemplatename);
+    //     lGenJnlLine.SetRange("Journal Batch Name", pBatchName);
+    //     if lGenJnlLine.FindFirst() then
+    //         repeat
+    //             lTotalAmount += lGenJnlLine."Amount (LCY)";
+    //         until lGenJnlLine.Next() = 0;
+    //     exit(lTotalAmount);
     // end;
 }

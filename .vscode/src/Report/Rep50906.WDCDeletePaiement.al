@@ -14,7 +14,10 @@ report 50906 "WDC Delete Paiement"
 {
     CaptionML = ENU = 'wdc Delete Paiement', FRA = 'wdc Supprimer Paiement';
     //UseRequestPage = false;
-    Permissions = tabledata "G/L Entry" = RIMD, tabledata "Cust. Ledger Entry" = RIMD, tabledata "Detailed Cust. Ledg. Entry" = RIMD, tabledata "Bank Account Ledger Entry" = RIMD;
+    Permissions = tabledata "G/L Entry" = RIMD,
+                  tabledata "Cust. Ledger Entry" = RIMD,
+                  tabledata "Detailed Cust. Ledg. Entry" = RIMD,
+                  tabledata "Bank Account Ledger Entry" = RIMD;
     ApplicationArea = All;
     ProcessingOnly = true;
     UsageCategory = Administration;

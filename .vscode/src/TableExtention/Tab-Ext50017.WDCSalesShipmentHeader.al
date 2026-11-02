@@ -68,15 +68,18 @@ tableextension 50017 "WDC Sales Shipment Header" extends "Sales Shipment Header"
         {
             CaptionML = ENU = 'Truck No.', FRA = 'N° camion';
             DataClassification = ToBeClassified;
-
-
         }
         field(50018; "Driver Name"; Text[100])
         {
             CaptionML = ENU = 'Driver Name', FRA = 'Nom chauffeur';
             DataClassification = ToBeClassified;
-
         }
         //>>wdc04
+    }
+    keys
+    {
+        key(Key10; "Posting Date", "Sell-to Customer No.")
+        {
+        }
     }
 }

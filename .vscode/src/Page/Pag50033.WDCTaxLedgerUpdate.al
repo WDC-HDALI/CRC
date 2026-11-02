@@ -1,4 +1,4 @@
-page 50033 "WDC Tax Ledger Update Page"
+page 50033 "WDC Tax Ledger Update"
 {
     PageType = Card;
     ApplicationArea = All;
@@ -19,13 +19,14 @@ page 50033 "WDC Tax Ledger Update Page"
                 {
                     CaptionML = ENU = 'End Date', FRA = 'Date fin';
                 }
-                field(Purchase; Purchase)
-                {
-                    CaptionML = ENU = 'Purchase', FRA = 'Achats';
-                }
+                // field(Purchase; Purchase)
+                // {
+                //     CaptionML = ENU = 'Purchase', FRA = 'Achats';
+                //}
                 field(Sales; Sales)
                 {
                     CaptionML = ENU = 'Sales', FRA = 'Ventes';
+                    Visible = false;
                 }
             }
 

@@ -1,4 +1,4 @@
-page 50046 "Suivi paiement Web"
+page 50046 "WDC Suivi paiement Web"
 {
     PageType = List;
     SourceTable = "Payment Tracking Buffer";

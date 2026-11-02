@@ -15,7 +15,7 @@ tableextension 54022 "WDC-ST Det. Cust. Ledg. Entry" extends "Detailed Cust. Led
         field(54075; "Payment Slip Type"; Enum "WDC-ST Payment Slip Type")
         {
             CaptionML = ENU = 'Payment Slip Type', FRA = 'Type paiement';
-            Editable = false;
+            //Editable = false;
         }
         field(54076; "Payment Terms Code"; Code[10])
         {

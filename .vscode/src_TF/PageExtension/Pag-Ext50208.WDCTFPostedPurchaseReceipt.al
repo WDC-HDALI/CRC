@@ -7,6 +7,7 @@ pageextension 50208 "WDC-TF Posted Purchase Receipt" extends "Posted Purchase Re
             field("Transit Folder No."; Rec."Transit Folder No.")
             {
                 ApplicationArea = all;
+                Editable = true;
             }
         }
     }

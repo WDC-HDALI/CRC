@@ -350,7 +350,7 @@ report 50019 "WDC Sales Shipment BONIAN"
                     if SalesHeader."Invoice Discount value" <> 0 then
                         TotalSansTva := TotalSansTva - SalesHeader."Invoice Discount value";
                     //<<WDC01
-                    TotalPayer := TotalSansTva + MontantTva7 + MontantTva19 + MontantTva13;
+                    TotalPayer := round(TotalSansTva + MontantTva7 + MontantTva19 + MontantTva13, 0.001);
                     ConvAmounttoLetter."Montant en texte sans millimes"(AmountLetter, TotalPayer);
                 end
             end;

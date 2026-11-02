@@ -3,6 +3,7 @@ namespace CRC.CRC;
 using Microsoft.Sales.Setup;
 //*****************Documentation*********************
 //WDC01  WDC.HG  26/06/2025  Create Current Object
+//WDC02  WDC.IM  02/03/2025  Add Fields to Current Object
 
 pageextension 50048 "WDC Sales Setup" extends "Sales & Receivables Setup"
 {
@@ -14,6 +15,16 @@ pageextension 50048 "WDC Sales Setup" extends "Sales & Receivables Setup"
             {
                 ApplicationArea = all;
             }
+            //<<WDC02
+            field("Enable Cash Credit Control"; Rec."Enable Cash Credit Control")
+            {
+                ApplicationArea = all;
+            }
+            field(Rec; Rec."Authorized Cash Credit Period")
+            {
+                ApplicationArea = all;
+            }
+            //>>WDC02
         }
         addlast("Number Series")
         {

@@ -99,29 +99,39 @@ report 50034 "WDC Vendor Engagement"
             trigger OnAfterGetRecord()
             var
                 Bordereau: Record "WDC-ED Payment Header";
+                lBordLines: record "WDC-ED Payment Line";
 
             begin
-                //TotalAmount += Amount;
+                TotalAmount := 0;
+                TotalRSAmount := 0;
                 if Bordereau.get("Document No.") then
                     BankTxt := Bordereau."Account No.";
                 Company.GEt;
                 Company.CalcFields(Picture);
+                "Vendor Ledger Entry".CalcFields("Amount (LCY)");
 
+                lBordLines.Reset();
+                lBordLines.SetRange("No.", "Vendor Ledger Entry"."Document No.");
+                lBordLines.SetFilter("Validated RS Amount", '<>%1', 0);
+                If lBordLines.FindFirst() then
+                    repeat
+                        TotalRSAmount := lBordLines."Validated RS Amount" * -1;
+                    until lBordLines.next = 0;
+
+                TotalAmount += "Vendor Ledger Entry"."Amount (LCY)" - TotalRSAmount;
             end;
 
             trigger OnPreDataItem()
             begin
-                "Vendor Ledger Entry".SetFilter("Due Date", '>=%1', WorkDate());
+                //"Vendor Ledger Entry".SetFilter("Due Date", '>=%1', WorkDate());
             end;
 
         }
     }
 
-
-
-
     var
         TotalAmount: Decimal;
+        TotalRSAmount: Decimal;
         BankTxt: text[100];
         company: Record "Company Information";
 }

@@ -1,10 +1,11 @@
 report 50026 "Delete Cr Memo"
 {
-    RDLCLayout = './.vscode/src/Report/RDLC/Updatecrmemo_.rdlc';
     ApplicationArea = All;
-    CaptionML = ENU = 'Delete Credit Note', FRA = 'Supprimer Avoir';
+    ProcessingOnly = true;
+    CaptionML = ENU = 'Delete Credit Note', FRA = 'WDC Supprimer Avoir vente';
     UsageCategory = Lists;
     Permissions = TableData "G/L Entry" = rimd,
+
    TableData "VAT Entry" = rimd,
    TableData "Value Entry" = rimd,
    TableData "Cust. Ledger Entry" = rimd,

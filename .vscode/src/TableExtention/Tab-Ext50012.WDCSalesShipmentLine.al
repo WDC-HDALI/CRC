@@ -81,7 +81,6 @@ tableextension 50012 "WDC Sales Shipment Line" extends "Sales Shipment Line"
             DataClassification = ToBeClassified;
 
         }
-
         //>>WDC01
     }
 

@@ -57,6 +57,43 @@ pageextension 50004 "WDC Item List" extends "Item List"
                 ApplicationArea = All;
             }
         }
+        addlast(Control1)
+        {
+            field("Item Unit Cost"; Rec."Item Unit Cost")
+            {
+                ApplicationArea = all;
+            }
+            field(SubCategorie; Rec.SubCategorie)
+            {
+                ApplicationArea = all;
+            }
+        }
 
+    }
+    actions
+    {
+        addlast(Reports)
+        {
+            action(EtiquettePrint)
+            {
+                ApplicationArea = All;
+                CaptionML = ENU = 'Print Etiquettes', FRA = 'Imprimer Etiquettes';
+                Image = PrintCover;
+                PromotedCategory = Process;
+                Promoted = true;
+                PromotedIsBig = true;
+                // RunObject = report "WDC Item Ticket";
+                trigger OnAction()
+                var
+                    lReportItemTicket: Report "WDC Item Ticket";
+                    lItem: record Item;
+                begin
+                    lItem.Reset();
+                    CurrPage.SetSelectionFilter(lItem);
+                    lReportItemTicket.SetTableView(lItem);
+                    lReportItemTicket.Run();
+                end;
+            }
+        }
     }
 }

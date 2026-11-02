@@ -29,7 +29,6 @@ tableextension 50010 "WDC JLEntry" extends "G/L Entry"
         }
         //>>WDC01
 
-
     }
 
 }

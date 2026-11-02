@@ -15,6 +15,10 @@ tableextension 50036 " WdC Item Journal Line" extends "Item Journal Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
-
+        field(50002; "Qty to apply"; Decimal)
+        {
+            CaptionML = ENU = 'Qty to apply', FRA = 'Qte à appliquer';
+            DataClassification = ToBeClassified;
+        }
     }
 }

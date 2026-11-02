@@ -62,6 +62,14 @@ pageextension 50038 "WDC User Setup" extends "User Setup"
             {
                 ApplicationArea = all;
             }
+            field("Allow Delete Purch. Invoice"; Rec."Allow Delete Purch. Invoice")
+            {
+                ApplicationArea = all;
+            }
+            field("Allow Delete Purch. Cr memo"; Rec."Allow Delete Purch. Cr memo")
+            {
+                ApplicationArea = all;
+            }
 
         }
 

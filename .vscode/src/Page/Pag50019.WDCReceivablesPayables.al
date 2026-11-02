@@ -1,4 +1,6 @@
+//************Documentation**********************
 
+// WDC.IM : 01/03/2026 : Add filter by start date - End date
 page 50019 "WDC Receivables-Payables"
 {
     ApplicationArea = Suite;
@@ -18,6 +20,41 @@ page 50019 "WDC Receivables-Payables"
             group(Options)
             {
                 Caption = 'Options';
+                //<<WDC.IM
+                field(StartFilterDate; StartFilterDate)
+                {
+                    ApplicationArea = Suite;
+                    Caption = 'Date début';
+
+                    trigger OnValidate()
+                    begin
+                        if (EndFilterDate <> 0D) and (StartFilterDate > EndFilterDate) then
+                            Error('La date début ne peut pas être supérieure à la date fin.');
+                        if StartFilterDate <> 0D then
+                            ReceivablesPayablesBuffer.SetFilter("Period Start", '>=%1', StartFilterDate)
+                        else
+                            ReceivablesPayablesBuffer.SetFilter("Period Start", '');
+                        UpdateSubForm();
+
+                    end;
+                }
+                field(EndFilterDate; EndFilterDate)
+                {
+                    ApplicationArea = Suite;
+                    Caption = 'Date fin';
+
+                    trigger OnValidate()
+                    begin
+                        if (StartFilterDate <> 0D) and (EndFilterDate < StartFilterDate) then
+                            Error('La date fin ne peut pas être inférieure à la date début.');
+                        if EndFilterDate <> 0D then
+                            ReceivablesPayablesBuffer.SetRange("Period Start", StartFilterDate, EndFilterDate)
+                        else
+                            ReceivablesPayablesBuffer.SetFilter("Period Start", '');
+                        UpdateSubForm();
+                    end;
+                }
+                //>>WDC.IM
                 field(PeriodType; PeriodType)
                 {
                     ApplicationArea = Suite;
@@ -83,9 +120,14 @@ page 50019 "WDC Receivables-Payables"
         }
     }
 
-    actions
-    {
-    }
+    trigger OnOpenPage()
+    begin
+        startFilterDate := 0D;
+        endFilterDate := 0D;
+        VendorNo := '';
+        VendorName := '';
+        UpdateSubForm();
+    end;
 
     trigger OnAfterGetRecord()
     begin
@@ -99,10 +141,12 @@ page 50019 "WDC Receivables-Payables"
         VendorName: Text[100];
         StartFilterDate: Date;
         EndFilterDate: Date;
+        ReceivablesPayablesBuffer: Record "Receivables-Payables Buffer" temporary; //WDC.IM
 
     local procedure UpdateSubForm()
     begin
         CurrPage.ReceivPayablesLinesNew.PAGE.SetLines(Rec, PeriodType, AmountType, VendorNo);
+        CurrPage.ReceivPayablesLinesNew.Page.SetTableView(ReceivablesPayablesBuffer);//WDC.IM
     end;
 
     local procedure DayPeriodTypeOnPush()
