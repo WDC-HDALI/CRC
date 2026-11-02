@@ -20,8 +20,8 @@ tableextension 50002 "WDC Customer" extends Customer
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Amount (LCY)" where("Customer No." = field("No."),
-                                                                                "Posting Date" = field("Start Year Filter"),
-                                                                                 "Currency Code" = field("Currency Filter")));
+                                                                                "Currency Code" = field("Currency Filter"),
+                                                                                "Posting Date" = field("Start Year Filter")));
         }
         field(50001; Debit; Decimal)
         {
@@ -32,7 +32,8 @@ tableextension 50002 "WDC Customer" extends Customer
                                                                                  "Entry Type" = const("Initial Entry"),
                                                                                  "Debit Amount (LCY)" = filter('<>0'),
                                                                                  "Document Type" = filter(Invoice | "Credit Memo"),
-                                                                                 "Currency Code" = field("Currency Filter")));
+                                                                                 "Currency Code" = field("Currency Filter"),
+                                                                                 "Posting Date" = field("Start Date Filter")));
         }
         field(50002; Credit; Decimal)
         {
@@ -41,8 +42,10 @@ tableextension 50002 "WDC Customer" extends Customer
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Customer No." = field("No."),
                                                                                  "Entry Type" = const("Initial Entry"),
+                                                                                  Unpaid = filter(false),
                                                                                   "Credit Amount (LCY)" = filter('<>0'),
-                                                                                  "Currency Code" = field("Currency Filter")));
+                                                                                  "Currency Code" = field("Currency Filter"),
+                                                                                  "Posting Date" = field("Start Date Filter")));
         }
 
         field(54004; "Draft Not Due"; Decimal)
@@ -56,28 +59,54 @@ tableextension 50002 "WDC Customer" extends Customer
                                                            "Document Type" = filter(Payment),
                                                            "Entry Type" = const("Initial Entry")));
         }
+        // field(54005; "Unpaid in progress"; Decimal)
+        // {
+        //     CaptionML = ENU = 'Unpaid in progress', FRA = 'Impayés en cours';
+        //     FieldClass = FlowField;
+        //     Editable = false;
+        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Debit Amount" where("Payment Slip Type" = filter(Draft | Cheque),
+        //                                                    //"Posting Date" = field("Date Filter"),
+        //                                                    "Customer No." = field("No."),
+        //                                                    "Entry Type" = const("Initial Entry"),
+        //                                                    "Applied Cust. Ledger Entry No." = filter(0),
+        //                                                    "Document Type" = const(" ")));
+        // }
+
+        // field(54006; "Historics Unpaid"; Decimal)
+        // {
+        //     CaptionML = ENU = 'Historics Unpaid', FRA = 'Historiques Impayés';
+        //     FieldClass = FlowField;
+        //     Editable = false;
+        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Debit Amount" where("Payment Slip Type" = filter(Draft | Cheque),
+        //                                                    "Customer No." = field("No."),
+        //                                                    "Entry Type" = const("Initial Entry"),
+        //                                                    "Document Type" = const(" ")));
+        // }
+
+
         field(54005; "Unpaid in progress"; Decimal)
         {
             CaptionML = ENU = 'Unpaid in progress', FRA = 'Impayés en cours';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Debit Amount" where("Payment Slip Type" = filter(Draft | Cheque),
-                                                           //"Posting Date" = field("Date Filter"),
+            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = filter(Draft | Cheque),
                                                            "Customer No." = field("No."),
+                                                           "Document Type" = filter(Payment),
                                                            "Entry Type" = const("Initial Entry"),
-                                                           "Applied Cust. Ledger Entry No." = filter(0),
-                                                           "Document Type" = const(" ")));
+                                                            Unpaid = filter(true),
+                                                           "Unpaid is Encaissed" = const(false)));
         }
-
         field(54006; "Historics Unpaid"; Decimal)
         {
             CaptionML = ENU = 'Historics Unpaid', FRA = 'Historiques Impayés';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Debit Amount" where("Payment Slip Type" = filter(Draft | Cheque),
+            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = filter(Draft | Cheque),
                                                            "Customer No." = field("No."),
+                                                           "Document Type" = filter(Payment),
                                                            "Entry Type" = const("Initial Entry"),
-                                                           "Document Type" = const(" ")));
+                                                           Unpaid = filter(true),
+                                                           "Unpaid is Encaissed" = const(true)));
         }
 
         field(50007; "Open Debit"; Decimal)
@@ -102,14 +131,14 @@ tableextension 50002 "WDC Customer" extends Customer
                                                                                   "Applied Cust. Ledger Entry No." = filter(0),
                                                                                   "Currency Code" = field("Currency Filter")));
         }
-
         field(50009; "Total Shipment"; Decimal)
         {
-            CaptionML = ENU = 'Total Shipment', FRA = 'Total BL Not Invoiced';
+            CaptionML = ENU = 'Total Shipment', FRA = 'BL non facturés';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Sales Line"."Shipped Not Invoiced (LCY)" where("Sell-to Customer No." = field("No."),
-                                                                                  "Shipped Not Invoiced (LCY)" = filter(<> 0)));
+                                                                              "Shipped Not Invoiced (LCY)" = filter(<> 0),
+                                                                              "Posting Date" = field("Start Date Filter")));//WDC.CHG 26/02/2026
         }
         field(50010; "Start Year Filter"; Date)
         {
@@ -120,6 +149,62 @@ tableextension 50002 "WDC Customer" extends Customer
             CaptionML = ENU = 'Due Date Filter', FRA = 'Filtre date d''échéance';
             FieldClass = FlowFilter;
         }
+
+        field(50014; "Last Payment Amount"; Decimal)
+        {
+            CaptionML = ENU = 'Last Payment Amount', FRA = 'Dernier paiement';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = max("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Customer No." = field("No."),
+                                                                                "Document Type" = filter("Payment"),
+                                                                                "Entry Type" = filter("Initial Entry")));
+        }
+        field(50015; "Last Payment Date"; Date)
+        {
+            CaptionML = ENU = 'Last Payment Date', FRA = 'Date dernier paiement';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = max("Detailed Cust. Ledg. Entry"."Posting Date" where("Customer No." = field("No."),
+                                                                                "Document Type" = filter("Payment"),
+                                                                                "Entry Type" = filter("Initial Entry")));
+        }
+        //<<WDC.CHG 26/02/2026 
+        field(50016; "Balance (LCY) Amount"; Decimal)
+        {
+            AutoFormatType = 1;
+            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Amount (LCY)" where("Customer No." = field("No."),
+                                                                                 "Initial Entry Global Dim. 1" = field("Global Dimension 1 Filter"),
+                                                                                 "Initial Entry Global Dim. 2" = field("Global Dimension 2 Filter"),
+                                                                                 "Currency Code" = field("Currency Filter"),
+                                                                                 "Posting Date" = field("Start Date Filter")));//WDC.CHG 26/02/2026;
+            Caption = 'Balance (LCY)amount';
+            Editable = false;
+            FieldClass = FlowField;
+        }
+        field(50017; "Start Date Filter"; Date)
+        {
+            FieldClass = FlowFilter;
+        }
+        field(54018; "Unpaid Before GoLive"; Decimal)
+        {
+            CaptionML = ENU = 'Unpaid Before GoLive', FRA = 'Impayés avant démarrage système';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = SUM("Detailed Cust. Ledg. Entry"."Debit Amount (LCY)" where("Payment Slip Type" = filter(Draft | Cheque),
+                                                           "Customer No." = field("No."),
+                                                           "Entry Type" = const("Initial Entry"),
+                                                            "Unpaid Before GoLive" = filter(true)));
+        }
+        field(50019; "Payment In Coffre"; Decimal)
+        {
+            CaptionML = ENU = 'Payments In Coffre', FRA = 'Paiments en coffre';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = SUM("WDC Payment In Coffre"."Payment Amount" where("Customer No." = field("No."),
+                                                                              Status = const(Released)));
+        }
+        //>>WDC.CHG 26/02/2026
+
         // field(50014; "Due Date Filter for balance"; Date)
         // {
         //     CaptionML = ENU = 'Due Date Filter', FRA = 'Filtre date d''échéance';
@@ -176,6 +261,7 @@ tableextension 50002 "WDC Customer" extends Customer
             end;
         }
         //>>wdc01
+
 
     }
 

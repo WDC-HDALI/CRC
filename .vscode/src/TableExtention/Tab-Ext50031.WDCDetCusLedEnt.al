@@ -29,7 +29,33 @@ tableextension 50031 "WDC Det. Cust. Ledg. Entry" extends "Detailed Cust. Ledg. 
             CalcFormula = lookup("Cust. Ledger Entry"."Bank Name" where("Entry No." = field("Cust. Ledger Entry No.")));
             Editable = false;
         }
+        field(50004; Unpaid; Boolean)
+        {
+            CaptionML = ENU = 'Unpaid', FRA = 'Impayé';
+            DataClassification = ToBeClassified;
+        }
+
+        field(50005; "Unpaid Enc. Reference"; Code[50])
+        {
+            CaptionML = ENU = 'Unpaid Enc. Reference', FRA = 'Référence Impayé Encaissé';
+        }
+        field(50006; "Unpaid is Encaissed"; Boolean)
+        {
+            CaptionML = ENU = 'Unpaid Is Encaissed', FRA = 'Impayé encaissé';
+            DataClassification = ToBeClassified;
+        }
+        field(50007; "Unpaid Before GoLive"; Boolean)
+        {
+            CaptionML = ENU = 'Unpaid Before GoLive', FRA = 'Impayé avant démarrage système';
+            DataClassification = ToBeClassified;
+        }
     }
 
-
+    keys
+    {
+        key(Key21; "Document Type", "Entry Type", "Posting Date", "Customer No.")
+        {
+            SumIndexFields = "Amount (LCY)";
+        }
+    }
 }

@@ -21,9 +21,9 @@ enum 54000 "WDC-ST Payment Slip Type"
     {
         CaptionML = ENU = 'Transfer', FRA = 'Virement';
     }
-    value(5; "Credit Letter")
+    value(5; "LC")
     {
-        CaptionML = ENU = 'Credit Letter', FRA = 'Lettre de crédit';
+        CaptionML = ENU = 'LC', FRA = 'LC';
     }
     value(6; TPE)
     {

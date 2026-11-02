@@ -2,7 +2,7 @@ report 50905 "WDC Upd Customer Entries Effet"
 {
     Caption = 'Mise à jour des effets sur Customer Ledger Entries';
     ProcessingOnly = true;
-    UsageCategory = Tasks;
+    //UsageCategory = Tasks;
     ApplicationArea = All;
 
     dataset

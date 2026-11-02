@@ -120,7 +120,7 @@ report 50037 "WDC CA By Category"
                         CaptionML = ENG = 'SubCategorie', FRA = 'Sous-Famille';
                         trigger OnLookup(Var Text: Text): Boolean
                         var
-                            WDCSubCategoryItemPage: Page "WDC SubCategory Item";
+                            WDCSubCategoryItemPage: Page "WDC SubCategory Item Dialog";
                             WDCSubCategory: Record "WDC SubCategory Item";
                         begin
                             WDCSubCategory.reset;

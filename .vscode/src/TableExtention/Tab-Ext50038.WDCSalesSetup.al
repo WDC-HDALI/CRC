@@ -4,6 +4,7 @@ using Microsoft.Sales.Setup;
 using Microsoft.Foundation.NoSeries;
 //*******************Documentation*************************
 //WDC01  WDC.HG  26/06/2025   Create Current Object
+//WDC02  WDC.IM  02/03/2026   Add New Fields
 tableextension 50038 "WDC Sales Setup" extends "Sales & Receivables Setup"
 {
     fields
@@ -30,6 +31,17 @@ tableextension 50038 "WDC Sales Setup" extends "Sales & Receivables Setup"
             Captionml = ENU = 'Print Paiement Model2', FRA = 'Modèle imprime paiement 2';
             DataClassification = ToBeClassified;
         }
-
+        //WDC02
+        field(50004; "Authorized Cash Credit Period"; DateFormula)
+        {
+            Captionml = ENU = 'Authorized cash credit period', FRA = 'Période crédit comptant autorisée';
+            DataClassification = ToBeClassified;
+        }
+        field(50005; "Enable Cash Credit Control"; Boolean)
+        {
+            CaptionML = ENU = 'Enable Cash Credit Control', FRA = 'Contrôle crédit comptant';
+            DataClassification = ToBeClassified;
+        }
+        //WDC02
     }
 }

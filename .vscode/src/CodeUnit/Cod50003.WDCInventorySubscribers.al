@@ -228,5 +228,30 @@ codeunit 50003 "WDC Inventory Subscribers"
     begin
         error(ltext001)
     end;
+
+
+    //<<WDC08
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnBeforeInsertTransShptLine', '', false, false)]
+    local procedure OnBeforeInsertTransShptLine(var TransShptLine: Record "Transfer Shipment Line"; TransLine: Record "Transfer Line"; CommitIsSuppressed: Boolean; var IsHandled: Boolean; TransShptHeader: Record "Transfer Shipment Header")
+    var
+        Item: Record Item;
+
+    begin
+        if TransLine."Item No." = '' then
+            Exit;
+        if Item.Get(TransLine."Item No.") then begin
+            TransShptLine."Last Direct Cost" := Item."Last Direct Cost";
+        end
+    end;
+    //>>WDC08
     //>>Control Deleting Posted document
+
+
+    // [EventSubscriber(ObjectType::Table, database::"Item Journal Line", OnBeforeValidateEvent, "Qty. (Phys. Inventory)", FALSE, FALSE)]
+    // local procedure OnBeforeValidateEvent(var Rec: Record "Item Journal Line")
+    // var
+    // begin
+    //     if (Rec."Journal Template Name" = 'INVENTAIRE') then
+    //         Rec."Phys. Inventory" := true;
+    // end;
 }

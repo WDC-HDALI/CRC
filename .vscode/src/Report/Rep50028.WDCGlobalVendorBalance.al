@@ -55,6 +55,18 @@ report 50028 "WDC Global Vendor Balance"
             {
 
             }
+            column(StartingDate; StartingDate)
+            {
+
+            }
+            column(EndingDate; EndingDate)
+            {
+
+            }
+            column(Date_Period_Report; DatePeridoReport)
+            {
+
+            }
             column(VendorNo; "No.")
             {
 
@@ -95,6 +107,10 @@ report 50028 "WDC Global Vendor Balance"
                 DataItemTableView = SORTING("Entry No.") ORDER(Ascending) where(Reversed = filter(false));
 
                 column(Paiement_PostingDate; Paiement."Posting Date")
+                {
+
+                }
+                column(Paiement_DescText; DescriptionText)
                 {
 
                 }
@@ -171,6 +187,12 @@ report 50028 "WDC Global Vendor Balance"
                         if lPaymentHeader.Get(Paiement."Document No.") then
                             BankName := lPaymentHeader."Bank Name";
 
+                    if (Paiement."Document No." = 'CLOT-300625') then
+                        DescriptionText := Paiement.Description
+                    else
+                        DescriptionText := Format(Paiement."Document Type") + ' N° ' + Paiement."Document No."
+
+
                 end;
             }
 
@@ -222,17 +244,22 @@ report 50028 "WDC Global Vendor Balance"
             begin
                 CompanyInfo.Get;
                 CompanyInfo.CalcFields(Picture);
+                if StartingDate <> 0D then
+                    DatePeridoReport := StartingDate - 1;
                 //<<wdc03
                 GLSetup.get();
-                if FilteredVendor.get(Vendor."No.") then begin
-                    FilteredVendor.SetFilter("Start Year Filter", '..%1', StartingDate);
+                FilteredVendor.reset;
+                FilteredVendor.SetRange("No.", Vendor."No.");
+                FilteredVendor.SetFilter("Start Year Filter", '..%1', StartingDate - 1);
+                if FilteredVendor.FindFirst() then begin
+                    FilteredVendor.CalcFields(Report);
                     FilteredVendor.CalcFields(Report);
                     FilteredVendor.CalcFields("Balance (LCY)");
                     FilteredVendor.CalcFields("Total Receipt");
-                    TotalVendorAmount := FilteredVendor."Balance (LCY)" - FilteredVendor."Total Receipt";
-                    TotalReceiptNotInvoiced := FilteredVendor."Total Receipt";
-
                 end;
+                TotalVendorAmount := FilteredVendor."Balance (LCY)";// + FilteredVendor."Total Receipt";
+                TotalReceiptNotInvoiced := FilteredVendor."Total Receipt";
+
                 //>>WDC03
             end;
         }
@@ -283,6 +310,7 @@ report 50028 "WDC Global Vendor Balance"
         //StartingDate := DMY2Date(1, 1, Date2DMY(WorkDate, 3));
         StartingDate := DMY2Date(1, Date2DMY(WorkDate, 2), Date2DMY(WorkDate, 3));
         EndingDate := CALCDATE('<CM>', StartingDate);
+
     end;
 
     var
@@ -299,4 +327,6 @@ report 50028 "WDC Global Vendor Balance"
         TotalVendorAmount: Decimal;
         TotalReceiptNotInvoiced: Decimal;
         DateFilterTxt: Text[100];
+        DatePeridoReport: Date;
+        DescriptionText: Text;
 }

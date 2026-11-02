@@ -17,7 +17,8 @@ tableextension 50043 "WDC Vendor" extends Vendor
             CalcFormula = sum("Detailed Vendor Ledg. Entry"."Debit Amount (LCY)" where("Vendor No." = field("No."),
                                                                                  "Entry Type" = const("Initial Entry"),
                                                                                  "Debit Amount (LCY)" = filter(<> 0),
-                                                                                 "Currency Code" = field("Currency Filter")));
+                                                                                 "Currency Code" = field("Currency Filter"),
+                                                                                 "Posting Date" = field("Start Date Filter")));//WDC.CHG 26/02/2026
         }
         field(50001; VendorInvoice; Decimal)
         {
@@ -27,7 +28,8 @@ tableextension 50043 "WDC Vendor" extends Vendor
             CalcFormula = sum("Detailed Vendor Ledg. Entry"."Debit Amount (LCY)" where("Vendor No." = field("No."),
                                                                                  "Entry Type" = const("Initial Entry"),
                                                                                  "Credit Amount (LCY)" = filter(<> 0),
-                                                                                 "Currency Code" = field("Currency Filter")));
+                                                                                 "Currency Code" = field("Currency Filter"),
+                                                                                 "Posting Date" = field("Start Date Filter")));//WDC.CHG 26/02/2026
         }
         field(50002; "Open Debit"; Decimal)
         {
@@ -58,7 +60,8 @@ tableextension 50043 "WDC Vendor" extends Vendor
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Purchase Line"."Amt. Rcd. Not Invoiced (LCY)" where("Buy-from Vendor No." = field("No."),
-                                                                                  "Amt. Rcd. Not Invoiced (LCY)" = filter(<> 0)));
+                                                                                  "Amt. Rcd. Not Invoiced (LCY)" = filter(<> 0),
+                                                                                  "Order Date" = field("Start Date Filter")));//WDC.CHG 26/02/2026
         }
         field(50005; "Start Year Filter"; Date)
         {
@@ -87,7 +90,28 @@ tableextension 50043 "WDC Vendor" extends Vendor
                                                            "Initial Entry Due Date" = field("Due Date Filter"),
                                                            "Vendor No." = field("No."),
                                                            "Document Type" = filter(Payment),
-                                                           "Entry Type" = const("Initial Entry")));
+                                                           "Entry Type" = const("Initial Entry"),
+                                                            "Posting Date" = field("Start Date Filter")));//WDC.CHG 26/02/2026
         }
+        //<<WDC.CHG 26/02/2026 
+
+        field(50009; "Start Date Filter"; Date)
+        {
+            FieldClass = FlowFilter;
+        }
+        field(50010; "Balance (LCY) Amount"; Decimal)
+        {
+            AutoFormatType = 1;
+            CalcFormula = - sum("Detailed Vendor Ledg. Entry"."Amount (LCY)" where("Vendor No." = field("No."),
+                                                                                   "Initial Entry Global Dim. 1" = field("Global Dimension 1 Filter"),
+                                                                                   "Initial Entry Global Dim. 2" = field("Global Dimension 2 Filter"),
+                                                                                   "Currency Code" = field("Currency Filter"),
+                                                                                   "Posting Date" = field("Start Date Filter")));//WDC.CHG 26/02/2026
+            Caption = 'Balance (LCY)';
+            Editable = false;
+            FieldClass = FlowField;
+        }
+        //>>WDC.CHG 26/02/2026 
+
     }
 }

@@ -11,7 +11,6 @@ page 50023 "WDC Sales Shipment Not Inv."
     SourceTable = "Sales Shipment Header";
     SourceTableView = where("Remain to Invoice" = const(true));
     Editable = false;
-
     layout
     {
         area(Content)
@@ -112,11 +111,24 @@ page 50023 "WDC Sales Shipment Not Inv."
             //TotalSansTva += VSalesshipmentline."Item Charge Base Amount";
             until VSalesshipmentline.Next() = 0;
             TotalSansTva += TotalNetvcRemise + TotalTransport + TotalRedevance;
-            TotalPayer := TotalSansTva + MontantTva7 + MontantTva19 + MontantTva13;
+
+            TotalPayer := TotalSansTva + MontantTva7 + MontantTva19 + MontantTva13 - GetInvoicedAmount(rec."No.");
         end
     end;
 
-
+    procedure GetInvoicedAmount(ShpNo: Code[20]): Decimal
+    var
+        lSalesInvoiceLine: Record "Sales Invoice Line";
+        TotalInvoiced: Decimal;
+    begin
+        lSalesInvoiceLine.Reset();
+        lSalesInvoiceLine.SetRange("Shipment No.", ShpNo);
+        if lSalesInvoiceLine.FindSet() then
+            repeat
+                TotalInvoiced += lSalesInvoiceLine."Amount Including VAT";
+            until lSalesInvoiceLine.Next() = 0;
+        exit(TotalInvoiced);
+    end;
 
     var
         VSalesshipmentline: record "Sales Shipment Line";
@@ -132,4 +144,5 @@ page 50023 "WDC Sales Shipment Not Inv."
         TotalTransport: Decimal;
         ChargeItem: record "Item Charge";
         TotalRedevance: decimal;
+
 }

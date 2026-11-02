@@ -4,10 +4,11 @@ page 50035 "WDC Customer Delivery Lines"
 {
     ApplicationArea = All;
     Caption = 'Customer Delivery Lines';
-    PageType = List;
+    PageType = ListPart;
     SourceTable = "WDC Customer Shipment Lines";
     InsertAllowed = false;
-    UsageCategory = Administration;
+    DeleteAllowed = true;
+    ModifyAllowed = true;
     layout
     {
         area(Content)
@@ -44,6 +45,14 @@ page 50035 "WDC Customer Delivery Lines"
                 {
                     ApplicationArea = All;
                     Editable = Rec.Quantity > Rec."Qty Shipped";
+                    trigger OnValidate()
+                    var
+                        lText001: TextConst ENU = 'Qty to ship must be less than  %1',
+                                            FRA = 'La quantité à livrer doit-etre inferiuer ou égale à %1';
+                    begin
+                        if rec."Qty to Ship" > Rec.Quantity - Rec."Qty Shipped" then
+                            Error(lText001, Rec.Quantity - Rec."Qty Shipped");
+                    end;
                 }
                 field("Qty Shipped"; Rec."Qty Shipped")
                 {

@@ -215,7 +215,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!NomAuxiliaire_PaymentLine.Value</Value>
+                                      <Value>=Fields!name.Value</Value>
                                       <Style>
                                         <FontSize>9pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
@@ -428,7 +428,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!name.Value</Value>
+                                      <Value>=Fields!NomAuxiliaire_PaymentLine.Value</Value>
                                       <Style>
                                         <FontSize>9pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
@@ -442,7 +442,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!adresse.Value</Value>
+                                      <Value>=Fields!Cutomeradresse.Value</Value>
                                       <Style>
                                         <FontSize>9pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
@@ -456,7 +456,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!adresse2.Value</Value>
+                                      <Value>=Fields!Cutomeradresse2.Value</Value>
                                       <Style>
                                         <FontSize>9pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
@@ -482,9 +482,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox24</rd:DefaultName>
                               <Top>7.1825cm</Top>
-                              <Left>3.44696in</Left>
+                              <Left>3.49104in</Left>
                               <Height>0.61412in</Height>
-                              <Width>1.63712in</Width>
+                              <Width>1.59304in</Width>
                               <ZIndex>11</ZIndex>
                               <Style>
                                 <Border>
@@ -681,7 +681,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!NomAuxiliaire_PaymentLine.Value</Value>
+                                      <Value>=Fields!name.Value</Value>
                                       <Style>
                                         <FontSize>8pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
@@ -889,7 +889,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!NomAuxiliaire_PaymentLine.Value</Value>
+                                      <Value>=Fields!name.Value</Value>
                                       <Style>
                                         <FontSize>9pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
@@ -925,7 +925,6 @@
                             </Border>
                           </Style>
                         </Rectangle>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -962,7 +961,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>9.79174cm</Height>
+        <Height>9.60653cm</Height>
         <Style />
       </Body>
       <Width>19.33188cm</Width>
@@ -1034,11 +1033,11 @@ End Function
         <Field Name="name">
           <DataField>name</DataField>
         </Field>
-        <Field Name="adresse">
-          <DataField>adresse</DataField>
+        <Field Name="Cutomeradresse">
+          <DataField>Cutomeradresse</DataField>
         </Field>
-        <Field Name="adresse2">
-          <DataField>adresse2</DataField>
+        <Field Name="Cutomeradresse2">
+          <DataField>Cutomeradresse2</DataField>
         </Field>
         <Field Name="ch2">
           <DataField>ch2</DataField>

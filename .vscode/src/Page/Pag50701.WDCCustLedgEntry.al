@@ -2,7 +2,7 @@ namespace CRC.CRC;
 
 using Microsoft.Sales.Receivables;
 
-page 50036 "WDC Cust. Ledger Entry Upd"
+page 50701 "WDC Cust. Ledg. Entry"
 {
     ApplicationArea = All;
     Caption = 'WDC Cust. Ledger Entry';
@@ -69,6 +69,18 @@ page 50036 "WDC Cust. Ledger Entry Upd"
                     ApplicationArea = All;
                 }
                 field("Debit Amount (LCY)"; Rec."Debit Amount (LCY)")
+                {
+                    ApplicationArea = All;
+                }
+                field(Unpaid; Rec.Unpaid)
+                {
+                    ApplicationArea = All;
+                }
+                field("Customer Posting Group"; Rec."Customer Posting Group")
+                {
+                    ApplicationArea = All;
+                }
+                field(Description; Rec.Description)
                 {
                     ApplicationArea = All;
                 }
@@ -156,14 +168,7 @@ page 50036 "WDC Cust. Ledger Entry Upd"
                 {
                     ApplicationArea = All;
                 }
-                field("Customer Posting Group"; Rec."Customer Posting Group")
-                {
-                    ApplicationArea = All;
-                }
-                field(Description; Rec.Description)
-                {
-                    ApplicationArea = All;
-                }
+
                 field("Dimension Set ID"; Rec."Dimension Set ID")
                 {
                     ApplicationArea = All;

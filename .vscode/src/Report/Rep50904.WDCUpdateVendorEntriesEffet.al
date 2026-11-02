@@ -2,7 +2,7 @@ report 50904 "WDC Upd Vendor Entries Effet"
 {
     Caption = 'Mise à jour des effets sur Vendor Ledger Entries';
     ProcessingOnly = true;
-    UsageCategory = Tasks;
+    //UsageCategory = Tasks;
     ApplicationArea = All;
 
     dataset

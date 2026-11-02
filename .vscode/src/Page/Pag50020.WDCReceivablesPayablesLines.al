@@ -142,6 +142,7 @@ page 50020 "WDC Receivables-Payables Lines"
         PeriodType: Enum "Analysis Period Type";
         AmountType: Enum "Analysis Amount Type";
         VendorNo: Code[20];
+        PaymentLine2: Record "WDC-ED Payment Line";
 
     protected var
         GLSetup: Record "General Ledger Setup";
@@ -175,7 +176,7 @@ page 50020 "WDC Receivables-Payables Lines"
         clear(PaymentLine);
         PaymentLine.SetCurrentKey("No.", "Account No.", "Bank Branch No.", "Agency Code", "Bank Account No.", "Payment Address Code");
         PaymentLine.SetRange("Status Name", 'CONFIRMEE');
-        PaymentLine.setrange("Payment Class", 'DECAISSEMENT EFFET');
+        PaymentLine.Setfilter("Payment Class", '%1|%2|%3', 'DECAISSEMENT EFFET', 'DECAISSEMENT VIRE', 'DECAISSEMENT LC');
         PaymentLine.setrange("Account Type", PaymentLine."Account Type"::Vendor);
         if VendorNo <> '' then //HD14122025 
             PaymentLine.SetFilter("Account No.", '%1', VendorNo);
@@ -184,20 +185,35 @@ page 50020 "WDC Receivables-Payables Lines"
         PAGE.Run(0, PaymentLine);
     end;
 
+    // local procedure ShowVendEntriesDue()
+    // begin
+    //     SetDateFilter();
+    //     VendLedgEntry.Reset();
+    //     VendLedgEntry.SetCurrentKey("Vendor No.", "Posting Date", "Currency Code");
+    //     if VendorNo <> '' then //HD14122025 
+    //         VendLedgEntry.SetFilter("Vendor No.", '%1', VendorNo);
+    //     VendLedgEntry.SetFilter("Amount (LCY)", '>%1', 0);
+    //     VendLedgEntry.SetRange("Payment Slip Type", VendLedgEntry."Payment Slip Type"::Draft);////HD210725 With HJ
+    //     VendLedgEntry.SetFilter("Due Date", '>=%1', WorkDate());
+    //     VendLedgEntry.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
+    //     VendLedgEntry.SetFilter("Global Dimension 1 Code", GLSetup.GetFilter("Global Dimension 1 Filter"));
+    //     VendLedgEntry.SetFilter("Global Dimension 2 Code", GLSetup.GetFilter("Global Dimension 2 Filter"));
+    //     PAGE.Run(0, VendLedgEntry);
+    // end;
     local procedure ShowVendEntriesDue()
     begin
         SetDateFilter();
-        VendLedgEntry.Reset();
-        VendLedgEntry.SetCurrentKey("Vendor No.", "Posting Date", "Currency Code");
+        PaymentLine2.Reset();
+        PaymentLine2.SetCurrentKey("Account Type", "Account No.", "Copied To Line", "Payment in Progress");
+        paymentLine2.SetRange("Account Type", PaymentLine2."Account Type"::Vendor);
         if VendorNo <> '' then //HD14122025 
-            VendLedgEntry.SetFilter("Vendor No.", '%1', VendorNo);
-        VendLedgEntry.SetFilter("Amount (LCY)", '>%1', 0);
-        VendLedgEntry.SetRange("Payment Slip Type", VendLedgEntry."Payment Slip Type"::Draft);////HD210725 With HJ
-        VendLedgEntry.SetFilter("Due Date", '>=%1', WorkDate());
-        VendLedgEntry.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
-        VendLedgEntry.SetFilter("Global Dimension 1 Code", GLSetup.GetFilter("Global Dimension 1 Filter"));
-        VendLedgEntry.SetFilter("Global Dimension 2 Code", GLSetup.GetFilter("Global Dimension 2 Filter"));
-        PAGE.Run(0, VendLedgEntry);
+            PaymentLine2.SetRange("Account No.", VendorNo);
+        PaymentLine2.SetFilter("Amount (LCY)", '>%1', 0);
+        PaymentLine2.SetFilter("Payment Methode Code", 'TRAITE|VIREMENT|LC');
+        paymentLine2.Setfilter("Status Name", 'VALIDEE|VIREMENT COMPTABILISE|LC VALIDE');
+        PaymentLine2.SetFilter("Due Date", '%1..', WorkDate());
+        PaymentLine2.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
+        PAGE.Run(50869, PaymentLine2);
     end;
 
     local procedure SetDateFilter()
@@ -213,21 +229,36 @@ page 50020 "WDC Receivables-Payables Lines"
         SetDateFilter();
         //New filter to vendor ledger entries       
         Balance := 0;
-        VendLedgEntry.Reset();
-        VendLedgEntry.SetCurrentKey("Vendor No.", "Posting Date", "Currency Code");
+        // VendLedgEntry.Reset();
+        // VendLedgEntry.SetCurrentKey("Vendor No.", "Posting Date", "Currency Code");
+        // if VendorNo <> '' then //HD14122025 
+        //     VendLedgEntry.SetFilter("Vendor No.", '%1', VendorNo);
+        // VendLedgEntry.SetFilter("Amount (LCY)", '>%1', 0);
+        // VendLedgEntry.SetRange("Payment Slip Type", VendLedgEntry."Payment Slip Type"::Draft);////HD210725 With HJ
+        // VendLedgEntry.SetFilter("Due Date", '>=%1', WorkDate());
+        // VendLedgEntry.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
+        // VendLedgEntry.SetFilter("Global Dimension 1 Code", GLSetup.GetFilter("Global Dimension 1 Filter"));
+        // VendLedgEntry.SetFilter("Global Dimension 2 Code", GLSetup.GetFilter("Global Dimension 2 Filter"));
+        // if VendLedgEntry.FindSet() then
+        //     repeat
+        //         VendLedgEntry.CalcFields("Amount (LCY)");
+        //         Balance := Balance + VendLedgEntry."Amount (LCY)"
+        //     until VendLedgEntry.next = 0;
+        PaymentLine2.Reset();
+        PaymentLine2.SetCurrentKey("Account Type", "Account No.", "Copied To Line", "Payment in Progress");
+        paymentLine2.SetRange("Account Type", PaymentLine2."Account Type"::Vendor);
         if VendorNo <> '' then //HD14122025 
-            VendLedgEntry.SetFilter("Vendor No.", '%1', VendorNo);
-        VendLedgEntry.SetFilter("Amount (LCY)", '>%1', 0);
-        VendLedgEntry.SetRange("Payment Slip Type", VendLedgEntry."Payment Slip Type"::Draft);////HD210725 With HJ
-        VendLedgEntry.SetFilter("Due Date", '>=%1', WorkDate());
-        VendLedgEntry.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
-        VendLedgEntry.SetFilter("Global Dimension 1 Code", GLSetup.GetFilter("Global Dimension 1 Filter"));
-        VendLedgEntry.SetFilter("Global Dimension 2 Code", GLSetup.GetFilter("Global Dimension 2 Filter"));
-        if VendLedgEntry.FindSet() then
+            PaymentLine2.SetRange("Account No.", VendorNo);
+        PaymentLine2.SetFilter("Amount (LCY)", '>%1', 0);
+        PaymentLine2.SetFilter("Payment Methode Code", 'TRAITE|VIREMENT|LC');////HD210725 With HJ
+        paymentLine2.Setfilter("Status Name", 'VALIDEE|VIREMENT COMPTABILISE|LC VALIDE');
+        PaymentLine2.SetFilter("Due Date", '%1..', WorkDate());
+        PaymentLine2.SetFilter("Due Date", GLSetup.GetFilter("Date Filter"));
+        if PaymentLine2.FindSet() then
             repeat
-                VendLedgEntry.CalcFields("Amount (LCY)");
-                Balance := Balance + VendLedgEntry."Amount (LCY)"
-            until VendLedgEntry.next = 0;
+                Balance := Balance + PaymentLine2."Amount (LCY)"
+            until PaymentLine2.next = 0;
+
         //New filter to vendor ledger entries 
         //New Customer
         Balancecli := 0;
@@ -249,7 +280,7 @@ page 50020 "WDC Receivables-Payables Lines"
         clear(PaymentLine);
         PaymentLine.SetCurrentKey("No.", "Account No.", "Bank Branch No.", "Agency Code", "Bank Account No.", "Payment Address Code");
         PaymentLine.SetRange("Status Name", 'CONFIRMEE');
-        PaymentLine.setrange("Payment Class", 'DECAISSEMENT EFFET');
+        PaymentLine.Setfilter("Payment Class", '%1|%2|%3', 'DECAISSEMENT EFFET', 'DECAISSEMENT VIRE', 'DECAISSEMENT LC');
         PaymentLine.setrange("Account Type", PaymentLine."Account Type"::Vendor);
         if VendorNo <> '' then //HD14122025 
             PaymentLine.SetFilter("Account No.", '%1', VendorNo);

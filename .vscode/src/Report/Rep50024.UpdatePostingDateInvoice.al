@@ -1,8 +1,9 @@
 report 50024 "Update Posting Date Invoice"
 {
-    RDLCLayout = './.vscode/src/Report/RDLC/UpdateDate_.rdlc';
+    RDLCLayout = './.vscode/src/Report/RDLC/UpdateInvoiceDate.rdlc';
     ApplicationArea = All;
     Caption = 'Update Invoice Date';
+    ProcessingOnly = false;
     UsageCategory = Lists;
     Permissions = TableData "G/L Entry" = rimd,
    TableData "VAT Entry" = rimd,

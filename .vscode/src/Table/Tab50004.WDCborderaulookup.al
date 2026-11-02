@@ -3,7 +3,7 @@
 //WDC01  WDC.HG  10/06/2025  create the current object 
 table 50004 "WDC borderau lookup"
 {
-    Captionml = ENU = 'list of payment slips', FRA = 'liste des bordereau de versement ';
+    Captionml = ENU = 'List of payment slips', FRA = 'Liste des bordereau de versement ';
     DataClassification = ToBeClassified;
     Permissions = tabledata "WDC borderau lookup" = Rimd;
 

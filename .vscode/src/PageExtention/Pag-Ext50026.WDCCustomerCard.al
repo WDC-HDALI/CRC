@@ -217,7 +217,6 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
                 Editable = false;
                 Style = Strong;
                 StyleExpr = StyleTxtBalanceNotEncashed;
-
             }
         }
         addafter(General)
@@ -270,28 +269,42 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
                         ApplicationArea = all;
                         Style = Attention;
                     }
+
                     //<<hg
-                    field(UnpaidInProgress; UnpaidInProgress)
+                    // field(UnpaidInProgress; UnpaidInProgress)
+                    // {
+                    //     CaptionML = ENU = 'Unpaid in progress', FRA = 'Impayés en cours';
+                    //     Editable = false;
+                    //     ApplicationArea = all;
+                    //     Style = StrongAccent;
+                    //     //<<WDC02
+                    //     trigger OnDrillDown()
+                    //     var
+                    //         FilteredDetailedCusotmerLedgEntry: record "Detailed Cust. Ledg. Entry";
+                    //     begin
+                    //         FilteredDetailedCusotmerLedgEntry.reset();
+                    //         FilteredDetailedCusotmerLedgEntry.SetFilter("Cust. Ledger Entry No.", LinkedCustomerLedgerEntryNo);
+                    //         FilteredDetailedCusotmerLedgEntry.SetRange("Entry Type", FilteredDetailedCusotmerLedgEntry."Entry Type"::"Initial Entry");
+                    //         Page.Run(Page::"Detailed Cust. Ledg. Entries", FilteredDetailedCusotmerLedgEntry);
+                    //     end;
+                    //     //>>WDC02
+                    // }
+                    field("Unpaid Before GoLive"; Rec."Unpaid Before GoLive")
                     {
-                        CaptionML = ENU = 'Unpaid in progress', FRA = 'Impayés en cours';
-                        Editable = false;
                         ApplicationArea = all;
-                        Style = StrongAccent;
-                        //<<WDC02
-                        trigger OnDrillDown()
-                        var
-                            FilteredDetailedCusotmerLedgEntry: record "Detailed Cust. Ledg. Entry";
-                        begin
-                            FilteredDetailedCusotmerLedgEntry.reset();
-                            FilteredDetailedCusotmerLedgEntry.SetRange("Cust. Ledger Entry No.", LinkedCustomerLedgerEntryNo);
-                            Page.Run(Page::"Detailed Cust. Ledg. Entries", FilteredDetailedCusotmerLedgEntry);
-                        end;
-                        //>>WDC02
+                    }
+                    field("Unpaid in progress"; Rec."Unpaid in progress")
+                    {
+                        ApplicationArea = all;
                     }
                     field("Historics Unpaid"; Rec."Historics Unpaid")
                     {
                         ApplicationArea = all;
                         Style = StrongAccent;
+                    }
+                    field("Payment In Coffre"; Rec."Payment In Coffre")
+                    {
+                        ApplicationArea = all;
                     }
                 }
 
@@ -454,8 +467,8 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
             CustomerNoIsEditable := UserSetup."Allow Rename Customer";
         EditFields := UserSetup."Allow Modify Customer";
         Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Go Live Date");
+        rec.SetFilter("Start Date Filter", '%1..', GLSetup."Go Live Date" + 1);//WDC.CHG
         rec.SetFilter("Due Date Filter", '%1..', WorkDate);
-        ///rec.SetFilter("Due Date Filter for balance", '..%1', WorkDate);
     end;
 
     trigger OnAfterGetRecord()
@@ -463,33 +476,44 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
         UserSetup: Record "User Setup";
         lCustLedgEntr: Record "Cust. Ledger Entry";
         lDetailedCustLedgEntry: record "Detailed Cust. Ledg. Entry";
+        GLSetup: record "General Ledger Setup";
     begin
         UnpaidInProgress := 0;
-        LinkedCustomerLedgerEntryNo := 0;
-        //<<WDC02
-        lDetailedCustLedgEntry.Reset();
-        lDetailedCustLedgEntry.SetCurrentKey("Document Type", "Customer No.", "Posting Date", "Currency Code");
-        lDetailedCustLedgEntry.SetRange("Customer No.", Rec."No.");
-        lDetailedCustLedgEntry.SetRange("Document Type", lDetailedCustLedgEntry."Document Type"::" ");
-        lDetailedCustLedgEntry.SetFilter("Payment Slip Type", '%1|%2', lDetailedCustLedgEntry."Payment Slip Type"::Draft, lDetailedCustLedgEntry."Payment Slip Type"::Cheque);
-        lDetailedCustLedgEntry.SetRange("Entry Type", lDetailedCustLedgEntry."Entry Type"::"Initial Entry");
-        lDetailedCustLedgEntry.SetFilter("Applied Cust. Ledger Entry No.", '%1', 0);
-        if lDetailedCustLedgEntry.FindSet() then
-            repeat
-                lCustLedgEntr.reset();
-                if lCustLedgEntr.get(lDetailedCustLedgEntry."Cust. Ledger Entry No.") then begin
-                    LinkedCustomerLedgerEntryNo := lCustLedgEntr."Entry No.";
-                    lCustLedgEntr.CalcFields("Remaining Amt. (LCY)");
-                    UnpaidInProgress += lCustLedgEntr."Remaining Amt. (LCY)";
-                end
-            until lDetailedCustLedgEntry.Next() = 0;
-        //>>WDC02
+        LinkedCustomerLedgerEntryNo := '';
+        // //<<WDC02
+        // lDetailedCustLedgEntry.Reset();
+        // lDetailedCustLedgEntry.SetCurrentKey("Document Type", "Customer No.", "Posting Date", "Currency Code");
+        // lDetailedCustLedgEntry.SetRange("Customer No.", Rec."No.");
+        // lDetailedCustLedgEntry.SetRange("Document Type", lDetailedCustLedgEntry."Document Type"::" ");
+        // lDetailedCustLedgEntry.SetFilter("Payment Slip Type", '%1|%2', lDetailedCustLedgEntry."Payment Slip Type"::Draft, lDetailedCustLedgEntry."Payment Slip Type"::Cheque);
+        // lDetailedCustLedgEntry.SetRange("Entry Type", lDetailedCustLedgEntry."Entry Type"::"Initial Entry");
+        // lDetailedCustLedgEntry.SetFilter("Applied Cust. Ledger Entry No.", '%1', 0);
+        // if lDetailedCustLedgEntry.FindSet() then
+        //     repeat
+        //         if lCustLedgEntr.get(lDetailedCustLedgEntry."Cust. Ledger Entry No.") then begin
+        //             lCustLedgEntr.CalcFields("Remaining Amt. (LCY)");
+        //             if lCustLedgEntr."Remaining Amt. (LCY)" <> 0 then begin
+        //                 if LinkedCustomerLedgerEntryNo = '' then
+        //                     LinkedCustomerLedgerEntryNo := Format(lCustLedgEntr."Entry No.")
+        //                 else
+        //                     LinkedCustomerLedgerEntryNo := LinkedCustomerLedgerEntryNo + '|' + Format(lCustLedgEntr."Entry No.");
+        //                 UnpaidInProgress += lCustLedgEntr."Remaining Amt. (LCY)";
+        //             end;
+
+        //         end
+        //     until lDetailedCustLedgEntry.Next() = 0;
+        // //>>WDC02
+
+        // CalcAndGetUnpaidEntries();
         UserSetup.Get(UserId);
         if not UserSetup."Allow Modify Customer" then
             CurrPage.Editable(false);
+        // Rec.CalcFields("Balance (LCY) Amount", "Total Shipment");//Remplacer Balance (LCY)par Balance (LCY)amount wdc.CHG 26/02/2026 demande de filtrer solde client a parir de 01/07/2025
+        //TotalCustomerAmount := Rec."Balance (LCY) Amount" + (Rec."Total Shipment");
         Rec.CalcFields("Balance (LCY)", "Total Shipment");
-        Rec.CalcFields("Draft Not Due");
         TotalCustomerAmount := Rec."Balance (LCY)" + (Rec."Total Shipment");
+
+        Rec.CalcFields("Draft Not Due");
         BalanceNotEncashed := TotalCustomerAmount + Rec."Draft Not Due";
         StyleTxt := Color(); //WDC01
         StyleTxtBalanceNotEncashed := ColorBalanceNotEncashed();
@@ -513,6 +537,37 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
 
     end;
 
+    procedure CalcAndGetUnpaidEntries()
+    var
+        UserSetup: Record "User Setup";
+        lCustLedgEntr: Record "Cust. Ledger Entry";
+        lDetailedCustLedgEntry: record "Detailed Cust. Ledg. Entry";
+        GLSetup: record "General Ledger Setup";
+    begin
+        UnpaidInProgress := 0;
+        LinkedCustomerLedgerEntryNo := '';
+        //<<WDC02
+        lDetailedCustLedgEntry.Reset();
+        lDetailedCustLedgEntry.SetCurrentKey("Document Type", "Customer No.", "Posting Date", "Currency Code");
+        lDetailedCustLedgEntry.SetRange("Customer No.", Rec."No.");
+        lDetailedCustLedgEntry.SetRange("Document Type", lDetailedCustLedgEntry."Document Type"::" ");
+        lDetailedCustLedgEntry.SetFilter("Payment Slip Type", '%1|%2', lDetailedCustLedgEntry."Payment Slip Type"::Draft, lDetailedCustLedgEntry."Payment Slip Type"::Cheque);
+        lDetailedCustLedgEntry.SetRange("Entry Type", lDetailedCustLedgEntry."Entry Type"::"Initial Entry");
+        lDetailedCustLedgEntry.setrange(Unpaid, true);
+        lDetailedCustLedgEntry.Setrange("Unpaid is Encaissed", false);
+        if lDetailedCustLedgEntry.FindSet() then
+            repeat
+                if lCustLedgEntr.get(lDetailedCustLedgEntry."Cust. Ledger Entry No.") then begin
+                    lCustLedgEntr.CalcFields("Amount (LCY)");
+                    if LinkedCustomerLedgerEntryNo = '' then
+                        LinkedCustomerLedgerEntryNo := Format(lCustLedgEntr."Entry No.")
+                    else
+                        LinkedCustomerLedgerEntryNo := LinkedCustomerLedgerEntryNo + '|' + Format(lCustLedgEntr."Entry No.");
+                    UnpaidInProgress += Abs(lCustLedgEntr."Amount (LCY)");
+                end;
+            until lDetailedCustLedgEntry.Next() = 0;
+    end;
+
     var
         TotalCustomerAmount: Decimal;
         StyleTxtBalanceNotEncashed: Text[50];
@@ -520,6 +575,6 @@ pageextension 50026 "WDC Customer Card" extends "Customer Card"
         StyleTxt: Text[50];
         EditFields: Boolean;
         UnpaidInProgress: Decimal;
-        LinkedCustomerLedgerEntryNo: integer;
+        LinkedCustomerLedgerEntryNo: Text;
         CustomerNoIsEditable: Boolean;
 }

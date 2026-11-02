@@ -154,7 +154,8 @@ page 50010 "WDC Customer Payment"
                     PostJnlLine: Codeunit "Gen. Jnl.-Post Line";
                     lGenJournalLine: record "Gen. Journal Line";
                     lGenJnlPostBatch: Codeunit "Gen. Jnl.-Post Batch";
-                    err01: TextConst ENU = 'Unable to validate this payment: the amount entered exceeds the open amount on the invoice.', FRA = 'Impossible de valider ce paiement : le montant saisi dépasse le montant ouvert sur la facture';
+                    err01: TextConst ENU = 'Unable to validate this payment: the amount entered exceeds the open amount on the invoice.',
+                                     FRA = 'Impossible de valider ce paiement : le montant saisi dépasse le montant ouvert sur la facture';
                 begin
                     SalesInvHeader.CalcFields("Remaining Amount");
                     if calculateAmountPayed() > SalesInvHeader."Remaining Amount" then
@@ -184,7 +185,6 @@ page 50010 "WDC Customer Payment"
         else
             editompanyBank := false;
     end;
-
 
     trigger OnOpenPage()
     var
@@ -236,7 +236,7 @@ page 50010 "WDC Customer Payment"
         SalesInvHeader := pSalesInvoiceHeader;
     end;
 
-    procedure calculateAmountPayed(): Decimal
+    procedure CalculateAmountPayed(): Decimal
     var
         pGenJournalLine: record "Gen. Journal Line";
     begin

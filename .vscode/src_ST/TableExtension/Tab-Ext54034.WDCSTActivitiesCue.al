@@ -17,6 +17,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Vendor Ledg. Entry"."Debit Amount (LCY)" where("Payment Slip Type" = Const(Cheque),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -26,6 +27,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Vendor Ledg. Entry"."Debit Amount (LCY)" where("Payment Slip Type" = Const(Draft),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -35,6 +37,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Vendor Ledg. Entry"."Debit Amount (LCY)" where("Payment Slip Type" = Const(Cash),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -44,6 +47,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Vendor Ledg. Entry"."Debit Amount (LCY)" where("Payment Slip Type" = Const(Transfer),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -53,6 +57,8 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Cheque),
+                                                           "Document Type" = filter(Payment),
+                                                           Unpaid = filter(false),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -62,6 +68,8 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Draft),
+                                                           "Document Type" = filter(Payment),
+                                                           Unpaid = filter(false),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -71,6 +79,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Cash),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -80,6 +89,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Transfer),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -89,6 +99,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(RS),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -160,11 +171,12 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             CaptionML = ENU = 'Total Payment', FRA = 'Total paiements';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = filter(<> " "),
+            CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = filter(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8),
+                                                           "Document Type" = filter(Payment),
+                                                           Unpaid = const(false),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Entry Type" = const("Initial Entry")));
         }
-
         field(50017; "Sales Inv. Due Next Week"; Integer)
         {
             CalcFormula = count("Cust. Ledger Entry" where("Document Type" = filter(Invoice),
@@ -215,6 +227,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Draft),
                                                            "Posting Date" = field("Date Filter"),
+                                                           Unpaid = filter(false),
                                                            "Payment Terms Code" = filter('COMPTANT'),
                                                            "Journal Batch Name" = filter('REGLEMENT'),
                                                            "Entry Type" = const("Initial Entry")));
@@ -248,7 +261,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(RS),
                                                            "Posting Date" = field("Date Filter"),
-                                                           "Payment Terms Code" = filter('COMPTANT'),
+                                                           "Customer No." = filter('9999'),
                                                            "Entry Type" = const("Initial Entry")));
         }
 
@@ -277,52 +290,59 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
         //------------------------------>>Payment comptant--------------------------------------------
         field(54028; "Term Payment Cheque"; Decimal)
         {
-            CaptionML = ENU = 'Term Payment Cheque', FRA = 'Chèque ventes à terme';
+            CaptionML = ENU = 'Term Payment Cheque', FRA = 'Chèque à terme';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Cheque),
-                                                           "Posting Date" = field("Date Filter"),
-                                                           "Payment Terms Code" = filter('<>COMPTANT'),
-                                                           "Entry Type" = const("Initial Entry")));
+                                                                                     Unpaid = filter(false),
+                                                                                    "Document Type" = filter(Payment),
+                                                                                    "Posting Date" = field("Date Filter"),
+                                                                                    "Payment Terms Code" = filter('<>COMPTANT'),
+                                                                                    "Entry Type" = const("Initial Entry")));
         }
         field(54029; "Term Payment Draft"; Decimal)
         {
-            CaptionML = ENU = 'Term Payment Draft', FRA = 'Traite ventes à terme';
+            CaptionML = ENU = 'Term Payment Draft', FRA = 'Traite à terme';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Draft),
+                                                           "Document Type" = filter(Payment),
+                                                           Unpaid = filter(false),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('<>COMPTANT'),
                                                            "Entry Type" = const("Initial Entry")));
         }
         field(54030; "Term Payment Cash"; Decimal)
         {
-            CaptionML = ENU = 'Term Payment Cash', FRA = 'Espèces ventes à terme';
+            CaptionML = ENU = 'Term Payment Cash', FRA = 'Espèces à terme';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Cash),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('<>COMPTANT'),
                                                            "Entry Type" = const("Initial Entry")));
         }
         field(54031; "Term Payment Transfer"; Decimal)
         {
-            CaptionML = ENU = 'Term Payment Transfer', FRA = 'Virements ventes à terme';
+            CaptionML = ENU = 'Term Payment Transfer', FRA = 'Virements à terme';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Transfer),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('<>COMPTANT'),
                                                            "Entry Type" = const("Initial Entry")));
         }
         field(54032; "Term Payment RS"; Decimal)
         {
-            CaptionML = ENU = 'Term Payment RS', FRA = 'RS ventes à terme';
+            CaptionML = ENU = 'Term Payment RS', FRA = 'RS à terme';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(RS),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
-                                                           "Payment Terms Code" = filter('<>COMPTANT'),
+                                                           "Customer No." = filter('<>9999'),
                                                            "Entry Type" = Const("Initial Entry")));
         }
         field(54033; "Term Payment Cr Memo"; Decimal)
@@ -342,6 +362,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = filter(<> " "),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('<>COMPTANT'),
                                                            // "Journal Batch Name" = filter('<>REGLEMENT'),
@@ -355,6 +376,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Cheque),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('COMPTANT'),
                                                            "Journal Batch Name" = filter('<>REGLEMENT'),
@@ -366,6 +388,8 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Draft),
+                                                           "Document Type" = filter(Payment),
+                                                            Unpaid = filter(false),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('COMPTANT'),
                                                            "Journal Batch Name" = filter('<>REGLEMENT'),
@@ -377,6 +401,7 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Cash),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('COMPTANT'),
                                                            "Journal Batch Name" = filter('<>REGLEMENT'),
@@ -384,10 +409,11 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
         }
         field(54043; "Cash Advance Transfer"; Decimal)
         {
-            CaptionML = ENU = 'Cash Advance Transfer', FRA = 'Virements avance comptants';
+            CaptionML = ENU = 'Cash Advance Transfer', FRA = 'Virements avance comptant';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Transfer),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('COMPTANT'),
                                                            "Journal Batch Name" = filter('<>REGLEMENT'),
@@ -399,8 +425,9 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(RS),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
-                                                           "Payment Terms Code" = filter('COMPTANT'),
+                                                           "Customer No." = filter('<>9999'),
                                                            "Journal Batch Name" = filter('<>REGLEMENT'),
                                                            "Entry Type" = const("Initial Entry")));
         }
@@ -412,83 +439,13 @@ tableextension 54034 "WDC-ST Activities Cue" extends "Activities Cue"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = filter(<> " "),
+                                                           "Document Type" = filter(Payment),
                                                            "Posting Date" = field("Date Filter"),
                                                            "Payment Terms Code" = filter('COMPTANT'),
                                                            "Journal Batch Name" = filter('<>REGLEMENT'),
                                                            "Entry Type" = const("Initial Entry")));
         }
-        //--------------------------------------------------------------------------
 
-        // //*****************Avance client à Terme ************
-        // field(54050; "Term Advance Cheque"; Decimal)
-        // {
-        //     CaptionML = ENU = 'Term Advance Cheque', FRA = 'Chèques avance à terme';
-        //     FieldClass = FlowField;
-        //     Editable = false;
-        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Cheque),
-        //                                                    "Posting Date" = field("Date Filter"),
-        //                                                    "Payment Terms Code" = filter('<>COMPTANT'),
-        //                                                    "Journal Batch Name" = filter('<>REGLEMENT'),
-        //                                                    "Entry Type" = const("Initial Entry")));
-        // }
-        // field(54051; "Term Advance Draft"; Decimal)
-        // {
-        //     CaptionML = ENU = 'Term Advance Draft', FRA = 'Traites avance à terme';
-        //     FieldClass = FlowField;
-        //     Editable = false;
-        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Draft),
-        //                                                    "Posting Date" = field("Date Filter"),
-        //                                                    "Payment Terms Code" = filter('<>COMPTANT'),
-        //                                                    "Journal Batch Name" = filter('<>REGLEMENT'),
-        //                                                    "Entry Type" = const("Initial Entry")));
-        // }
-        // field(54052; "Term Advance Cash"; Decimal)
-        // {
-        //     CaptionML = ENU = 'Term Advance Cash', FRA = 'Espèces avance à terme';
-        //     FieldClass = FlowField;
-        //     Editable = false;
-        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Cash),
-        //                                                    "Posting Date" = field("Date Filter"),
-        //                                                    "Payment Terms Code" = filter('<>COMPTANT'),
-        //                                                    "Journal Batch Name" = filter('<>REGLEMENT'),
-        //                                                    "Entry Type" = const("Initial Entry")));
-        // }
-        // field(54053; "Term Advance Transfer"; Decimal)
-        // {
-        //     CaptionML = ENU = 'Term Advance Transfer', FRA = 'Virements avance à terme';
-        //     FieldClass = FlowField;
-        //     Editable = false;
-        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(Transfer),
-        //                                                    "Posting Date" = field("Date Filter"),
-        //                                                    "Payment Terms Code" = filter('<>COMPTANT'),
-        //                                                    "Journal Batch Name" = filter('<>REGLEMENT'),
-        //                                                    "Entry Type" = const("Initial Entry")));
-        // }
-        // field(54054; "Term Advance RS"; Decimal)
-        // {
-        //     CaptionML = ENU = 'Term Advance RS', FRA = 'RS avance à terme';
-        //     FieldClass = FlowField;
-        //     Editable = false;
-        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = Const(RS),
-        //                                                    "Posting Date" = field("Date Filter"),
-        //                                                    "Payment Terms Code" = filter('<>COMPTANT'),
-        //                                                    "Journal Batch Name" = filter('<>REGLEMENT'),
-        //                                                    "Entry Type" = const("Initial Entry")));
-        // }
-
-
-        // field(54055; "Term Total Advance"; Decimal)
-        // {
-        //     CaptionML = ENU = 'Term Total Advance', FRA = 'Total avances à terme';
-        //     FieldClass = FlowField;
-        //     Editable = false;
-        //     CalcFormula = sum("Detailed Cust. Ledg. Entry"."Credit Amount (LCY)" where("Payment Slip Type" = filter(<> " "),
-        //                                                    "Posting Date" = field("Date Filter"),
-        //                                                    "Payment Terms Code" = filter('<>COMPTANT'),
-        //                                                    "Journal Batch Name" = filter('<>REGLEMENT'),
-        //                                                    "Entry Type" = const("Initial Entry")));
-        // }
-        // //--------------------------------------------------------------------------
 
         field(54060; "Month Cash Invoices"; Decimal)
         {

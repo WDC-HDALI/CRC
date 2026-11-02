@@ -6,7 +6,8 @@ tableextension 50214 "WDC-TF Item Ledger Entry" extends "Item Ledger Entry"
         {
             CaptionML = ENU = 'Transit Folder No.', FRA = 'N° dossier import';
             DataClassification = ToBeClassified;
-            Editable = false;
+            TableRelation = "WDC-TF Transit Folder";
+            //Editable = false;
         }
         field(50201; "Item Charge Filter"; Code[20])
         {

@@ -34,6 +34,26 @@ tableextension 50005 "WDC Cust. Ledger Entry" extends "Cust. Ledger Entry"
         }
 
         //>>WDC01
+        field(50006; "Unpaid"; Boolean)
+        {
+            CaptionML = ENU = 'Unpaid', FRA = 'Impayé';
+            DataClassification = ToBeClassified;
+        }
 
+        field(50007; "Unpaid is Encaissed"; Boolean)
+        {
+            CaptionML = ENU = 'Unpaid Is Encaissed', FRA = 'Impayé encaissé';
+            DataClassification = ToBeClassified;
+        }
+        field(50008; "Unpaid Enc. Reference"; Code[50])
+        {
+            CaptionML = ENU = 'Unpaid Enc. Reference', FRA = 'Référence Impayé Encaissé';
+        }
+        field(50009; "Unpaid Before GoLive"; Boolean)
+        {
+            CaptionML = ENU = 'Unpaid Before GoLive', FRA = 'Impayé avant démarrage système';
+            DataClassification = ToBeClassified;
+        }
     }
+
 }

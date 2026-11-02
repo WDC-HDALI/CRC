@@ -46,6 +46,11 @@ pageextension 50020 "WDC Posted Sales Inv. - Update" extends "Posted Sales Inv. 
             //  CaptionML = FRA = 'Code chauffeur';
             // ApplicationArea = All;
             //}
+            field("VAT Registration No."; Rec."VAT Registration No.")
+            {
+                ApplicationArea = All;
+                Editable = true;
+            }
             field("Truck No."; Rec."Truck No.")
             {
                 ApplicationArea = All;

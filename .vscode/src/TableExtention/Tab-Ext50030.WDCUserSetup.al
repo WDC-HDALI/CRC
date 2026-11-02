@@ -77,5 +77,15 @@ tableextension 50030 "WDC User Setup" extends "User Setup"
             CaptionML = ENU = 'Allow Rename Customer', FRA = 'Autoriser renommer Client';
             DataClassification = ToBeClassified;
         }
+        field(50014; "Allow Delete Purch. cr memo"; Boolean)
+        {
+            CaptionML = ENU = 'Allow Delete Sales Cr. Memo', FRA = 'Autoriser Suppression Avoir';
+            DataClassification = ToBeClassified;
+        }
+        field(50015; "Allow Delete Purch. Invoice"; Boolean)
+        {
+            CaptionML = ENU = 'Allow Delete sales Invoice', FRA = 'Autoriser Suppression facture enreg.';
+            DataClassification = ToBeClassified;
+        }
     }
 }

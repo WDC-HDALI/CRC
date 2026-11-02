@@ -1,6 +1,8 @@
 namespace CRC.CRC;
 
 using Microsoft.Purchases.Document;
+using System.Security.User;
+using Microsoft.Purchases.History;
 
 pageextension 50052 "WDC Purchase Credit Memo" extends "Purchase Credit Memo"
 {
@@ -11,8 +13,5 @@ pageextension 50052 "WDC Purchase Credit Memo" extends "Purchase Credit Memo"
             Editable = false;
         }
     }
-    trigger OnOpenPage()
-    begin
-        rec.SetCurrentKey("Posting Date");
-    end;
+
 }

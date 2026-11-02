@@ -240,7 +240,7 @@ page 50021 "WDC Caisse Journal_V2"
 
     trigger OnOpenPage()
     begin
-        ViewStatistics := true;
+        ViewStatistics := false;
         StartDateFilter := WorkDate();
         EndDateFilter := WorkDate();
         Rec.SetFilter("Posting Date", '%1..%2', StartDateFilter, EndDateFilter);

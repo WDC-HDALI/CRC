@@ -27,10 +27,10 @@ report 54016 "WDC-ST Customer Draft"
             column(name; RecCompany.Name)
             {
             }
-            column(adresse; RecCompany.Address)
+            column(Cutomeradresse; Customer.Address)
             {
             }
-            column(adresse2; RecCompany."Address 2")
+            column(Cutomeradresse2; Customer."Address 2")
             {
             }
             column(ch2; ch2)
@@ -62,6 +62,7 @@ report 54016 "WDC-ST Customer Draft"
                 lCustBankaccount: Record "Customer Bank Account";
             begin
                 montant_en_lettre := '';
+                Customer.get("Customer No.");
                 Convert_cdu."Montant en texte"(montant_en_lettre, ABS(Amount));
                 IF RecCompany.GET() THEN
                     RecCompany.CALCFIELDS(RecCompany.Picture);
@@ -86,27 +87,6 @@ report 54016 "WDC-ST Customer Draft"
         }
 
     }
-    // requestpage
-    // {
-
-    //     layout
-    //     {
-    //         area(content)
-    //         {
-    //             group(Group)
-    //             {
-    //                 CaptionML = ENU = 'Filters', FRA = 'Filtres';
-
-    //                 field(CustBankAccounCode; CustBankAccounCode)
-    //                 {
-    //                     CaptionML = ENU = 'Customer Bank Account', FRA = 'Banque Client';
-    //                     ApplicationArea = All;
-    //                 }
-
-    //             }
-    //         }
-    //     }
-    // }
     var
         montant_en_lettre: Text;
         RecCompany: Record "Company Information";
@@ -119,5 +99,5 @@ report 54016 "WDC-ST Customer Draft"
         ch3: Code[13];
         ch4: Code[2];
         CustBankAccounCode: Code[20];
-
+        Customer: Record Customer;
 }

@@ -7,7 +7,7 @@ tableextension 50209 "WDC-TF Purch. Inv. Header" extends "Purch. Inv. Header"
             CaptionML = ENU = 'Transit Folder No.', FRA = 'N° dossier import';
             DataClassification = ToBeClassified;
             TableRelation = "WDC-TF Transit Folder";
-            Editable = false;
+            //Editable = false;
         }
     }
 }

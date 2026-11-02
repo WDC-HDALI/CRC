@@ -132,6 +132,7 @@ pageextension 50063 "WDC Vendor List" extends "Vendor List"
 
         //Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Allow Deferral Posting From");
         Rec.SetFilter("Start Year Filter", '..%1', GLSetup."Go Live Date");//WDC;HG
+        Rec.SetFilter("Start date Filter", '%1..', GLSetup."Go Live Date" + 1);//wdc.chg 26/02/2026 
         rec.SetFilter("Due Date Filter", '%1..', WorkDate);
         rec.CalcFields("Balance (LCY)");
         rec.CalcFields("Total Receipt");

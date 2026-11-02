@@ -231,6 +231,13 @@ pageextension 50005 "WDC Item Card" extends "Item Card"
             }
 
         }
+        addbefore("Costing Method")
+        {
+            field("Item Unit Cost"; Rec."Item Unit Cost")
+            {
+                ApplicationArea = all;
+            }
+        }
 
 
     }
