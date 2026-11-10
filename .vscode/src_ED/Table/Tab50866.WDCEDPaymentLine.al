@@ -54,7 +54,8 @@ table 50866 "WDC-ED Payment Line"
         field(5; "Account No."; Code[20])
         {
             CaptionML = ENU = 'Account No.', FRA = 'N° compte';
-            TableRelation = IF ("Account Type" = CONST("G/L Account")) "G/L Account"
+            TableRelation =
+            IF ("Account Type" = CONST("G/L Account")) "G/L Account"
             ELSE
             IF ("Account Type" = CONST(Customer)) Customer
             ELSE
@@ -73,7 +74,8 @@ table 50866 "WDC-ED Payment Line"
         {
             CaptionML = ENU = 'Posting Group', FRA = 'Groupe comptabilisation';
             Editable = false;
-            TableRelation = IF ("Account Type" = CONST(Customer)) "Customer Posting Group"
+            TableRelation =
+            IF ("Account Type" = CONST(Customer)) "Customer Posting Group"
             ELSE
             IF ("Account Type" = CONST(Vendor)) "Vendor Posting Group"
             ELSE
@@ -100,7 +102,8 @@ table 50866 "WDC-ED Payment Line"
         {
             CaptionML = ENU = 'Acc. No. Last Entry Debit', FRA = 'N° cpte écr. préc. débit';
             Editable = false;
-            TableRelation = IF ("Acc. Type Last Entry Debit" = CONST("G/L Account")) "G/L Account"
+            TableRelation =
+            IF ("Acc. Type Last Entry Debit" = CONST("G/L Account")) "G/L Account"
             ELSE
             IF ("Acc. Type Last Entry Debit" = CONST(Customer)) Customer
             ELSE
@@ -119,7 +122,8 @@ table 50866 "WDC-ED Payment Line"
         {
             CaptionML = ENU = 'Acc. No. Last Entry Credit', FRA = 'N° compte écr. préc. crédit';
             Editable = false;
-            TableRelation = IF ("Acc. Type Last Entry Credit" = CONST("G/L Account")) "G/L Account"
+            TableRelation =
+            IF ("Acc. Type Last Entry Credit" = CONST("G/L Account")) "G/L Account"
             ELSE
             IF ("Acc. Type Last Entry Credit" = CONST(Customer)) Customer
             ELSE
@@ -198,7 +202,8 @@ table 50866 "WDC-ED Payment Line"
         field(25; "Bank Account Code"; Code[20])
         {
             CaptionML = ENU = 'Bank Account Code', FRA = 'Code compte bancaire';
-            TableRelation = IF ("Account Type" = CONST(Customer)) "Customer Bank Account".Code WHERE("Customer No." = FIELD("Account No."))
+            TableRelation =
+            IF ("Account Type" = CONST(Customer)) "Customer Bank Account".Code WHERE("Customer No." = FIELD("Account No."))
             ELSE
             IF ("Account Type" = CONST(Vendor)) "Vendor Bank Account".Code WHERE("Vendor No." = FIELD("Account No."));
 
@@ -746,7 +751,6 @@ table 50866 "WDC-ED Payment Line"
                     Customer.Get("Account No.");
                     if Customer."Privacy Blocked" then
                         Customer.FieldError("Privacy Blocked");
-
                     if Customer.Blocked in [Customer.Blocked::All] then
                         Customer.FieldError(Blocked);
                     if "Bank Account Code" = '' then
@@ -788,8 +792,11 @@ table 50866 "WDC-ED Payment Line"
     end;
 
     procedure ModifyCheck()
+    Var
+        lUserSetup: record "User Setup";
     begin
-        if Posted then
+        lUserSetup.get(USERID);
+        if not lUserSetup."Allow Update Posted Document" and Posted then
             Error(Text002);
     end;
 

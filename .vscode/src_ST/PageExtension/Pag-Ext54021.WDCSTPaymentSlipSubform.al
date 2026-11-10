@@ -24,6 +24,10 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
             {
                 ApplicationArea = All;
             }
+            field("Payment Methode Code"; Rec."Payment Methode Code")
+            {
+                ApplicationArea = All;
+            }
             // field("Commission VAT Amount"; Rec."Commission VAT Amount")
             // {
             //     ApplicationArea = All;
@@ -110,10 +114,7 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
             // {
             //     ApplicationArea = All;
             // }
-            field("Payment Methode Code"; Rec."Payment Methode Code")
-            {
-                ApplicationArea = All;
-            }
+
             field("Header RIB"; Rec."Header RIB")
             {
                 ApplicationArea = All;
@@ -244,7 +245,6 @@ pageextension 54021 "WDC-ST Payment Slip Subform" extends "WDC-ED Payment Slip S
         IF Header."No. of Lines" = 0 THEN
             ERROR(Text004);
         PaymentFunctions.PrintLine(Header, PaymentStep."Action Type"::Report);
-
     end;
 
     Procedure EnablePetiteDépense(PetiteDépense: Boolean)
