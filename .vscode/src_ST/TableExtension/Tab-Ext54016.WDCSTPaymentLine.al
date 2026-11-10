@@ -18,7 +18,6 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                     "Assiette RS" := "Initial Amount";
                     "Initial Amount LCY" := "Amount (LCY)";
                 END;
-
                 IF Amount >= Paramcpta."Min RS Amount LCY" THEN BEGIN
                     IF "RS Code" <> '' THEN
                         VALIDATE("RS Code", "RS Code");
@@ -81,7 +80,7 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                                     "Payment Label" := Vendor.Name;
                                     VALIDATE("RS Code", Vendor."RS Code");
                                     // Code_Mode_Règlement := FORMAT(Vendor."Payment Method Code");
-                                    "Payment Methode Code" := Vendor."Payment Method Code"; //HD2204 :Update Code_Mode_Règlement
+                                    //"Payment Methode Code" := Vendor."Payment Method Code"; //HD2204 :Update Code_Mode_Règlement
                                 END;
                             END;
                         "Account Type"::"G/L Account":
@@ -103,9 +102,7 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                             BEGIN
                                 IF BankAccount.GET("Account No.") THEN
                                     "Payment Label" := BankAccount.Name;
-
                             END;
-
                     END;
                 IF "Account Type" = "Account Type"::Vendor THEN BEGIN
                     Vendor.RESET;
@@ -128,7 +125,6 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                 paymentheader.GET("No.");
                 "Header Account Type" := paymentheader."Account Type";
                 "Header Account No." := paymentheader."Account No.";
-
                 IF PaymentClass.GET("Payment Class") THEN
                     IF (PaymentClass."Line Account Type" = PaymentClass."Line Account Type"::"Expense Cash") AND ("Account Type" = "Account Type"::"Bank Account") THEN
                         IF banqe.GET("Account No.") THEN
@@ -139,9 +135,11 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
         field(54000; "RS Code"; Code[10])
         {
             CaptionML = ENU = 'RS Code', FRA = 'Code RS';
-            TableRelation = IF ("Account Type" = CONST(Customer)) "WDC-ST Retained Group".Code WHERE("Type Retenue" = FILTER("à la source"),
+            TableRelation =
+            IF ("Account Type" = CONST(Customer)) "WDC-ST Retained Group".Code WHERE("Type Retenue" = FILTER("à la source"),
             "RS Type" = const(Customer))
-            ELSE IF ("Account Type" = CONST(Vendor)) "WDC-ST Retained Group".Code WHERE("Type Retenue" = FILTER("à la source"),
+            ELSE
+            IF ("Account Type" = CONST(Vendor)) "WDC-ST Retained Group".Code WHERE("Type Retenue" = FILTER("à la source"),
             "RS Type" = const(Vendor));
             trigger OnValidate()
             begin
@@ -171,7 +169,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                     "RS Amount" := -"RS Amount";
 
                 // Calc Montant Retenu
-                IF "Currency Code" <> '' THEN RecGCurrency.GET("Currency Code");
+                IF "Currency Code" <> '' THEN
+                    RecGCurrency.GET("Currency Code");
                 IF ("RS Amount" <> 0) AND ("Validated RS Amount" = 0) AND (RecGPaymentStatus."Calculate RS") THEN BEGIN
                     IF "Currency Code" <> '' THEN
                         "RS Amount LCY" := ROUND(RecGCurrencyExchangeRate.ExchangeAmtFCYToLCY("Posting Date",
@@ -244,7 +243,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                     "Guarantee RS Amount" := -"Guarantee RS Amount";
 
                 // Calc Montant Retenue G.
-                IF "Currency Code" <> '' THEN RecGCurrency.GET("Currency Code");
+                IF "Currency Code" <> '' THEN
+                    RecGCurrency.GET("Currency Code");
                 IF ("Guarantee RS Amount" <> 0) AND ("Validated Guarantee RS Amount" = 0) AND
                 (RecGPaymentStatus."Calc. RS On Guarrantee") THEN BEGIN
                     IF "Currency Code" <> '' THEN
@@ -337,7 +337,6 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             AutoFormatType = 1;
             trigger OnValidate()
             begin
-
                 IF (((Amount > 0) AND ("Commission VAT Amount" < 0)) OR ((Amount < 0) AND ("Commission VAT Amount" > 0)))
                   AND ("Account Type" = "Account Type"::Vendor) THEN
                     "Commission VAT Amount" := -"Commission VAT Amount"
@@ -482,7 +481,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             DataClassification = ToBeClassified;
 
             Editable = false;
-            TableRelation = IF ("Header Account Type" = CONST("G/L Account")) "G/L Account"
+            TableRelation =
+            IF ("Header Account Type" = CONST("G/L Account")) "G/L Account"
             ELSE
             IF ("Header Account Type" = CONST(Customer)) Customer
             ELSE
@@ -525,7 +525,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             CaptionML = ENU = 'Counterparty Payment Line', FRA = 'Contrepartie Ligne paiement';
             DataClassification = ToBeClassified;
 
-            TableRelation = IF ("Counterparty Account Type" = CONST("G/L Account")) "G/L Account"
+            TableRelation =
+            IF ("Counterparty Account Type" = CONST("G/L Account")) "G/L Account"
             ELSE
             IF ("Counterparty Account Type" = CONST(Customer)) Customer
             ELSE
@@ -549,7 +550,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             CaptionML = ENU = 'Contr. Associ. Acc. LP No.', FRA = 'N° Cpt. Ass. Contrepartie Lp';
             DataClassification = ToBeClassified;
 
-            TableRelation = IF ("Counterparty Account Type" = CONST("G/L Account")) "G/L Account"
+            TableRelation =
+            IF ("Counterparty Account Type" = CONST("G/L Account")) "G/L Account"
             ELSE
             IF ("Counterparty Account Type" = CONST(Customer)) Customer
             ELSE
@@ -742,10 +744,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
         Statement.GET(Rec."No.");
         "ED Type" := Statement."ED Type";
         "Payment Methode Code" := Statement."Payment Methode Code";
-
         IF PaymentStatus.GET(Rec."Payment Class", Rec."Status No.") THEN
             Situation := PaymentStatus.Situation;
-
         IF "Currency Code" <> '' THEN
             Currency.GET("Currency Code");
         PaymentStatus.RESET;
@@ -754,9 +754,9 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
         PaymentStatus.SETRANGE(Cancelation, TRUE);
         IF PaymentStatus.FINDFIRST THEN
             Cancelation := TRUE;
-
         IF "Status No." = 0 THEN
-            IF ("Due Date" < "Posting Date") AND ("Due Date" <> 0D) THEN ERROR('Date echéance erronée');
+            IF ("Due Date" < "Posting Date") AND ("Due Date" <> 0D) THEN
+                ERROR('Date echéance erronée');
     end;
 
     var
@@ -802,7 +802,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
         MntTvaComm := 0;
         IF RecGPaymentStatus1.GET("Payment Class", "Status No.") THEN;
         RecGGeneralLedgerSetup.GET;
-        IF "Currency Code" <> '' THEN RecGCurrency1.GET("Currency Code");
+        IF "Currency Code" <> '' THEN
+            RecGCurrency1.GET("Currency Code");
         IF ("RS VAT Amount" <> 0) AND ("Validated RS VAT Amount" = 0) AND (RecGPaymentStatus1."Calc. RS On VAT") THEN BEGIN
             IF "Currency Code" <> '' THEN
                 "RS VAT Amount LCY" := ROUND(RecGCurrencyExchangeRate.ExchangeAmtFCYToLCY
@@ -813,7 +814,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                 "RS VAT Amount LCY" := ROUND("RS VAT Amount", RecGGeneralLedgerSetup."Amount Rounding Precision");
         END;
         // Calcul Montant Commission DS
-        IF "Currency Code" <> '' THEN RecGCurrency1.GET("Currency Code");
+        IF "Currency Code" <> '' THEN
+            RecGCurrency1.GET("Currency Code");
         IF ("Commission Amount LCY" <> 0) AND ("Validated Commission Amount" = 0) AND (RecGPaymentStatus1.Commission) THEN BEGIN
             IF "Currency Code" <> '' THEN
                 "Commission Amount" := ROUND(RecGCurrencyExchangeRate.ExchangeAmtLCYToFCY("Posting Date",
@@ -832,7 +834,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
             END;
 
         // Calcul Montant TVA sur Commission DS
-        IF "Currency Code" <> '' THEN RecGCurrency1.GET("Currency Code");
+        IF "Currency Code" <> '' THEN
+            RecGCurrency1.GET("Currency Code");
         IF ("Commission VAT Amount LCY" <> 0) AND ("Validated VAt Amt Commission" = 0) AND
         (RecGPaymentStatus1."VAT On Commission") THEN BEGIN
             IF "Currency Code" <> '' THEN
@@ -852,7 +855,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                     "Commission VAT Amount LCY" := ROUND("Commission VAT Amount", RecGGeneralLedgerSetup."Amount Rounding Precision");
             END;
         // Calcul Retenu sur Garantie
-        IF "Currency Code" <> '' THEN RecGCurrency1.GET("Currency Code");
+        IF "Currency Code" <> '' THEN
+            RecGCurrency1.GET("Currency Code");
         IF ("Guarantee RS Amount LCY" <> 0) AND ("Validated Guarantee RS Amount" = 0) AND
         (RecGPaymentStatus1."Calc. RS On Guarrantee") THEN BEGIN
             IF "Currency Code" <> '' THEN
@@ -871,7 +875,6 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                 ELSE
                     "Guarantee RS Amount LCY" := ROUND("Guarantee RS Amount", RecGGeneralLedgerSetup."Amount Rounding Precision");
             END;
-
         IF RecGPaymentStatus1."Calc. RS On Guarrantee" THEN
             MntRGart := "Guarantee RS Amount";
         IF RecGPaymentStatus1."Calculate RS" THEN
@@ -897,7 +900,8 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
         RecGPaymentStatus: Record "WDC-ED Payment Status";
     begin
         RecGGeneralLedgerSetup.GET;
-        IF "Currency Code" <> '' THEN RecGCurrency1.GET("Currency Code");
+        IF "Currency Code" <> '' THEN
+            RecGCurrency1.GET("Currency Code");
         RecGPaymentStepLedger.RESET;
         RecGPaymentStepLedger.SETFILTER("Payment Class", "Payment Class");
         IF (RecGPaymentStepLedger.Findfirst) AND (("Commission VAT Amount" = 0) AND ("Commission VAT Amount LCY" = 0)) THEN BEGIN
@@ -925,7 +929,6 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
         IF "RS Amount LCY" = 0 THEN
             "RS Amount LCY" := -ROUND("Initial Amount LCY" * ("VarD%Retenue" / 100),
             RecGGeneralLedgerSetup."Amount Rounding Precision");
-
         IF RecGPaymentStatus1.GET("Payment Class", "Status No.") THEN
             IF ("RS Amount" = 0) AND ("Validated RS Amount" = 0) AND (RecGPaymentStatus1."Calculate RS") THEN BEGIN
                 "VarD%Retenue" := GroupeRetenu."Retention %";
@@ -937,7 +940,6 @@ tableextension 54016 "WDC-ST Payment Line" extends "WDC-ED Payment Line"
                 "RS Amount LCY" := -ROUND("Initial Amount LCY" * ("VarD%Retenue" / 100),
                 RecGGeneralLedgerSetup."Amount Rounding Precision");
                 CalcAmount;
-
             END;
 
         "VarD%Retenue" := 0;
